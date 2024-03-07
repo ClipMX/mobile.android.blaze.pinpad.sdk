@@ -17,6 +17,6 @@ dependencyResolutionManagement {
     }
 }
 
-include(":sdk")
+include(":pinpad-sdk")
 
 rootProject.name = "PinPad SDK"

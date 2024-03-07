@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    `maven-publish`
+    id("maven-publish")
 }
 
 @Suppress("UnstableApiUsage")
@@ -23,8 +23,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_19
-        targetCompatibility = JavaVersion.VERSION_19
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
 
     kotlinOptions {
@@ -35,8 +35,8 @@ android {
         kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
     }
 
-    sourceSets["main"].kotlin {
-        srcDir("src/main/kotlin")
+    sourceSets["main"].java {
+        srcDir("src/main/java")
     }
 }
 
@@ -47,6 +47,24 @@ val sourcesJar: Jar = tasks.create("sourcesJar", Jar::class.java) {
 
 project.artifacts {
     archives(sourcesJar)
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                groupId = "com.payclip.blaze"
+                artifactId = "pinpad-sdk"
+                // the version is provided by the TAG name
+                version = System.getenv("GITHUB_REF_NAME") ?: "0.0.0"
+
+                afterEvaluate {
+                    from(components["release"])
+                    artifact(project.tasks.getByName("sourcesJar"))
+                }
+            }
+        }
+    }
 }
 
 dependencies {
@@ -69,22 +87,4 @@ dependencies {
     implementation(libs.gsonCore)
     implementation(libs.okhttpCore)
     implementation(libs.okhttpLogging)
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("release") {
-            groupId = "com.payclip.blaze"
-            artifactId = "pinpad-sdk"
-            version = System.getenv("GITHUB_REF_NAME") ?: "0.0.0"
-
-            afterEvaluate {
-                from(components["release"])
-                artifact(project.tasks.getByName("sourcesJar"))
-            }
-        }
-    }
-    repositories {
-        mavenLocal()
-    }
 }

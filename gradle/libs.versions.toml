@@ -1,6 +1,6 @@
 [versions]
-jvmTarget = "19"
-androidxComposeCompiler = "1.5.10"
+jvmTarget = "18"
+androidxComposeCompiler = "1.4.3"
 androidGradlePlugin = "8.0.1"
 androidxActivity = "1.8.2"
 androidxAppCompat = "1.6.1"
@@ -10,7 +10,7 @@ androidxLifecycle = "2.7.0"
 coroutinesTest = "1.7.3"
 gson = "2.10.1"
 junit4 = "4.13.2"
-kotlin = "1.9.22"
+kotlin = "1.8.10"
 mockitoKotlin = "5.1.0"
 mockk = "1.13.7"
 okhttp = "4.11.0"
@@ -40,4 +40,3 @@ okhttpLogging = { group = "com.squareup.okhttp3", name = "logging-interceptor", 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
