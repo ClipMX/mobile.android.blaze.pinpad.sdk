@@ -40,3 +40,4 @@ okhttpLogging = { group = "com.squareup.okhttp3", name = "logging-interceptor", 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }

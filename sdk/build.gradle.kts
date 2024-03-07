@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    kotlin("kapt")
+    `maven-publish`
 }
 
 @Suppress("UnstableApiUsage")
@@ -69,4 +69,22 @@ dependencies {
     implementation(libs.gsonCore)
     implementation(libs.okhttpCore)
     implementation(libs.okhttpLogging)
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            groupId = "com.payclip.blaze"
+            artifactId = "pinpad-sdk"
+            version = System.getenv("GITHUB_REF_NAME") ?: "0.0.0"
+
+            afterEvaluate {
+                from(components["release"])
+                artifact(project.tasks.getByName("sourcesJar"))
+            }
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
 }
