@@ -1,0 +1,42 @@
+[versions]
+jvmTarget = "18"
+androidxComposeCompiler = "1.4.3"
+androidGradlePlugin = "8.0.1"
+androidxActivity = "1.8.2"
+androidxAppCompat = "1.6.1"
+androidxComposeBom = "2024.02.02"
+androidxCore = "1.12.0"
+androidxLifecycle = "2.7.0"
+coroutinesTest = "1.7.3"
+gson = "2.10.1"
+junit4 = "4.13.2"
+kotlin = "1.8.10"
+mockitoKotlin = "5.1.0"
+mockk = "1.13.7"
+okhttp = "4.11.0"
+retrofit = "2.9.0"
+
+[libraries]
+androidx-coreKtx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+
+junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
+mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockitoKotlin" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesTest" }
+
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
+androidx-compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
+androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
+
+retrofit-converterGson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+retrofitCore = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+gsonCore = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+okhttpCore = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okhttpLogging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+
+[plugins]
+android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
