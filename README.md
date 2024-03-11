@@ -18,25 +18,6 @@
 
 
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-  </ol>
-</details>
-
-
-
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
@@ -113,57 +94,153 @@ We strongly recommend staying informed about new versions of our SDK and updatin
 
 ## How to use the SDK?
 
-Before initiating a payment, you'll need to obtain a request ID from our SDK. We've designed our SDK to separate the payment process from the creation of a payment request, allowing you to handle loading states according to your application's requirements.
-
-```PaymentViewModel.kt
-class PaymentViewModel : ViewModel() {
-
-    private val _client = ClipPayment.Builder()
-        .setUser(YOUR_CLIP_USER)
-        .setApiKey(YOUR_CLIP_TOKEN)
-        .build()
-
-    fun onPay(amount: Double, message: String) = viewModelScope.launch {
-        _client.create(amount, message)
-            .onSuccess {
-                handleCreationSuccess()
-            }
-            .onFailure {
-                handleCreationFailure()
-            }
-    }
-}
-```
-
-To ensure smooth integration of our SDK into your application, we recommend handling the payment logic within your ViewModel or a similar component. This approach helps to keep your codebase organized and maintainable.
-
-Once you've successfully obtained the request ID, our SDK provides a launcher that simplifies the payment process and handles all the necessary results. Below is a sample implementation of the launcher:
+Our payment SDK is designed to be incredibly user-friendly, allowing you to configure the client according to your specific needs. Below is an example implementation for basic usage in a Compose application:
 
 ```Payment.kt
 @Composable
 fun PaymentScreen() {
-    val launcher = remember { ClipLauncherFactory.create() }
+    val scope = rememberCoroutineScope()
+    val client = remember {
+        ClipPayment.Builder()
+            .setUser(YOUR_CLIP_USER)
+            .setApiKey(YOUR_CLIP_TOKEN)
+            .build()
+    }
 
-    launcher.setPaymentHandler(
-        onSuccess = { handlePaymentSuccess() },
-        onCancelled = { handlePaymentCancelled() },
-        onFailure = { handlePaymentCancelled() }
-    )
+    client.setPaymentHandler()
 
     Button(
         onClick = {
-            launcher.startPayment(REQUEST_ID)
+            scope.launch {
+                client.start(
+                    amount = AMOUNT,
+                    message = MESSAGE
+                )
+           }
         }
     ) {
-        Text(text = "START PAYMENT")
+        ...
     }
 }
 ```
 
+In this example, there are three vital components for client configuration:
+
+1. **Client Initialization**: You must instantiate the client in your application. The client requires two mandatory parameters: your Clip user and the API key generated earlier.
+
+```Payment.kt
+val client = remember {
+    ClipPayment.Builder()
+        .setUser(YOUR_CLIP_USER)
+        .setApiKey(YOUR_CLIP_TOKEN)
+        .build()
+}
+```
+
+2. **Payment Handler**: Payment handling is mandatory as the client needs to know the composable context to launch activities and handle results.
+
+```Payment.kt
+@Composable
+fun PaymentScreen() {
+    ...
+
+    client.setPaymentHandler()
+
+    ...
+}
+```
+
+3. **Payment Launch**: With the client instantiated and the payment handler configured, you can call the launcher. This method requires two parameters: the amount to charge and a descriptive message about the payment.
+
+```Payment.kt
+onClick = {
+    scope.launch {
+        client.start(
+            amount = AMOUNT,
+            message = MESSAGE
+        )
+   }
+}
+```
+
+And that's it! With these steps, you can start processing payments in your application 🤑
+
+### Additional Configuration Parameters
+
+Our payment SDK offers several additional configuration parameters to customize your integration experience. Below are explanations of each parameter and examples of how to use them:
+
+- **isDemo**: This parameter allows you to toggle the usage of the Clip Demo Server. By default, it is set to false, meaning it operates with the production server for real payments. Setting it to true enables the use of the demo server, which is useful for testing purposes. By default, it is set to false.
+```Payment.kt
+    ClipPayment.Builder()
+        .isDemo(isDemo: Boolean)
+```
+
+- **isAutoReturnEnabled**: This parameter sets the return mode for the terminal after a transaction. When set to true, the terminal automatically returns to your application after completing or encountering an error during the transaction process. If set to false, the terminal displays its own detailed screen explaining the situation. By default, it is set to false.
+```Payment.kt
+    ClipPayment.Builder()
+        .isAutoReturnEnabled(isAutoReturnEnabled: Boolean)
+```
+
+- **addListener**: With this parameter, you can register a listener to receive transaction results. This allows you to handle the outcome of the transaction within your application.
+```Payment.kt
+    ClipPayment.Builder()
+        .addListener(listener: PaymentListener)
+```
+
+- **setLoadingState**: This parameter provides you with a loading state while our SDK is performing various tasks such as calling APIs. It accepts a MutableStateFlow<Boolean> parameter, allowing you to manage the loading state within your application.
+```Payment.kt
+    ClipPayment.Builder()
+        .setLoadingState(state: MutableStateFlow<Boolean>)
+```
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
-[Laravel-url]: https://laravel.com
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[Bootstrap-url]: https://getbootstrap.com
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
+
+
+
+### Error Codes
+In the event of an error during the transaction process, the client may return one of the following error codes along with a description of the error:
+
+| CODE | DESCRIPTION | 
+| --- | --- |
+| EMPTY_AMOUNT | Amount should not be 0.0. |
+| EMPTY_MESSAGE | Message should not be empty. |
+| SERVICE_ERROR | Something failed attempting to create payment order |
+| LIMIT_ERROR | You have reached the terminal usage limit. |
+| GENERIC_DECLINE | The transaction was declined for unspecified reasons. |
+| RECEIVE_DECLINE_CALL_ISSUER | The transaction was declined. Please call the card issuer for further assistance. |
+| INSUFFICIENT_FUNDS | Insufficient funds available for the transaction. |
+| RECEIVE_DECLINE_CALL_ISSUER_2 | Another instance of transaction decline. Please call the card issuer for further assistance. |
+| NO_CONN | No connection available during the transaction. |
+| MC_FALLBACK | Mastercard fallback transaction initiated. |
+| VISA_CTLS_FALLBACK | Visa contactless fallback transaction initiated. |
+| AMEX_MERCHANT_BLOCKED | American Express transaction declined due to merchant blocking. |
+| NOT_SUFFICIENT_FUNDS | Insufficient funds available for the transaction. |
+| DO_NOT_HONOR | The card issuer declined the transaction. |
+| DESTINATION_NOT_AVAILABLE | The destination for the transaction is not available. |
+| INVALID_MERCHANT | Invalid merchant for the transaction. |
+| RESTRICTED_CARD | The card used for the transaction is restricted. |
+| INVALID_TRANSACTION | The transaction is invalid. |
+| TRANSACTION_NOT_PERMITTED_TO_CARDHOLDER | The transaction is not permitted to the cardholder. |
+| ISSUER_OR_SWITCH_IS_INOPERATIVE | The card issuer or switch is inoperative. |
+| PICK_UP_CARD | The card should be picked up by the merchant. |
+| EXPIRED_CARD | The card used for the transaction has expired. |
+| EXCEEDS_WITHDRAWAL_AMOUNT_LIMIT | The transaction amount exceeds the withdrawal limit. |
+| FAIL_3DS_AUTHENTICATION | 3DS authentication for the transaction failed. |
+| ALLOWABLE_NUMBER_OF_PIN_TRIES_EXCEEDED | Maximum allowable number of PIN tries exceeded. |
+| INVALID_CARD_NUMBER_NO_SUCH_NUMBER | Invalid card number provided. |
+| GENERIC_ERROR | Generic error occurred during the transaction. |
+| REFER_TO_CARD_ISSUER | The transaction should be referred to the card issuer. |
+| INVALID_AMOUNT | The transaction amount is invalid. |
+| INVALID_PIN_ONE_TIME | Invalid one-time PIN provided. |
+| CONTACTLESS_FALLBACK_VISA_MASTERCARD | Contactless fallback transaction for Visa or Mastercard initiated |
+| QPS_FALLBACK_FOREIGN_CARDS | Quick Payment Service (QPS) fallback transaction for foreign cards initiated. |
+| BILLER_SYSTEM_UNAVAILABLE | Biller system is unavailable for the transaction. |
+| TERMINAL_ERROR | Error occurred at the terminal. |
+| NO_CONNECTION | No connection detected during the transaction. |
+| CANCELLED | The transaction was cancelled. |
+| UNKNOWN_ERROR | An unknown error occurred. |
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
