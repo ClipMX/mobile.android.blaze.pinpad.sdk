@@ -12,6 +12,7 @@ import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyMessageExcepti
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.UserNotFoundException
 import com.payclip.blaze.pinpad.sdk.domain.usecases.payment.CreatePaymentUseCase
 import com.payclip.blaze.pinpad.sdk.ui.launcher.ClipLauncher
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class ClipPayment internal constructor(
     private val launcher: ClipLauncher,
@@ -19,7 +20,7 @@ class ClipPayment internal constructor(
     private val user: String,
     private val isAutoReturnEnabled: Boolean,
     private val listener: PaymentListener?,
-    private val isLoading: MutableState<Boolean>?
+    private val isLoading: MutableStateFlow<Boolean>?
 ) {
 
     class Builder {
@@ -34,7 +35,7 @@ class ClipPayment internal constructor(
 
         private var listener: PaymentListener? = null
 
-        private var isLoading: MutableState<Boolean>? = null
+        private var isLoading: MutableStateFlow<Boolean>? = null
 
         fun setUser(user: String) = apply { this.user = user }
 
@@ -50,7 +51,7 @@ class ClipPayment internal constructor(
             this.listener = listener
         }
 
-        fun setLoadingState(state: MutableState<Boolean>) = apply {
+        fun setLoadingState(state: MutableStateFlow<Boolean>) = apply {
             this.isLoading = state
         }
 
