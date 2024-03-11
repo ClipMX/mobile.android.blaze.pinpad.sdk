@@ -5,7 +5,7 @@ import com.payclip.blaze.pinpad.sdk.di.ui.intent.ClipIntentProviderFactory
 import com.payclip.blaze.pinpad.sdk.ui.launcher.ClipLauncher
 import com.payclip.blaze.pinpad.sdk.ui.launcher.activity.ActivityClipLauncher
 
-object ClipLauncherFactory {
+internal object ClipLauncherFactory {
 
     fun create(): ClipLauncher {
         val resultManager = ClipResultManagerFactory.create()
