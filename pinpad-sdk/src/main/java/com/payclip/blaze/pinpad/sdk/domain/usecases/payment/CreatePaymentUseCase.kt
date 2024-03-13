@@ -12,6 +12,7 @@ internal class CreatePaymentUseCase constructor(
 
     suspend operator fun invoke(
         user: String,
+        reference: String,
         amount: Double,
         message: String
     ): Result<PendingPayment> {
@@ -24,7 +25,14 @@ internal class CreatePaymentUseCase constructor(
                 throw EmptyMessageException()
             }
 
-            Result.success(repository.create(amount, user, message))
+            Result.success(
+                repository.create(
+                    user = user,
+                    reference = reference,
+                    amount = amount,
+                    message = message
+                )
+            )
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {

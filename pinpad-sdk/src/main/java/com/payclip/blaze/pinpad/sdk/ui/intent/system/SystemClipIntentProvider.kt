@@ -8,12 +8,14 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
 
     override fun getClipIntent(
         requestId: String,
-        autoReturn: Boolean
+        autoReturn: Boolean,
+        isTipEnabled: Boolean
     ): Intent {
         return Intent(Intent.ACTION_MAIN).apply {
             component = ComponentName(PINPAD_PACKAGE, PINPAD_ENTRY_ACTIVITY)
             putExtra(PAYMENT_REQUEST_ID_EXTRA, requestId)
             putExtra(PAYMENT_AUTO_RETURN_EXTRA, autoReturn)
+            putExtra(PAYMENT_IS_TIP_ENABLED_EXTRA, isTipEnabled)
         }
     }
 
@@ -25,11 +27,16 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         return intent.extras?.getBoolean(PAYMENT_AUTO_RETURN_EXTRA) ?: false
     }
 
+    override fun isTipEnabled(intent: Intent): Boolean {
+        return intent.extras?.getBoolean(PAYMENT_IS_TIP_ENABLED_EXTRA) ?: false
+    }
+
     companion object {
         private const val PINPAD_PACKAGE = "com.payclip.blaze.pinpad"
         private const val PINPAD_ENTRY_ACTIVITY = "$PINPAD_PACKAGE.views.MainActivity"
 
         private const val PAYMENT_AUTO_RETURN_EXTRA = "PAYMENT_AUTO_RETURN"
         private const val PAYMENT_REQUEST_ID_EXTRA = "PAYMENT_REQUEST_ID"
+        private const val PAYMENT_IS_TIP_ENABLED_EXTRA = "PAYMENT_IS_TIP_ENABLED"
     }
 }

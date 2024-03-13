@@ -8,8 +8,9 @@ internal interface PaymentDataSource {
 
     @Throws(CreatePaymentException::class)
     suspend fun create(
-        amount: Double,
         user: String,
+        reference: String,
+        amount: Double,
         message: String
     ): PendingPayment
 }

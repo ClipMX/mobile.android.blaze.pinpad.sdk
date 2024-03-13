@@ -19,6 +19,7 @@ class ClipPayment internal constructor(
     private val useCase: CreatePaymentUseCase,
     private val user: String,
     private val isAutoReturnEnabled: Boolean,
+    private val isTipEnabledEnabled: Boolean,
     private val listener: PaymentListener?,
     private val isLoading: MutableStateFlow<Boolean>?
 ) {
@@ -33,6 +34,8 @@ class ClipPayment internal constructor(
 
         private var isAutoReturnEnabled: Boolean = false
 
+        private var isTipEnabledEnabled: Boolean = false
+
         private var listener: PaymentListener? = null
 
         private var isLoading: MutableStateFlow<Boolean>? = null
@@ -45,6 +48,10 @@ class ClipPayment internal constructor(
 
         fun isAutoReturnEnabled(isEnabled: Boolean) = apply {
             this.isAutoReturnEnabled = isEnabled
+        }
+
+        fun isTipEnabled(isEnabled: Boolean) = apply {
+            this.isTipEnabledEnabled = isEnabled
         }
 
         fun addListener(listener: PaymentListener) = apply {
@@ -66,6 +73,7 @@ class ClipPayment internal constructor(
                 useCase = useCase,
                 user = user,
                 isAutoReturnEnabled = isAutoReturnEnabled,
+                isTipEnabledEnabled = isTipEnabledEnabled,
                 listener = listener,
                 isLoading = isLoading
             )
@@ -81,13 +89,18 @@ class ClipPayment internal constructor(
         )
     }
 
-    suspend fun start(amount: Double, message: String) {
+    suspend fun start(
+        reference: String,
+        amount: Double,
+        message: String
+    ) {
         isLoading?.value = true
-        useCase.invoke(user, amount, message)
+        useCase.invoke(user, reference, amount, message)
             .onSuccess {
                 launcher.startPayment(
                     requestId = it.requestId,
-                    autoReturn = isAutoReturnEnabled
+                    autoReturn = isAutoReturnEnabled,
+                    isTipEnabled = isTipEnabledEnabled
                 )
             }
             .onFailure {
