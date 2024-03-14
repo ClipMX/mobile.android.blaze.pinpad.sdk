@@ -19,7 +19,7 @@ class ClipPayment internal constructor(
     private val useCase: CreatePaymentUseCase,
     private val user: String,
     private val isAutoReturnEnabled: Boolean,
-    private val isTipEnabledEnabled: Boolean,
+    private val isTipEnabledEnabled: Boolean?,
     private val listener: PaymentListener?,
     private val isLoading: MutableStateFlow<Boolean>?
 ) {
@@ -34,7 +34,7 @@ class ClipPayment internal constructor(
 
         private var isAutoReturnEnabled: Boolean = false
 
-        private var isTipEnabledEnabled: Boolean = false
+        private var isTipEnabledEnabled: Boolean? = null
 
         private var listener: PaymentListener? = null
 

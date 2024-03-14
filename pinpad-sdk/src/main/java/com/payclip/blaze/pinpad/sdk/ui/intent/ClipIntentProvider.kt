@@ -7,12 +7,12 @@ interface ClipIntentProvider {
     fun getClipIntent(
         requestId: String,
         autoReturn: Boolean = false,
-        isTipEnabled: Boolean = false
+        isTipEnabled: Boolean? = null
     ): Intent
 
     fun getRequestId(intent: Intent): String
 
     fun getAutoReturn(intent: Intent): Boolean
 
-    fun isTipEnabled(intent: Intent): Boolean
+    fun isTipEnabled(intent: Intent): Boolean?
 }
