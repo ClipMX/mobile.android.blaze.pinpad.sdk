@@ -12,11 +12,12 @@ internal class ServerPaymentDataSource constructor(
 ) : PaymentDataSource {
 
     override suspend fun create(
-        amount: Double,
         user: String,
+        reference: String,
+        amount: Double,
         message: String
     ): PendingPayment {
-        val request = getRequest(amount, user, message)
+        val request = getRequest(user, reference, amount, message)
         val response = api.create(request)
 
         if (response.code != 100) {
@@ -27,13 +28,14 @@ internal class ServerPaymentDataSource constructor(
     }
 
     private fun getRequest(
-        amount: Double,
         user: String,
+        reference: String,
+        amount: Double,
         message: String
     ) = PaymentRequestDTO(
-        amount,
-        user,
-        UUID.randomUUID().toString().substring(0, 11),
-        message
+        assignedUser = user,
+        reference = reference,
+        amount = amount,
+        message = message
     )
 }

@@ -53,7 +53,8 @@ internal class ActivityClipLauncher constructor(
 
     override fun startPayment(
         requestId: String,
-        autoReturn: Boolean
+        autoReturn: Boolean,
+        isTipEnabled: Boolean?
     ) {
         if (!::launcher.isInitialized) {
             throw PaymentInitializationException()
@@ -61,7 +62,8 @@ internal class ActivityClipLauncher constructor(
 
         val intent = intentProvider.getClipIntent(
             requestId = requestId,
-            autoReturn = autoReturn
+            autoReturn = autoReturn,
+            isTipEnabled = isTipEnabled
         )
 
         try {

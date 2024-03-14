@@ -17,6 +17,7 @@ interface ClipLauncher {
 
     fun startPayment(
         requestId: String,
-        autoReturn: Boolean = false
+        autoReturn: Boolean = false,
+        isTipEnabled: Boolean? = null
     )
 }

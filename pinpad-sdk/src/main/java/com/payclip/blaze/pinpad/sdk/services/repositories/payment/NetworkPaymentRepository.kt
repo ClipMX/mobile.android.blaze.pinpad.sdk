@@ -9,10 +9,16 @@ internal class NetworkPaymentRepository constructor(
 ) : PaymentRepository {
 
     override suspend fun create(
-        amount: Double,
         user: String,
+        reference: String,
+        amount: Double,
         message: String
     ): PendingPayment {
-        return dataSource.create(amount, user, message)
+        return dataSource.create(
+            user = user,
+            reference = reference,
+            amount = amount,
+            message = message
+        )
     }
 }
