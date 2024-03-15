@@ -43,6 +43,7 @@ class ClipPaymentTest {
             .setApiKey(API_KEY)
             .isDemo(IS_DEMO)
             .isAutoReturnEnabled(AUTO_RETURN)
+            .isTipEnabled(IS_TIP_ENABLED)
             .addListener(getEmptyListener())
             .setLoadingState(MutableStateFlow(false))
             .build()
@@ -55,6 +56,7 @@ class ClipPaymentTest {
                 .setApiKey(API_KEY)
                 .isDemo(IS_DEMO)
                 .isAutoReturnEnabled(AUTO_RETURN)
+                .isTipEnabled(IS_TIP_ENABLED)
                 .addListener(getEmptyListener())
                 .setLoadingState(MutableStateFlow(false))
                 .build()
@@ -68,6 +70,7 @@ class ClipPaymentTest {
                 .setUser(USER)
                 .isDemo(IS_DEMO)
                 .isAutoReturnEnabled(AUTO_RETURN)
+                .isTipEnabled(IS_TIP_ENABLED)
                 .addListener(getEmptyListener())
                 .setLoadingState(MutableStateFlow(false))
                 .build()
@@ -82,11 +85,11 @@ class ClipPaymentTest {
         val payment = getPaymentInstance(loading = flow)
         val response = getPendingPayment()
 
-        whenever(useCase.invoke(USER, AMOUNT, MESSAGE)).thenReturn(Result.success(response))
+        whenever(useCase.invoke(USER, REFERENCE, AMOUNT, MESSAGE)).thenReturn(Result.success(response))
 
-        payment.start(AMOUNT, MESSAGE)
+        payment.start(REFERENCE, AMOUNT, MESSAGE)
 
-        verify(launcher).startPayment(response.requestId, false)
+        verify(launcher).startPayment(response.requestId)
         assertEquals(listOf(false, true, false), results)
 
         job.cancel()
@@ -100,11 +103,29 @@ class ClipPaymentTest {
         val payment = getPaymentInstance(autoReturn = true, loading = flow)
         val response = getPendingPayment()
 
-        whenever(useCase.invoke(USER, AMOUNT, MESSAGE)).thenReturn(Result.success(response))
+        whenever(useCase.invoke(USER, REFERENCE, AMOUNT, MESSAGE)).thenReturn(Result.success(response))
 
-        payment.start(AMOUNT, MESSAGE)
+        payment.start(REFERENCE, AMOUNT, MESSAGE)
 
-        verify(launcher).startPayment(response.requestId, true)
+        verify(launcher).startPayment(requestId = response.requestId, autoReturn = true)
+        assertEquals(listOf(false, true, false), results)
+
+        job.cancel()
+    }
+
+    @Test
+    fun `create payment with success response and tip enabled and check if the result is right`() = runTest {
+        val results = mutableListOf<Boolean>()
+        val flow = MutableStateFlow(false)
+        val job = launch(testDispatcher) { flow.toList(results) }
+        val payment = getPaymentInstance(isTipEnabled = true, loading = flow)
+        val response = getPendingPayment()
+
+        whenever(useCase.invoke(USER, REFERENCE, AMOUNT, MESSAGE)).thenReturn(Result.success(response))
+
+        payment.start(REFERENCE, AMOUNT, MESSAGE)
+
+        verify(launcher).startPayment(requestId = response.requestId, isTipEnabled = true)
         assertEquals(listOf(false, true, false), results)
 
         job.cancel()
@@ -117,8 +138,8 @@ class ClipPaymentTest {
         val job = launch(testDispatcher) { flow.toList(results) }
         val payment = getPaymentInstance(loading = flow)
 
-        whenever(useCase.invoke(USER, 0.0, MESSAGE)).thenReturn(Result.failure(EmptyAmountException()))
-        payment.start(0.0, MESSAGE)
+        whenever(useCase.invoke(USER, REFERENCE, 0.0, MESSAGE)).thenReturn(Result.failure(EmptyAmountException()))
+        payment.start(REFERENCE, 0.0, MESSAGE)
 
         verify(listener).onFailure(EmptyAmountException.ERROR_CODE)
         assertEquals(listOf(false, true, false), results)
@@ -133,8 +154,8 @@ class ClipPaymentTest {
         val job = launch(testDispatcher) { flow.toList(results) }
         val payment = getPaymentInstance(loading = flow)
 
-        whenever(useCase.invoke(USER, AMOUNT, "")).thenReturn(Result.failure(EmptyMessageException()))
-        payment.start(AMOUNT, "")
+        whenever(useCase.invoke(USER, REFERENCE, AMOUNT, "")).thenReturn(Result.failure(EmptyMessageException()))
+        payment.start(REFERENCE, AMOUNT, "")
 
         verify(listener).onFailure(EmptyMessageException.ERROR_CODE)
         assertEquals(listOf(false, true, false), results)
@@ -149,9 +170,9 @@ class ClipPaymentTest {
         val job = launch(testDispatcher) { flow.toList(results) }
         val payment = getPaymentInstance(loading = flow)
 
-        whenever(useCase.invoke(USER, AMOUNT, MESSAGE)).thenReturn(Result.failure(CreatePaymentException()))
+        whenever(useCase.invoke(USER, REFERENCE, AMOUNT, MESSAGE)).thenReturn(Result.failure(CreatePaymentException()))
 
-        payment.start(AMOUNT, MESSAGE)
+        payment.start(REFERENCE, AMOUNT, MESSAGE)
 
         verify(listener).onFailure(CreatePaymentException.ERROR_CODE)
         assertEquals(listOf(false, true, false), results)
@@ -166,9 +187,9 @@ class ClipPaymentTest {
         val job = launch(testDispatcher) { flow.toList(results) }
         val payment = getPaymentInstance(loading = flow)
 
-        whenever(useCase.invoke(USER, AMOUNT, MESSAGE)).thenReturn(Result.failure(Exception()))
+        whenever(useCase.invoke(USER, REFERENCE, AMOUNT, MESSAGE)).thenReturn(Result.failure(Exception()))
 
-        payment.start(AMOUNT, MESSAGE)
+        payment.start(REFERENCE, AMOUNT, MESSAGE)
 
         verify(listener).onFailure(ClipPayment.DEFAULT_ERROR)
         assertEquals(listOf(false, true, false), results)
@@ -178,12 +199,14 @@ class ClipPaymentTest {
 
     private fun getPaymentInstance(
         autoReturn: Boolean = false,
+        isTipEnabled: Boolean? = null,
         loading: MutableStateFlow<Boolean>? = null
     ) = ClipPayment(
         launcher,
         useCase,
         USER,
         autoReturn,
+        isTipEnabled,
         listener,
         loading
     )
@@ -208,6 +231,7 @@ class ClipPaymentTest {
 
         private const val AMOUNT = 10.0
         private const val USER = "guido.perre@payclip.com"
+        private const val REFERENCE = "xyz"
         private const val MESSAGE = "cena"
 
         private const val REQUEST_ID = "abc"
@@ -215,5 +239,6 @@ class ClipPaymentTest {
         private const val API_KEY = "def"
         private const val IS_DEMO = false
         private const val AUTO_RETURN = false
+        private const val IS_TIP_ENABLED = false
     }
 }

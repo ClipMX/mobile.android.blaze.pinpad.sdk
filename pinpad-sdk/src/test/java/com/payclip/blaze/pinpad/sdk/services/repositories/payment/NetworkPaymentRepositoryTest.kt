@@ -23,14 +23,15 @@ class NetworkPaymentRepositoryTest {
 
     @Test
     fun `try to get pending payment and check if it wrap data source correctly`() = runTest {
-        val amount = 0.1
         val user = "guido.perre@payclip.com"
+        val reference = "xyz"
+        val amount = 0.1
         val message = "cena"
         val requestId = "abc"
         val response = PendingPayment(requestId)
 
-        whenever(dataSource.create(amount, user, message)).thenReturn(response)
+        whenever(dataSource.create(user, reference, amount, message)).thenReturn(response)
 
-        assertEquals(response, repository.create(amount, user, message))
+        assertEquals(response, repository.create(user, reference, amount, message))
     }
 }
