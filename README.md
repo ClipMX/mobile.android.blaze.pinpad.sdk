@@ -54,9 +54,6 @@ Before you begin, make sure you have the following:
 ##### Supported Device
 Please note that our SDK is currently only supported on Clip Total devices, as it requires integration with the PinPad application installed on these devices.
 
-##### Compose
-You will need compose in order to use this SDK.
-
 ##### API Key
 You'll need an API key to authenticate with our services. If you don't have one yet, you can generate it on the [Clip Developers](https://developer.clip.mx/reference/token-de-autenticacion#2-crea-un-token-de-autenticaci%C3%B3n-con-codificaci%C3%B3n-base64) page.
 
@@ -68,7 +65,7 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         mavenCentral()
-        maven { url = uri("https://jitpack.io") }
+        maven { url = uri("https://maven.pkg.github.com/ClipMX/mobile.android.blaze.pinpad.sdk") }
     }
 }
 ```
@@ -96,6 +93,7 @@ We strongly recommend staying informed about new versions of our SDK and updatin
 
 Our payment SDK is designed to be incredibly user-friendly, allowing you to configure the client according to your specific needs. Below is an example implementation for basic usage in a Compose application:
 
+Compose
 ```Payment.kt
 @Composable
 fun PaymentScreen() {
@@ -113,13 +111,43 @@ fun PaymentScreen() {
         onClick = {
             scope.launch {
                 client.start(
+                    reference = REFERENCE,
                     amount = AMOUNT,
                     message = MESSAGE
                 )
-           }
+            }
         }
     ) {
         ...
+    }
+}
+```
+
+Activity
+```Activity.kt
+class MainActivity : ComponentActivity() {
+
+    private val builder: ClipPayment by lazy {
+        ClipPayment.Builder()
+            .setUser(YOUR_CLIP_USER)
+            .setApiKey(YOUR_CLIP_TOKEN)
+            .build()
+    }
+
+    init {
+        builder.setPaymentHandler(this@MainActivity)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            builder.start(
+                reference = REFERENCE,
+                amount = AMOUNT,
+                message = MESSAGE
+            )
+        }
     }
 }
 ```
@@ -128,6 +156,7 @@ In this example, there are three vital components for client configuration:
 
 1. **Client Initialization**: You must instantiate the client in your application. The client requires two mandatory parameters: your Clip user and the API key generated earlier.
 
+Compose
 ```Payment.kt
 val client = remember {
     ClipPayment.Builder()
@@ -137,8 +166,19 @@ val client = remember {
 }
 ```
 
-2. **Payment Handler**: Payment handling is mandatory as the client needs to know the composable context to launch activities and handle results.
+Activity
+```Activity.kt
+private val builder: ClipPayment by lazy {
+    ClipPayment.Builder()
+        .setUser(YOUR_CLIP_USER)
+        .setApiKey(YOUR_CLIP_TOKEN)
+        .build()
+}
+```
 
+2. **Payment Handler**: Payment handling is mandatory as the client needs to know the composable context to launch activities and handle results. If you are using Activity, be sure to call handler before activity onCreate.
+
+Compose
 ```Payment.kt
 @Composable
 fun PaymentScreen() {
@@ -150,16 +190,22 @@ fun PaymentScreen() {
 }
 ```
 
+Activity
+```Activity.kt
+init {
+    builder.setPaymentHandler(this@MainActivity)
+}
+```
+
 3. **Payment Launch**: With the client instantiated and the payment handler configured, you can call the launcher. This method requires two parameters: the amount to charge and a descriptive message about the payment.
 
 ```Payment.kt
-onClick = {
-    scope.launch {
-        client.start(
-            amount = AMOUNT,
-            message = MESSAGE
-        )
-   }
+scope.launch {
+    client.start(
+        reference = REFERENCE,
+        amount = AMOUNT,
+        message = MESSAGE
+    )
 }
 ```
 
