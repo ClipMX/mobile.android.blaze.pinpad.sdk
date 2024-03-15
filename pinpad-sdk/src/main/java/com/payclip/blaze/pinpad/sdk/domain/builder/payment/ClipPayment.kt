@@ -15,6 +15,9 @@ import com.payclip.blaze.pinpad.sdk.domain.usecases.payment.CreatePaymentUseCase
 import com.payclip.blaze.pinpad.sdk.ui.launcher.ClipLauncher
 import kotlinx.coroutines.flow.MutableStateFlow
 
+/**
+ * With ClipPayment you will be able to start payment and customize your experience as you want.
+ */
 class ClipPayment internal constructor(
     private val launcher: ClipLauncher,
     private val useCase: CreatePaymentUseCase,
@@ -25,6 +28,10 @@ class ClipPayment internal constructor(
     private val isLoading: MutableStateFlow<Boolean>?
 ) {
 
+    /**
+     * [ClipPayment] builder. Offers a way to configure you ClipPayment object and customize your
+     * experience.
+     */
     class Builder {
 
         private var user: String? = null
@@ -41,28 +48,71 @@ class ClipPayment internal constructor(
 
         private var isLoading: MutableStateFlow<Boolean>? = null
 
+        /**
+         * Method to settle user.
+         *
+         * @param user Your clip user, it is very important to be logged with this user in PinPad
+         * Clip application.
+         */
         fun setUser(user: String) = apply { this.user = user }
 
+        /**
+         * Method to settle api key.
+         *
+         * @param apiKey Your clip api key generated in Clip Developer page.
+         */
         fun setApiKey(apiKey: String) = apply { this.apiKey = apiKey }
 
+        /**
+         * Method to settle environment.
+         *
+         * @param isDemo If it is true, you will use demo environment. Api keys are different by
+         * environment, be sure to change it.
+         */
         fun isDemo(isDemo: Boolean) = apply { this.isDemo = isDemo }
 
+        /**
+         * Method to settle return type.
+         *
+         * @param isEnabled If it is true, when the payment process throw success or error, you will
+         * auto return to your application. Otherwise you will see a screen with information.
+         */
         fun isAutoReturnEnabled(isEnabled: Boolean) = apply {
             this.isAutoReturnEnabled = isEnabled
         }
 
+        /**
+         * Method to settle tip availability.
+         *
+         * @param isEnabled If it is true, you will tip screen before payment start.
+         */
         fun isTipEnabled(isEnabled: Boolean) = apply {
             this.isTipEnabledEnabled = isEnabled
         }
 
+        /**
+         * Method to settle result listener.
+         *
+         * @param listener Listen the payment process results.
+         */
         fun addListener(listener: PaymentListener) = apply {
             this.listener = listener
         }
 
+        /**
+         * Method to settle loading state.
+         *
+         * @param state A [MutableStateFlow] that handle loading state of request call.
+         */
         fun setLoadingState(state: MutableStateFlow<Boolean>) = apply {
             this.isLoading = state
         }
 
+        /**
+         * Method to build ClipPayment object.
+         *
+         * @return This method returns [ClipPayment] object with all parameters settled.
+         */
         fun build(): ClipPayment {
             val user = user ?: throw UserNotFoundException()
             val apiKey = apiKey ?: throw ApiKeyNotFoundException()
@@ -81,6 +131,12 @@ class ClipPayment internal constructor(
         }
     }
 
+    /**
+     * This handler register activity contract in your Activity. It is very import to
+     * invoke this method before calling `startPayment`.
+     *
+     * @param activity component activity needed to register activity contract.
+     */
     fun setPaymentHandler(activity: ComponentActivity) {
         launcher.setPaymentHandler(
             activity = activity,
@@ -90,6 +146,10 @@ class ClipPayment internal constructor(
         )
     }
 
+    /**
+     * This handler register activity contract in your Composable. It is very import to
+     * invoke this method before calling `startPayment`.
+     */
     @Composable
     fun setPaymentHandler() {
         launcher.setPaymentHandler(
@@ -99,6 +159,15 @@ class ClipPayment internal constructor(
         )
     }
 
+    /**
+     * Call this method when you want to start Clip payment process. Be sure to call
+     * `setPaymentHandler` before, otherwise this method call will crash with no initialization
+     * exception.
+     *
+     * @param reference The id or a reference of your payment.
+     * @param amount The amount to be processed in payment process.
+     * @param message A message you want to add to your payment.
+     */
     suspend fun start(
         reference: String,
         amount: Double,

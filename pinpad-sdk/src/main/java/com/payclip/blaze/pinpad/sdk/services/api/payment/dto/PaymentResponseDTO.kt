@@ -2,7 +2,7 @@ package com.payclip.blaze.pinpad.sdk.services.api.payment.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class PaymentResponseDTO(
+internal data class PaymentResponseDTO(
     @SerializedName("code")
     val code: Int,
     @SerializedName("description")
