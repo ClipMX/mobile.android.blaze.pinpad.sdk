@@ -37,7 +37,7 @@ class ServerPaymentDataSourceTest {
 
         whenever(api.create(request)).thenReturn(response)
 
-        with(dataSource.create(request.amount, request.assignedUser, request.message)) {
+        with(dataSource.create(request.assignedUser, request.reference, request.amount, request.message)) {
             assertEquals(result, this)
         }
     }
@@ -52,15 +52,15 @@ class ServerPaymentDataSourceTest {
 
         assertThrows(Exception::class.java) {
             runBlocking {
-                dataSource.create(request.amount, request.assignedUser, request.message)
+                dataSource.create(request.assignedUser, request.reference, request.amount, request.message)
             }
         }
     }
 
     private fun getPaymentRequestDTO() = PaymentRequestDTO(
-        AMOUNT,
         USER,
-        referenceId.toString().substring(0, 11),
+        REFERENCE,
+        AMOUNT,
         MESSAGE
     )
 
@@ -76,21 +76,13 @@ class ServerPaymentDataSourceTest {
     private fun getPendingPayment() = PendingPayment(REQUEST_ID)
 
     companion object {
-        private val referenceId = UUID(100, 100)
-        private val uuid = Mockito.mockStatic(UUID::class.java)
-
-        private const val AMOUNT = 10.0
         private const val USER = "guido.perre@payclip.com"
+        private const val REFERENCE = "xyz"
+        private const val AMOUNT = 10.0
         private const val MESSAGE = "cena"
 
         private const val DESCRIPTION = "Saved"
         private const val REQUEST_ID = "abc"
         private const val REQUEST_STATUS = "approved"
-
-
-        @BeforeClass
-        @JvmStatic fun setUpMocks() {
-            uuid.`when`<UUID> { UUID.randomUUID() }.thenReturn(referenceId)
-        }
     }
 }
