@@ -2,7 +2,7 @@ package com.payclip.blaze.pinpad.sdk.services.api.payment.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class PaymentRequestDTO(
+internal data class PaymentRequestDTO(
     @SerializedName("assigned_user")
     val assignedUser: String,
     @SerializedName("reference")
