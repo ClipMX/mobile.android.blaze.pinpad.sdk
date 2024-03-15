@@ -1,19 +1,24 @@
 package com.payclip.blaze.pinpad.sdk.ui.launcher
 
-import android.content.Intent
-import androidx.activity.compose.ManagedActivityResultLauncher
-import androidx.activity.result.ActivityResult
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.PaymentResult
 
 interface ClipLauncher {
+
+    fun setPaymentHandler(
+        activity: ComponentActivity,
+        onSuccess: (result: PaymentResult) -> Unit,
+        onCancelled: () -> Unit,
+        onFailure: (code: String) -> Unit
+    )
 
     @Composable
     fun setPaymentHandler(
         onSuccess: (result: PaymentResult) -> Unit,
         onCancelled: () -> Unit,
         onFailure: (code: String) -> Unit
-    ): ManagedActivityResultLauncher<Intent, ActivityResult>
+    )
 
     fun startPayment(
         requestId: String,

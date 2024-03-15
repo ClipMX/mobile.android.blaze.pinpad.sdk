@@ -1,5 +1,6 @@
 package com.payclip.blaze.pinpad.sdk.domain.builder.payment
 
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import com.payclip.blaze.pinpad.sdk.di.domain.usecases.payment.CreatePaymentUseCaseFactory
@@ -78,6 +79,15 @@ class ClipPayment internal constructor(
                 isLoading = isLoading
             )
         }
+    }
+
+    fun setPaymentHandler(activity: ComponentActivity) {
+        launcher.setPaymentHandler(
+            activity = activity,
+            onSuccess = { listener?.onSuccess(it) },
+            onCancelled = { listener?.onCancelled() },
+            onFailure = { listener?.onFailure(it) }
+        )
     }
 
     @Composable
