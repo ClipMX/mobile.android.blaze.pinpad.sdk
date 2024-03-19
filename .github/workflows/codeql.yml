@@ -43,27 +43,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-    #checkout credenciales
-
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        role-to-assume: ${{ secrets.AWS_OIDC_ROLE }}
-        aws-region: ${{ secrets.SHARED_AWS_REGION }}
-
-    - name: Get token and update secret
-      run: |
-          CODEARTIFACT_TOKEN=$(aws codeartifact get-authorization-token --domain payclip --domain-owner 947496605289 --query authorizationToken --output text --region us-west-2)
-          echo "CODEARTIFACT_TOKEN=$CODEARTIFACT_TOKEN" >> $GITHUB_ENV
-    - name: Check if generation was not successful
-      shell: bash
-      if: env.CODEARTIFACT_TOKEN == ''
-      run: |
-        echo CODEARTIFACT_TOKEN not generated succesfully... ABORTING
-        exit(1);
-
-
-
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
@@ -106,7 +85,7 @@ jobs:
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v3
     - name: Build with Gradle
-      run: ./gradlew build            
+      run: ./gradlew build --scan
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
