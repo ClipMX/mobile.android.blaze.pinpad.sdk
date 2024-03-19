@@ -1,40 +1,24 @@
 package com.payclip.blaze.pinpad.sdk.domain.usecases.payment
 
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyAmountException
-import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyMessageException
-import com.payclip.blaze.pinpad.sdk.domain.models.payment.PendingPayment
-import com.payclip.blaze.pinpad.sdk.domain.repository.payment.PaymentRepository
-import kotlinx.coroutines.CancellationException
+import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyReferenceException
 
-internal class CreatePaymentUseCase constructor(
-    private val repository: PaymentRepository
-) {
+internal class CreatePaymentUseCase {
 
-    suspend operator fun invoke(
-        user: String,
+    operator fun invoke(
         reference: String,
-        amount: Double,
-        message: String
-    ): Result<PendingPayment> {
+        amount: Double
+    ): Result<Unit> {
         return try {
+            if (reference.isBlank()) {
+                throw EmptyReferenceException()
+            }
+
             if (amount == EMPTY_AMOUNT) {
                 throw EmptyAmountException()
             }
 
-            if (message.isEmpty()) {
-                throw EmptyMessageException()
-            }
-
-            Result.success(
-                repository.create(
-                    user = user,
-                    reference = reference,
-                    amount = amount,
-                    message = message
-                )
-            )
-        } catch (e: CancellationException) {
-            throw e
+            Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }

@@ -54,11 +54,8 @@ Before you begin, make sure you have the following:
 ##### Supported Device
 Please note that our SDK is currently only supported on Clip Total devices, as it requires integration with the PinPad application installed on these devices.
 
-##### API Key
-You'll need an API key to authenticate with our services. If you don't have one yet, you can generate it on the [Clip Developers](https://developer.clip.mx/reference/token-de-autenticacion#2-crea-un-token-de-autenticaci%C3%B3n-con-codificaci%C3%B3n-base64) page.
-
 ##### Dependency
-To download the SDK dependency, you'll need to add JitPack to your Maven repositories. Follow these steps:
+To download the SDK dependency, you'll need to add our Github Package to your Maven repositories. Follow these steps:
 
 ```settings.gradle.kts
 dependencyResolutionManagement {
@@ -79,7 +76,7 @@ dependencies {
 ```
 
 ##### Installation Steps
-- Add JitPack Repository: Open your settings.gradle.kts file and add the JitPack repository to your Maven repositories list.
+- Add Github Packages Repository: Open your settings.gradle.kts file and add our Github Package repository to your Maven repositories list.
 - Add Dependency: Open your build.gradle.kts file and add the SDK dependency.
 
 ###### Stay Updated
@@ -100,8 +97,7 @@ fun PaymentScreen() {
     val scope = rememberCoroutineScope()
     val client = remember {
         ClipPayment.Builder()
-            .setUser(YOUR_CLIP_USER)
-            .setApiKey(YOUR_CLIP_TOKEN)
+            // Configure your payment
             .build()
     }
 
@@ -112,8 +108,7 @@ fun PaymentScreen() {
             scope.launch {
                 client.start(
                     reference = REFERENCE,
-                    amount = AMOUNT,
-                    message = MESSAGE
+                    amount = AMOUNT
                 )
             }
         }
@@ -129,8 +124,7 @@ class MainActivity : ComponentActivity() {
 
     private val builder: ClipPayment by lazy {
         ClipPayment.Builder()
-            .setUser(YOUR_CLIP_USER)
-            .setApiKey(YOUR_CLIP_TOKEN)
+            // Configure your payment
             .build()
     }
 
@@ -144,8 +138,7 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             builder.start(
                 reference = REFERENCE,
-                amount = AMOUNT,
-                message = MESSAGE
+                amount = AMOUNT
             )
         }
     }
@@ -154,14 +147,13 @@ class MainActivity : ComponentActivity() {
 
 In this example, there are three vital components for client configuration:
 
-1. **Client Initialization**: You must instantiate the client in your application. The client requires two mandatory parameters: your Clip user and the API key generated earlier.
+1. **Client Initialization**: You must instantiate the client in your application.
 
 Compose
 ```Payment.kt
 val client = remember {
     ClipPayment.Builder()
-        .setUser(YOUR_CLIP_USER)
-        .setApiKey(YOUR_CLIP_TOKEN)
+        // Configure your payment
         .build()
 }
 ```
@@ -170,8 +162,7 @@ Activity
 ```Activity.kt
 private val builder: ClipPayment by lazy {
     ClipPayment.Builder()
-        .setUser(YOUR_CLIP_USER)
-        .setApiKey(YOUR_CLIP_TOKEN)
+        // Configure your payment
         .build()
 }
 ```
@@ -203,8 +194,7 @@ init {
 scope.launch {
     client.start(
         reference = REFERENCE,
-        amount = AMOUNT,
-        message = MESSAGE
+        amount = AMOUNT
     )
 }
 ```
@@ -227,16 +217,16 @@ Our payment SDK offers several additional configuration parameters to customize 
         .isAutoReturnEnabled(isAutoReturnEnabled: Boolean)
 ```
 
+- **isTipEnabled**: This parameter sets if the tip screen will be shown when the payment process starts or not. By default it is false, and the tip screen will not be shown.
+```Payment.kt
+    ClipPayment.Builder()
+        .isTipEnabled(isTipEnabled: Boolean)
+```
+
 - **addListener**: With this parameter, you can register a listener to receive transaction results. This allows you to handle the outcome of the transaction within your application.
 ```Payment.kt
     ClipPayment.Builder()
         .addListener(listener: PaymentListener)
-```
-
-- **setLoadingState**: This parameter provides you with a loading state while our SDK is performing various tasks such as calling APIs. It accepts a MutableStateFlow<Boolean> parameter, allowing you to manage the loading state within your application.
-```Payment.kt
-    ClipPayment.Builder()
-        .setLoadingState(state: MutableStateFlow<Boolean>)
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

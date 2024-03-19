@@ -86,13 +86,15 @@ internal class ActivityClipLauncher constructor(
     }
 
     override fun startPayment(
-        requestId: String,
+        reference: String,
+        amount: Double,
         autoReturn: Boolean,
         isTipEnabled: Boolean?
     ) {
         val launcher = getLauncher()
         val intent = intentProvider.getClipIntent(
-            requestId = requestId,
+            reference = reference,
+            amount = amount,
             autoReturn = autoReturn,
             isTipEnabled = isTipEnabled
         )
