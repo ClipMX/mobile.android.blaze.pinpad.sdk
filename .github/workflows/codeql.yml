@@ -34,7 +34,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'java' ]
+        language: [ 'java-kotlin' ]
         # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
         # Use only 'java' to analyze code written in Java, Kotlin or both
         # Use only 'javascript' to analyze code written in JavaScript, TypeScript or both
@@ -92,7 +92,7 @@ jobs:
     # - run: |
     #     echo "Run, Build Application using script"
     #     ./location_of_script_within_repo/buildscript.sh
-    - if: matrix.language == 'java'
+    - if: matrix.language == 'java-kotlin'
       uses: actions/setup-java@v4
       with:
         java-version: "11"
@@ -102,7 +102,7 @@ jobs:
         server-password: CODEARTIFACT_TOKEN
         cache: "maven"
 
-    - if: matrix.language == 'java'
+    - if: matrix.language == 'java-kotlin'
       name: Build Java
       run: |
         echo Is JAVA
