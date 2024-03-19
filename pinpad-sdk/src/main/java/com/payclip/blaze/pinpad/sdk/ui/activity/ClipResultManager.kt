@@ -11,14 +11,12 @@ interface ClipResultManager {
      * Set result when payment process is finished and has a successful response.
      *
      * @param activity The activity that will be finished.
-     * @param paymentId payment id used in payment process.
-     * @param merchantId merchant invoice id used in payment process.
+     * @param reference merchant invoice id used in payment process.
      * @param amount amount used in payment process.
      */
     fun setSuccessResult(
         activity: Activity,
-        paymentId: String,
-        merchantId: String,
+        reference: String,
         amount: String
     )
 
@@ -26,15 +24,13 @@ interface ClipResultManager {
      * Set result when payment process is finished and has a successful response.
      *
      * @param activity The activity that will be finished.
-     * @param paymentId payment id used in payment process.
-     * @param merchantId merchant invoice id used in payment process.
+     * @param reference merchant invoice id used in payment process.
      * @param amount amount used in payment process.
      * @param errorCode error code thrown by payment process.
      */
     fun setErrorResult(
         activity: Activity,
-        paymentId: String,
-        merchantId: String,
+        reference: String,
         amount: String,
         errorCode: String
     )

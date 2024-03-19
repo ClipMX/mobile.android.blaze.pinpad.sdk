@@ -13,6 +13,7 @@ import com.payclip.blaze.pinpad.sdk.ui.launcher.ClipLauncher
  * With ClipPayment you will be able to start payment and customize your experience as you want.
  */
 class ClipPayment internal constructor(
+    private val useCase: CreatePaymentUseCase,
     private val launcher: ClipLauncher,
     private val isAutoReturnEnabled: Boolean,
     private val isTipEnabledEnabled: Boolean?,
@@ -65,9 +66,11 @@ class ClipPayment internal constructor(
          * @return This method returns [ClipPayment] object with all parameters settled.
          */
         fun build(): ClipPayment {
+            val useCase = CreatePaymentUseCase()
             val launcher = ClipLauncherFactory.create()
 
             return ClipPayment(
+                useCase = useCase,
                 launcher = launcher,
                 isAutoReturnEnabled = isAutoReturnEnabled,
                 isTipEnabledEnabled = isTipEnabledEnabled,
@@ -116,7 +119,7 @@ class ClipPayment internal constructor(
         reference: String,
         amount: Double
     ) {
-        CreatePaymentUseCase().invoke(reference = reference, amount = amount)
+       useCase.invoke(reference = reference, amount = amount)
             .onSuccess {
                 launcher.startPayment(
                     reference = reference,

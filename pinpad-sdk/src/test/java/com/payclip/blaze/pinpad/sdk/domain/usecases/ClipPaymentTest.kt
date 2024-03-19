@@ -7,24 +7,13 @@ import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyReferenceExcep
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.PaymentResult
 import com.payclip.blaze.pinpad.sdk.domain.usecases.payment.CreatePaymentUseCase
 import com.payclip.blaze.pinpad.sdk.ui.launcher.ClipLauncher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThrows
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ClipPaymentTest {
-
-    @ExperimentalCoroutinesApi
-    val testDispatcher = UnconfinedTestDispatcher()
 
     private val launcher = mock<ClipLauncher>()
 
@@ -96,9 +85,6 @@ class ClipPaymentTest {
 
     @Test
     fun `create payment with unknown error response and check if the error is handled`() = runTest {
-        val results = mutableListOf<Boolean>()
-        val flow = MutableStateFlow(false)
-        val job = launch(testDispatcher) { flow.toList(results) }
         val payment = getPaymentInstance()
 
         whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.failure(Exception()))
@@ -106,15 +92,13 @@ class ClipPaymentTest {
         payment.start(REFERENCE, AMOUNT)
 
         verify(listener).onFailure(ClipPayment.DEFAULT_ERROR)
-        assertEquals(listOf(false, true, false), results)
-
-        job.cancel()
     }
 
     private fun getPaymentInstance(
         autoReturn: Boolean = false,
         isTipEnabled: Boolean? = null
     ) = ClipPayment(
+        useCase,
         launcher,
         autoReturn,
         isTipEnabled,
