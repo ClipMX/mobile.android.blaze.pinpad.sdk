@@ -17,7 +17,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         return Intent(Intent.ACTION_MAIN).apply {
             component = ComponentName(PINPAD_PACKAGE, PINPAD_ENTRY_ACTIVITY)
             putExtra(PAYMENT_REFERENCE_EXTRA, reference)
-            putExtra(PAYMENT_AMOUNT_EXTRA, amount)
+            putExtra(PAYMENT_AMOUNT_EXTRA, amount.toString())
             putExtra(PAYMENT_AUTO_RETURN_EXTRA, autoReturn)
             putExtra(PAYMENT_IS_TIP_ENABLED_EXTRA, isTipEnabled)
         }
@@ -27,12 +27,12 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         return intent.extras?.getString(PAYMENT_REFERENCE_EXTRA) ?: throw EmptyReferenceException()
     }
 
-    override fun getAmount(intent: Intent): Double {
-        return intent.extras?.getDouble(PAYMENT_AMOUNT_EXTRA) ?: throw EmptyAmountException()
+    override fun getAmount(intent: Intent): String {
+        return intent.extras?.getString(PAYMENT_AMOUNT_EXTRA) ?: throw EmptyAmountException()
     }
 
-    override fun getAutoReturn(intent: Intent): Boolean {
-        return intent.extras?.getBoolean(PAYMENT_AUTO_RETURN_EXTRA) ?: false
+    override fun getAutoReturn(intent: Intent): Boolean? {
+        return intent.extras?.getBoolean(PAYMENT_AUTO_RETURN_EXTRA)
     }
 
     override fun isTipEnabled(intent: Intent): Boolean? {

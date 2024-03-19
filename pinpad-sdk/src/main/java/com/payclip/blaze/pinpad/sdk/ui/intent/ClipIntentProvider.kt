@@ -38,16 +38,16 @@ interface ClipIntentProvider {
      *
      * @return The amount to be charged.
      */
-    fun getAmount(intent: Intent): Double
+    fun getAmount(intent: Intent): String
 
     /**
      * Get auto return from intent extras.
      *
      * @param intent activity intent with extras.
      *
-     * @return The auto return state. If auto return was not settled, false is returned.
+     * @return The auto return state. If auto return was not settled, null is returned.
      */
-    fun getAutoReturn(intent: Intent): Boolean
+    fun getAutoReturn(intent: Intent): Boolean?
 
     /**
      * Get tip availability from intent extras.
