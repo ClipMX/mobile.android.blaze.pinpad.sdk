@@ -95,8 +95,8 @@ jobs:
     - if: matrix.language == 'java-kotlin'
       uses: actions/setup-java@v4
       with:
-        java-version: "11"
-        distribution: "corretto"
+        java-version: "18"
+        distribution: "adopt"
         server-id: codeartifact
         server-username: aws
         server-password: CODEARTIFACT_TOKEN
