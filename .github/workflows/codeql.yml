@@ -97,20 +97,6 @@ jobs:
       with:
         java-version: "18"
         distribution: "adopt"
-        server-id: codeartifact
-        server-username: aws
-        server-password: CODEARTIFACT_TOKEN
-        cache: "maven"
-
-    - if: matrix.language == 'java-kotlin'
-      name: Build Java
-      run: |
-        echo Is JAVA
-        mvn  clean package -U -DskipTests=true
-
-    - if: matrix.language == 'python'
-      name: Autobuild
-      uses: github/codeql-action/autobuild@v3
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
