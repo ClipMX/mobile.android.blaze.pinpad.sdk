@@ -95,8 +95,13 @@ jobs:
     - if: matrix.language == 'java-kotlin'
       uses: actions/setup-java@v4
       with:
-        java-version: "18"
-        distribution: "adopt"
+        java-version: '18'
+        distribution: 'adopt'
+        cache: 'gradle'
+        cache-dependency-path: | # optional
+            sub-project/*.gradle*
+            sub-project/**/gradle-wrapper.properties
+        run: ./gradlew build --no-daemon  
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
