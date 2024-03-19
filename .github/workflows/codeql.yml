@@ -99,8 +99,8 @@ jobs:
         distribution: 'adopt'
         cache: 'gradle'
         cache-dependency-path: | # optional
-            sub-project/*.gradle*
-            sub-project/**/gradle-wrapper.properties
+            gradle/*.gradle*
+            gradle/**/gradle-wrapper.properties
         run: ./gradlew build --no-daemon  
 
     - name: Perform CodeQL Analysis
