@@ -12,13 +12,11 @@ class ActivityClipResultManager : ClipResultManager {
 
     override fun setSuccessResult(
         activity: Activity,
-        paymentId: String,
-        merchantId: String,
+        reference: String,
         amount: String
     ) {
         val result = PaymentResult(
-            paymentId = paymentId,
-            merchantId = merchantId,
+            reference = reference,
             status = PAYMENT_RESPONSE_APPROVED_STATUS,
             amount = amount
         )
@@ -38,14 +36,12 @@ class ActivityClipResultManager : ClipResultManager {
 
     override fun setErrorResult(
         activity: Activity,
-        paymentId: String,
-        merchantId: String,
+        reference: String,
         amount: String,
         errorCode: String
     ) {
         val result = PaymentResult(
-            paymentId = paymentId,
-            merchantId = merchantId,
+            reference = reference,
             status = PAYMENT_RESPONSE_ERROR_STATUS,
             amount = amount
         )

@@ -41,13 +41,15 @@ internal interface ClipLauncher {
      * `setPaymentHandler` before, otherwise this method call will crash with no initialization
      * exception.
      *
-     * @param requestId The id generated in backend when payment is created.
+     * @param reference The id or a reference of your payment.
+     * @param amount The amount to be processed in payment process.
      * @param autoReturn If it is true, when the payment process throw success or error, you will
      * auto return to your application. Otherwise you will see a defined screen with information.
      * @param isTipEnabled If it is true, you will tip screen before payment start.
      */
     fun startPayment(
-        requestId: String,
+        reference: String,
+        amount: Double,
         autoReturn: Boolean = false,
         isTipEnabled: Boolean? = null
     )
