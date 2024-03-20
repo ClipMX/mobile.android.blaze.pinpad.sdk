@@ -23,12 +23,12 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         }
     }
 
-    override fun getReference(intent: Intent): String {
-        return intent.extras?.getString(PAYMENT_REFERENCE_EXTRA) ?: throw EmptyReferenceException()
+    override fun getReference(intent: Intent): String? {
+        return intent.extras?.getString(PAYMENT_REFERENCE_EXTRA)
     }
 
-    override fun getAmount(intent: Intent): String {
-        return intent.extras?.getString(PAYMENT_AMOUNT_EXTRA) ?: throw EmptyAmountException()
+    override fun getAmount(intent: Intent): String? {
+        return intent.extras?.getString(PAYMENT_AMOUNT_EXTRA)
     }
 
     override fun getAutoReturn(intent: Intent): Boolean? {

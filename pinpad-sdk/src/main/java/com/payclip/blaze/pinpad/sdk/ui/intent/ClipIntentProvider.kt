@@ -29,7 +29,7 @@ interface ClipIntentProvider {
      *
      * @return The merchant payment reference.
      */
-    fun getReference(intent: Intent): String
+    fun getReference(intent: Intent): String?
 
     /**
      * Get amount to be charged from intent extras.
@@ -38,7 +38,7 @@ interface ClipIntentProvider {
      *
      * @return The amount to be charged.
      */
-    fun getAmount(intent: Intent): String
+    fun getAmount(intent: Intent): String?
 
     /**
      * Get auto return from intent extras.
