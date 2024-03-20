@@ -53,8 +53,8 @@ afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("release") {
-                groupId = "com.payclip.blaze"
-                artifactId = "pinpad-sdk"
+                groupId = "com.github.ClipMX"
+                artifactId = "mobile.android.blaze.pinpad.sdk"
                 // the version is provided by the TAG name
                 version = System.getenv("GITHUB_REF_NAME") ?: "0.0.0"
 
