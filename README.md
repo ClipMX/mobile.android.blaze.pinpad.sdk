@@ -55,14 +55,14 @@ Before you begin, make sure you have the following:
 Please note that our SDK is currently only supported on Clip Total devices, as it requires integration with the PinPad application installed on these devices.
 
 ##### Dependency
-To download the SDK dependency, you'll need to add our Github Package to your Maven repositories. Follow these steps:
+To download the SDK dependency, you'll need to add Jitpack to your Maven repositories. Follow these steps:
 
 ```settings.gradle.kts
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         mavenCentral()
-        maven { url = uri("https://maven.pkg.github.com/ClipMX/mobile.android.blaze.pinpad.sdk") }
+        maven { url = uri("https://jitpack.io") }
     }
 }
 ```
@@ -71,12 +71,12 @@ And then add the dependency to `build.gradle.kts`.
 
 ```build.gradle.kts
 dependencies {
-    implementation("com.blaze.pinpad:pinpad-sdk:latest-version")
+    implementation("com.github.ClipMX:mobile.android.blaze.pinpad.sdk:latest-version")
 }
 ```
 
 ##### Installation Steps
-- Add Github Packages Repository: Open your settings.gradle.kts file and add our Github Package repository to your Maven repositories list.
+- Add Jitpack Repository: Open your settings.gradle.kts file and add Jitpack repository to your Maven repositories list.
 - Add Dependency: Open your build.gradle.kts file and add the SDK dependency.
 
 ###### Stay Updated

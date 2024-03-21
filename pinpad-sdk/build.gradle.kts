@@ -53,25 +53,14 @@ afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("release") {
-                groupId = "com.payclip.blaze"
-                artifactId = "pinpad-sdk"
+                groupId = "com.github.ClipMX"
+                artifactId = "mobile.android.blaze.pinpad.sdk"
                 // the version is provided by the TAG name
                 version = System.getenv("GITHUB_REF_NAME") ?: "0.0.0"
 
                 afterEvaluate {
                     from(components["release"])
                     artifact(project.tasks.getByName("sourcesJar"))
-                }
-            }
-        }
-
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/ClipMX/mobile.android.blaze.pinpad.sdk")
-                credentials {
-                    username = System.getenv("GITHUB_ACTOR")
-                    password = System.getenv("GITHUB_TOKEN")
                 }
             }
         }
