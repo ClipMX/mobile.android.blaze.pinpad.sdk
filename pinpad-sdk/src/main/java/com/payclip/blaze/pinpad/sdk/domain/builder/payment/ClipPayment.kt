@@ -1,11 +1,13 @@
 package com.payclip.blaze.pinpad.sdk.domain.builder.payment
 
+import android.annotation.SuppressLint
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import com.payclip.blaze.pinpad.sdk.di.ui.launcher.ClipLauncherFactory
 import com.payclip.blaze.pinpad.sdk.domain.listener.payment.PaymentListener
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyAmountException
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyReferenceException
+import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
 import com.payclip.blaze.pinpad.sdk.domain.usecases.payment.CreatePaymentUseCase
 import com.payclip.blaze.pinpad.sdk.ui.launcher.ClipLauncher
 
@@ -16,7 +18,7 @@ class ClipPayment internal constructor(
     private val useCase: CreatePaymentUseCase,
     private val launcher: ClipLauncher,
     private val isAutoReturnEnabled: Boolean,
-    private val isTipEnabledEnabled: Boolean?,
+    private val preferences: PaymentPreferences,
     private val listener: PaymentListener?
 ) {
 
@@ -28,7 +30,7 @@ class ClipPayment internal constructor(
 
         private var isAutoReturnEnabled: Boolean = false
 
-        private var isTipEnabledEnabled: Boolean? = null
+        private var preferences: PaymentPreferences = PaymentPreferences()
 
         private var listener: PaymentListener? = null
 
@@ -43,12 +45,12 @@ class ClipPayment internal constructor(
         }
 
         /**
-         * Method to settle tip availability.
+         * Method to settle payment preferences.
          *
-         * @param isEnabled If it is true, you will tip screen before payment start.
+         * @param preferences An object loaded with all payment configuration.
          */
-        fun isTipEnabled(isEnabled: Boolean) = apply {
-            this.isTipEnabledEnabled = isEnabled
+        fun setPaymentPreferences(preferences: PaymentPreferences) = apply {
+            this.preferences = preferences
         }
 
         /**
@@ -73,7 +75,7 @@ class ClipPayment internal constructor(
                 useCase = useCase,
                 launcher = launcher,
                 isAutoReturnEnabled = isAutoReturnEnabled,
-                isTipEnabledEnabled = isTipEnabledEnabled,
+                preferences = preferences,
                 listener = listener
             )
         }
@@ -98,6 +100,7 @@ class ClipPayment internal constructor(
      * This handler register activity contract in your Composable. It is very import to
      * invoke this method before calling `startPayment`.
      */
+    @SuppressLint("ComposableNaming")
     @Composable
     fun setPaymentHandler() {
         launcher.setPaymentHandler(
@@ -125,7 +128,7 @@ class ClipPayment internal constructor(
                     reference = reference,
                     amount = amount,
                     autoReturn = isAutoReturnEnabled,
-                    isTipEnabled = isTipEnabledEnabled
+                    preferences = preferences
                 )
             }
             .onFailure {

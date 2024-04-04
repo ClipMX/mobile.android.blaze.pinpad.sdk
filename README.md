@@ -217,10 +217,14 @@ Our payment SDK offers several additional configuration parameters to customize 
         .isAutoReturnEnabled(isAutoReturnEnabled: Boolean)
 ```
 
-- **isTipEnabled**: This parameter sets if the tip screen will be shown when the payment process starts or not. By default it is false, and the tip screen will not be shown.
+- **setPaymentPreferences**: This parameter sets payment preferences.
+  - **isTipEnabled**: This parameter sets if the tip screen will be shown when the payment process starts or not. By default it is false, and the tip screen will not be shown.
+  - **isTipEnabled**: This parameter sets if the tip screen will be shown when the payment process starts or not. By default it is false, and the tip screen will not be shown.
+  - **isTipEnabled**: This parameter sets if the tip screen will be shown when the payment process starts or not. By default it is false, and the tip screen will not be shown.
+  - **isTipEnabled**: This parameter sets if the tip screen will be shown when the payment process starts or not. By default it is false, and the tip screen will not be shown.
 ```Payment.kt
     ClipPayment.Builder()
-        .isTipEnabled(isTipEnabled: Boolean)
+        .setPaymentPreferences(preferences: PaymentPreferences)
 ```
 
 - **addListener**: With this parameter, you can register a listener to receive transaction results. This allows you to handle the outcome of the transaction within your application.
