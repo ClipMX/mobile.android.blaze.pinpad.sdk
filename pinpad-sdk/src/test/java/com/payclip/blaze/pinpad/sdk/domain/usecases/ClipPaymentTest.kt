@@ -5,6 +5,7 @@ import com.payclip.blaze.pinpad.sdk.domain.listener.payment.PaymentListener
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyAmountException
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyReferenceException
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.PaymentResult
+import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
 import com.payclip.blaze.pinpad.sdk.domain.usecases.payment.CreatePaymentUseCase
 import com.payclip.blaze.pinpad.sdk.ui.launcher.ClipLauncher
 import kotlinx.coroutines.test.runTest
@@ -25,42 +26,93 @@ class ClipPaymentTest {
     fun `create clip payment with builder, then verify that nothing crash`() = runTest {
         ClipPayment.Builder()
             .isAutoReturnEnabled(AUTO_RETURN)
-            .isTipEnabled(IS_TIP_ENABLED)
+            .setPaymentPreferences(getPaymentPreferences())
             .addListener(getEmptyListener())
             .build()
     }
 
     @Test
     fun `create payment with success response and check if the result is right`() = runTest {
+        val preferences = getPaymentPreferences()
         val payment = getPaymentInstance()
 
         whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
 
         payment.start(REFERENCE, AMOUNT)
 
-        verify(launcher).startPayment(REFERENCE, AMOUNT)
+        verify(launcher).startPayment(REFERENCE, AMOUNT, false, preferences)
     }
 
     @Test
     fun `create payment with success response and auto return and check if the result is right`() = runTest {
+        val preferences = getPaymentPreferences()
         val payment = getPaymentInstance(autoReturn = true)
 
         whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
 
         payment.start(REFERENCE, AMOUNT)
 
-        verify(launcher).startPayment(REFERENCE, AMOUNT, autoReturn = true)
+        verify(launcher).startPayment(REFERENCE, AMOUNT, true, preferences)
     }
 
     @Test
-    fun `create payment with success response and tip enabled and check if the result is right`() = runTest {
-        val payment = getPaymentInstance(isTipEnabled = true)
+    fun `create payment with success response and qps enabled and check if the result is right`() = runTest {
+        val preferences = getPaymentPreferences(isQPSEnabled = true)
+        val payment = getPaymentInstance(preferences = preferences)
 
         whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
 
         payment.start(REFERENCE, AMOUNT)
 
-        verify(launcher).startPayment(REFERENCE, AMOUNT, isTipEnabled = true)
+        verify(launcher).startPayment(REFERENCE, AMOUNT, false, preferences)
+    }
+
+    @Test
+    fun `create payment with success response and msi disabled and check if the result is right`() = runTest {
+        val preferences = getPaymentPreferences(isMSIEnabled = true)
+        val payment = getPaymentInstance(preferences = preferences)
+
+        whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+
+        payment.start(REFERENCE, AMOUNT)
+
+        verify(launcher).startPayment(REFERENCE, AMOUNT, false, preferences)
+    }
+
+    @Test
+    fun `create payment with success response and mci disabled and check if the result is right`() = runTest {
+        val preferences = getPaymentPreferences(isMCIEnabled = true)
+        val payment = getPaymentInstance(preferences = preferences)
+
+        whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+
+        payment.start(REFERENCE, AMOUNT)
+
+        verify(launcher).startPayment(REFERENCE, AMOUNT, false, preferences)
+    }
+
+    @Test
+    fun `create payment with success response and dcc disabled and check if the result is right`() = runTest {
+        val preferences = getPaymentPreferences(isDCCEnabled = true)
+        val payment = getPaymentInstance(preferences = preferences)
+
+        whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+
+        payment.start(REFERENCE, AMOUNT)
+
+        verify(launcher).startPayment(REFERENCE, AMOUNT, false, preferences)
+    }
+
+    @Test
+    fun `create payment with success response and tip enabled and check if the result is right`() = runTest {
+        val preferences = getPaymentPreferences(isTipEnabled = true)
+        val payment = getPaymentInstance(preferences = preferences)
+
+        whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+
+        payment.start(REFERENCE, AMOUNT)
+
+        verify(launcher).startPayment(REFERENCE, AMOUNT, false, preferences)
     }
 
     @Test
@@ -96,12 +148,12 @@ class ClipPaymentTest {
 
     private fun getPaymentInstance(
         autoReturn: Boolean = false,
-        isTipEnabled: Boolean? = null
+        preferences: PaymentPreferences = getPaymentPreferences()
     ) = ClipPayment(
         useCase,
         launcher,
         autoReturn,
-        isTipEnabled,
+        preferences,
         listener
     )
 
@@ -119,11 +171,30 @@ class ClipPaymentTest {
         }
     }
 
+    private fun getPaymentPreferences(
+        isQPSEnabled: Boolean = IS_QPS_ENABLED,
+        isMSIEnabled: Boolean = IS_MSI_ENABLED,
+        isMCIEnabled: Boolean = IS_MCI_ENABLED,
+        isDCCEnabled: Boolean = IS_DCC_ENABLED,
+        isTipEnabled: Boolean = IS_TIP_ENABLED
+    ) = PaymentPreferences(
+        isQPSEnabled = isQPSEnabled,
+        isMSIEnabled = isMSIEnabled,
+        isMCIEnabled = isMCIEnabled,
+        isDCCEnabled = isDCCEnabled,
+        isTipEnabled = isTipEnabled
+    )
+
     companion object {
         private const val AMOUNT = 10.0
         private const val REFERENCE = "xyz"
 
         private const val AUTO_RETURN = false
+
+        private const val IS_QPS_ENABLED = false
+        private const val IS_MSI_ENABLED = true
+        private const val IS_MCI_ENABLED = true
+        private const val IS_DCC_ENABLED = true
         private const val IS_TIP_ENABLED = false
     }
 }
