@@ -1,6 +1,7 @@
 package com.payclip.blaze.pinpad.sdk.ui.intent
 
 import android.content.Intent
+import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
 
 interface ClipIntentProvider {
 
@@ -11,7 +12,7 @@ interface ClipIntentProvider {
      * @param amount The amount to be processed in payment process.
      * @param autoReturn If it is true, when the payment process throw success or error, you will
      * auto return to your application. Otherwise you will see a defined screen with information.
-     * @param isTipEnabled If it is true, you will tip screen before payment start.
+     * @param preferences An object loaded with all payment configuration.
      *
      * @return [Intent] with extras pointing to PinPad application.
      */
@@ -19,7 +20,7 @@ interface ClipIntentProvider {
         reference: String,
         amount: Double,
         autoReturn: Boolean = false,
-        isTipEnabled: Boolean? = null
+        preferences: PaymentPreferences
     ): Intent
 
     /**
@@ -50,11 +51,12 @@ interface ClipIntentProvider {
     fun getAutoReturn(intent: Intent): Boolean?
 
     /**
-     * Get tip availability from intent extras.
+     * Get payment preferences from intent extras.
      *
      * @param intent activity intent with extras.
      *
-     * @return The tip availability state. If tip was not settled, null is returned.
+     * @return The payment preferences model.
+     * If no preferences was settled, a default model is returned.
      */
-    fun isTipEnabled(intent: Intent): Boolean?
+    fun getPaymentPreferences(intent: Intent): PaymentPreferences
 }
