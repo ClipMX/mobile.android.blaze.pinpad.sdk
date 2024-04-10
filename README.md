@@ -473,84 +473,42 @@ ClipPayment.Builder()
 
 In the event of an error during the transaction process, the client may return one of the following error codes along with a description of the error:
 
-  
-
 | CODE | DESCRIPTION |
-
 | --- | --- |
-
 | EMPTY_AMOUNT | Amount should not be 0.0. |
-
 | EMPTY_MESSAGE | Message should not be empty. |
-
-| SERVICE_ERROR | Something failed attempting to create payment order |
-
-| LIMIT_ERROR | You have reached the terminal usage limit. |
-
 | GENERIC_DECLINE | The transaction was declined for unspecified reasons. |
-
 | RECEIVE_DECLINE_CALL_ISSUER | The transaction was declined. Please call the card issuer for further assistance. |
-
 | INSUFFICIENT_FUNDS | Insufficient funds available for the transaction. |
-
 | RECEIVE_DECLINE_CALL_ISSUER_2 | Another instance of transaction decline. Please call the card issuer for further assistance. |
-
 | NO_CONN | No connection available during the transaction. |
-
 | MC_FALLBACK | Mastercard fallback transaction initiated. |
-
 | VISA_CTLS_FALLBACK | Visa contactless fallback transaction initiated. |
-
 | AMEX_MERCHANT_BLOCKED | American Express transaction declined due to merchant blocking. |
-
 | NOT_SUFFICIENT_FUNDS | Insufficient funds available for the transaction. |
-
 | DO_NOT_HONOR | The card issuer declined the transaction. |
-
 | DESTINATION_NOT_AVAILABLE | The destination for the transaction is not available. |
-
 | INVALID_MERCHANT | Invalid merchant for the transaction. |
-
 | RESTRICTED_CARD | The card used for the transaction is restricted. |
-
 | INVALID_TRANSACTION | The transaction is invalid. |
-
 | TRANSACTION_NOT_PERMITTED_TO_CARDHOLDER | The transaction is not permitted to the cardholder. |
-
 | ISSUER_OR_SWITCH_IS_INOPERATIVE | The card issuer or switch is inoperative. |
-
 | PICK_UP_CARD | The card should be picked up by the merchant. |
-
 | EXPIRED_CARD | The card used for the transaction has expired. |
-
 | EXCEEDS_WITHDRAWAL_AMOUNT_LIMIT | The transaction amount exceeds the withdrawal limit. |
-
 | FAIL_3DS_AUTHENTICATION | 3DS authentication for the transaction failed. |
-
 | ALLOWABLE_NUMBER_OF_PIN_TRIES_EXCEEDED | Maximum allowable number of PIN tries exceeded. |
-
 | INVALID_CARD_NUMBER_NO_SUCH_NUMBER | Invalid card number provided. |
-
 | GENERIC_ERROR | Generic error occurred during the transaction. |
-
 | REFER_TO_CARD_ISSUER | The transaction should be referred to the card issuer. |
-
 | INVALID_AMOUNT | The transaction amount is invalid. |
-
 | INVALID_PIN_ONE_TIME | Invalid one-time PIN provided. |
-
 | CONTACTLESS_FALLBACK_VISA_MASTERCARD | Contactless fallback transaction for Visa or Mastercard initiated |
-
 | QPS_FALLBACK_FOREIGN_CARDS | Quick Payment Service (QPS) fallback transaction for foreign cards initiated. |
-
 | BILLER_SYSTEM_UNAVAILABLE | Biller system is unavailable for the transaction. |
-
 | TERMINAL_ERROR | Error occurred at the terminal. |
-
 | NO_CONNECTION | No connection detected during the transaction. |
-
 | CANCELLED | The transaction was cancelled. |
-
 | UNKNOWN_ERROR | An unknown error occurred. |
 
   
