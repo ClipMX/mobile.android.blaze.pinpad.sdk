@@ -1,49 +1,62 @@
 package com.payclip.blaze.pinpad.sdk.ui.intent
 
 import android.content.Intent
+import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
 
 interface ClipIntentProvider {
 
     /**
      * Get intent with extras generated to start PinPad activity.
      *
-     * @param requestId The id generated in backend when payment is created.
+     * @param reference The id or a reference of your payment.
+     * @param amount The amount to be processed in payment process.
      * @param autoReturn If it is true, when the payment process throw success or error, you will
      * auto return to your application. Otherwise you will see a defined screen with information.
-     * @param isTipEnabled If it is true, you will tip screen before payment start.
+     * @param preferences An object loaded with all payment configuration.
      *
      * @return [Intent] with extras pointing to PinPad application.
      */
     fun getClipIntent(
-        requestId: String,
+        reference: String,
+        amount: Double,
         autoReturn: Boolean = false,
-        isTipEnabled: Boolean? = null
+        preferences: PaymentPreferences
     ): Intent
 
     /**
-     * Get request id from intent extras.
+     * Get merchant payment reference from intent extras.
      *
      * @param intent activity intent with extras.
      *
-     * @return The request id. If it is not a request id an exception will be thrown.
+     * @return The merchant payment reference.
      */
-    fun getRequestId(intent: Intent): String
+    fun getReference(intent: Intent): String?
+
+    /**
+     * Get amount to be charged from intent extras.
+     *
+     * @param intent activity intent with extras.
+     *
+     * @return The amount to be charged.
+     */
+    fun getAmount(intent: Intent): String?
 
     /**
      * Get auto return from intent extras.
      *
      * @param intent activity intent with extras.
      *
-     * @return The auto return state. If auto return was not settled, false is returned.
+     * @return The auto return state. If auto return was not settled, null is returned.
      */
-    fun getAutoReturn(intent: Intent): Boolean
+    fun getAutoReturn(intent: Intent): Boolean?
 
     /**
-     * Get tip availability from intent extras.
+     * Get payment preferences from intent extras.
      *
      * @param intent activity intent with extras.
      *
-     * @return The tip availability state. If tip was not settled, null is returned.
+     * @return The payment preferences model.
+     * If no preferences was settled, a default model is returned.
      */
-    fun isTipEnabled(intent: Intent): Boolean?
+    fun getPaymentPreferences(intent: Intent): PaymentPreferences
 }

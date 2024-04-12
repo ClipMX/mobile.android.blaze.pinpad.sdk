@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.ApplicationNotFoundException
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.PaymentInitializationException
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.PaymentResult
+import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
 import com.payclip.blaze.pinpad.sdk.ui.activity.ClipResultManager
 import com.payclip.blaze.pinpad.sdk.ui.intent.ClipIntentProvider
 import com.payclip.blaze.pinpad.sdk.ui.launcher.ClipLauncher
@@ -86,15 +87,17 @@ internal class ActivityClipLauncher constructor(
     }
 
     override fun startPayment(
-        requestId: String,
+        reference: String,
+        amount: Double,
         autoReturn: Boolean,
-        isTipEnabled: Boolean?
+        preferences: PaymentPreferences
     ) {
         val launcher = getLauncher()
         val intent = intentProvider.getClipIntent(
-            requestId = requestId,
+            reference = reference,
+            amount = amount,
             autoReturn = autoReturn,
-            isTipEnabled = isTipEnabled
+            preferences = preferences
         )
 
         try {

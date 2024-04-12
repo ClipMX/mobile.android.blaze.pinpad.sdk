@@ -2,41 +2,59 @@ package com.payclip.blaze.pinpad.sdk.ui.intent.system
 
 import android.content.ComponentName
 import android.content.Intent
+import android.os.Build.VERSION.SDK_INT
+import android.os.Build.VERSION_CODES.TIRAMISU
+import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
 import com.payclip.blaze.pinpad.sdk.ui.intent.ClipIntentProvider
 
 internal class SystemClipIntentProvider : ClipIntentProvider {
 
     override fun getClipIntent(
-        requestId: String,
+        reference: String,
+        amount: Double,
         autoReturn: Boolean,
-        isTipEnabled: Boolean?
+        preferences: PaymentPreferences
     ): Intent {
         return Intent(Intent.ACTION_MAIN).apply {
             component = ComponentName(PINPAD_PACKAGE, PINPAD_ENTRY_ACTIVITY)
-            putExtra(PAYMENT_REQUEST_ID_EXTRA, requestId)
+            putExtra(PAYMENT_REFERENCE_EXTRA, reference)
+            putExtra(PAYMENT_AMOUNT_EXTRA, amount.toString())
             putExtra(PAYMENT_AUTO_RETURN_EXTRA, autoReturn)
-            putExtra(PAYMENT_IS_TIP_ENABLED_EXTRA, isTipEnabled)
+            putExtra(PAYMENT_PREFERENCES_EXTRA, preferences)
         }
     }
 
-    override fun getRequestId(intent: Intent): String {
-        return intent.extras?.getString(PAYMENT_REQUEST_ID_EXTRA).orEmpty()
+    override fun getReference(intent: Intent): String? {
+        return intent.extras?.getString(PAYMENT_REFERENCE_EXTRA)
     }
 
-    override fun getAutoReturn(intent: Intent): Boolean {
-        return intent.extras?.getBoolean(PAYMENT_AUTO_RETURN_EXTRA) ?: false
+    override fun getAmount(intent: Intent): String? {
+        return intent.extras?.getString(PAYMENT_AMOUNT_EXTRA)
     }
 
-    override fun isTipEnabled(intent: Intent): Boolean? {
-        return intent.extras?.getBoolean(PAYMENT_IS_TIP_ENABLED_EXTRA)
+    override fun getAutoReturn(intent: Intent): Boolean? {
+        return intent.extras?.getBoolean(PAYMENT_AUTO_RETURN_EXTRA)
+    }
+
+    @Suppress("DEPRECATION")
+    override fun getPaymentPreferences(intent: Intent): PaymentPreferences {
+        val preferences = when {
+            SDK_INT >= TIRAMISU -> intent.getParcelableExtra(
+                PAYMENT_PREFERENCES_EXTRA,
+                PaymentPreferences::class.java
+            )
+            else -> intent.extras?.getParcelable(PAYMENT_PREFERENCES_EXTRA)
+        }
+        return  preferences ?: PaymentPreferences()
     }
 
     companion object {
         private const val PINPAD_PACKAGE = "com.payclip.blaze.pinpad"
         private const val PINPAD_ENTRY_ACTIVITY = "$PINPAD_PACKAGE.views.MainActivity"
 
+        private const val PAYMENT_REFERENCE_EXTRA = "PAYMENT_REFERENCE"
+        private const val PAYMENT_AMOUNT_EXTRA = "PAYMENT_AMOUNT"
         private const val PAYMENT_AUTO_RETURN_EXTRA = "PAYMENT_AUTO_RETURN"
-        private const val PAYMENT_REQUEST_ID_EXTRA = "PAYMENT_REQUEST_ID"
-        private const val PAYMENT_IS_TIP_ENABLED_EXTRA = "PAYMENT_IS_TIP_ENABLED"
+        private const val PAYMENT_PREFERENCES_EXTRA = "PAYMENT_PREFERENCES_ENABLED"
     }
 }

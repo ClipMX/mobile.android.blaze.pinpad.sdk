@@ -1,8 +1,10 @@
 package com.payclip.blaze.pinpad.sdk.ui.launcher
 
+import android.annotation.SuppressLint
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.PaymentResult
+import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
 
 internal interface ClipLauncher {
 
@@ -29,6 +31,7 @@ internal interface ClipLauncher {
      * @param onCancelled cancelled listener called when payment process is cancelled.
      * @param onFailure failure listener called when payment process fail.
      */
+    @SuppressLint("ComposableNaming")
     @Composable
     fun setPaymentHandler(
         onSuccess: (result: PaymentResult) -> Unit,
@@ -41,14 +44,16 @@ internal interface ClipLauncher {
      * `setPaymentHandler` before, otherwise this method call will crash with no initialization
      * exception.
      *
-     * @param requestId The id generated in backend when payment is created.
+     * @param reference The id or a reference of your payment.
+     * @param amount The amount to be processed in payment process.
      * @param autoReturn If it is true, when the payment process throw success or error, you will
      * auto return to your application. Otherwise you will see a defined screen with information.
-     * @param isTipEnabled If it is true, you will tip screen before payment start.
+     * @param preferences An object loaded with all payment configuration.
      */
     fun startPayment(
-        requestId: String,
+        reference: String,
+        amount: Double,
         autoReturn: Boolean = false,
-        isTipEnabled: Boolean? = null
+        preferences: PaymentPreferences
     )
 }
