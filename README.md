@@ -181,86 +181,82 @@ Our payment SDK is designed to be incredibly user-friendly, allowing you to conf
 
 Compose
 
-    @Composable
-    fun PaymentScreen() {
-        val scope = rememberCoroutineScope()
-        val client = remember {
-            ClipPayment.Builder()
-                .setUser(YOUR_CLIP_USER)
-                .setApiKey(YOUR_CLIP_TOKEN)
-                .build()
-        }
-    
-        client.setPaymentHandler()
-    
-        Button(
-            onClick = {
-                scope.launch {
-                    client.start(
-                        amount = AMOUNT,
-                        message = MESSAGE
-                    )
-               }
-            }
-        ) {
-            ...
-        }
-    }
+```Payment.kt  
+@Composable
+fun PaymentScreen() {
+	val scope = rememberCoroutineScope()
+	val client = remember {
+		ClipPayment.Builder()
+			.build()
+	}
 
+	client.setPaymentHandler()
+
+	Button(
+		onClick = {
+			scope.launch {
+				client.start(
+					amount = AMOUNT,
+					message = MESSAGE
+				)
+		   }
+		}
+	) {
+		...
+	}
+}
+```  
 
 Activity
 
-    class MainActivity : ComponentActivity() {
-    
-        private val builder: ClipPayment by lazy {
-            ClipPayment.Builder()
-                .setUser(YOUR_CLIP_USER)
-                .setApiKey(YOUR_CLIP_TOKEN)
-                .build()
-        }
-    
-        init {
-            builder.setPaymentHandler(this@MainActivity)
-        }
-    
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-    
-            lifecycleScope.launch {
-                builder.start(
-                    reference = REFERENCE,
-                    amount = AMOUNT,
-                    message = MESSAGE
-                )
-            }
-        }
-    }
+```Payment.kt  
+class MainActivity : ComponentActivity() {
 
+	private val builder: ClipPayment by lazy {
+		ClipPayment.Builder()
+			.build()
+	}
+
+	init {
+		builder.setPaymentHandler(this@MainActivity)
+	}
+
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+
+		lifecycleScope.launch {
+			builder.start(
+				reference = REFERENCE,
+				amount = AMOUNT
+			)
+		}
+	}
+}
+```  
 
 
 
 In this example, there are three vital components for client configuration:
 
-1. **Client Initialization**: You must instantiate the client in your application. The client requires two mandatory parameters: your Clip user and the API key generated earlier.
+1. **Client Initialization**: You must instantiate the client in your application.
 
 Compose
 
-    val client = remember {
-        ClipPayment.Builder()
-            .setUser(YOUR_CLIP_USER)
-            .setApiKey(YOUR_CLIP_TOKEN)
-            .build()
-    }
+```Payment.kt  
+val client = remember {
+	ClipPayment.Builder()
+		.build()
+}
+```  
 
 Activity
 
-    private val builder: ClipPayment by lazy {
-        ClipPayment.Builder()
-            .setUser(YOUR_CLIP_USER)
-            .setApiKey(YOUR_CLIP_TOKEN)
-            .build()
-    }
-
+```Payment.kt  
+private val builder: ClipPayment by lazy {
+	ClipPayment.Builder()
+		.build()
+}
+```  
 
 
 
@@ -268,21 +264,24 @@ Activity
 
 Compose
 
-    @Composable
-    fun PaymentScreen() {
-        ...
-    
-        client.setPaymentHandler()
-    
-        ...
-    }
+```Payment.kt  
+@Composable
+fun PaymentScreen() {
+	...
+
+	client.setPaymentHandler()
+
+	...
+}
+```
 
 Activity
 
-    init {
-        builder.setPaymentHandler(this@MainActivity)
-    }
-
+```Payment.kt  
+init {
+	builder.setPaymentHandler(this@MainActivity)
+}
+```  
 
 
 
@@ -293,11 +292,10 @@ Activity
 scope.launch {  
   client.start(  
 	  reference = REFERENCE,  
-	  amount = AMOUNT,  
-	  message = MESSAGE  
+	  amount = AMOUNT
   )  
 }  
-  ```  
+```
 
 
 ### Additional Configuration Parameters
@@ -307,15 +305,11 @@ scope.launch {
 Our payment SDK offers several additional configuration parameters to customize your integration experience. Below are explanations of each parameter and examples of how to use them:
 
 
-
 - **isDemo**: This parameter allows you to toggle the usage of the Clip Demo Server. By default, it is set to false, meaning it operates with the production server for real payments. Setting it to true enables the use of the demo server, which is useful for testing purposes. By default, it is set to false.
 
 ```Payment.kt  
-  
 ClipPayment.Builder()  
-  
-.isDemo(isDemo: Boolean)  
-  
+	.isDemo(isDemo: Boolean)  
 ```  
 
 
@@ -323,23 +317,26 @@ ClipPayment.Builder()
 - **isAutoReturnEnabled**: This parameter sets the return mode for the terminal after a transaction. When set to true, the terminal automatically returns to your application after completing or encountering an error during the transaction process. If set to false, the terminal displays its own detailed screen explaining the situation. By default, it is set to false.
 
 ```Payment.kt  
-  
-ClipPayment.Builder()  
-  
-.isAutoReturnEnabled(isAutoReturnEnabled: Boolean)  
-  
+ClipPayment.Builder()
+	.isAutoReturnEnabled(isAutoReturnEnabled: Boolean)
 ```  
+
+
+
+- **isRetryEnabled**: This parameter sets if retries are available for the terminal after a transaction. When set to true, the terminal allows you to retry the payment in case of failure. If set to false, the terminal will only show cancel option in case of failure.
+
+```Payment.kt  
+ClipPayment.Builder()
+	.isRetryEnabled(isRetryEnabled: Boolean)
+```
 
 
 
 - **addListener**: With this parameter, you can register a listener to receive transaction results. This allows you to handle the outcome of the transaction within your application.
 
 ```Payment.kt  
-  
-ClipPayment.Builder()  
-  
-.addListener(listener: PaymentListener)  
-  
+ClipPayment.Builder()
+	.addListener(listener: PaymentListener)
 ```  
 
 
@@ -347,11 +344,8 @@ ClipPayment.Builder()
 - **setLoadingState**: This parameter provides you with a loading state while our SDK is performing various tasks such as calling APIs. It accepts a MutableStateFlow<Boolean> parameter, allowing you to manage the loading state within your application.
 
 ```Payment.kt  
-  
-ClipPayment.Builder()  
-  
-.setLoadingState(state: MutableStateFlow<Boolean>)  
-  
+	ClipPayment.Builder()  
+		.setLoadingState(state: MutableStateFlow<Boolean>)  
 ```  
 
 
@@ -379,22 +373,17 @@ We need to enter to [clip account](https://dashboard.clip.mx/reporting) and foll
 
 1.  Go to the developers portal.
 
-	![](https://lh7-us.googleusercontent.com/3P72h6R6Nvx19vv6JUBiFqdcKaqa3voGd2WO2yDZQICvXr4GTwSmXTi4bQ8z5iN5UJcScqH60brw-T1glAkb4I6BmObPBx4bzHh-f3HJ4CAMhjuvFGoVnXaJQYZyK5GA22YODqDUZAH8-cev9iUuHW0)
+(https://lh7-us.googleusercontent.com/3P72h6R6Nvx19vv6JUBiFqdcKaqa3voGd2WO2yDZQICvXr4GTwSmXTi4bQ8z5iN5UJcScqH60brw-T1glAkb4I6BmObPBx4bzHh-f3HJ4CAMhjuvFGoVnXaJQYZyK5GA22YODqDUZAH8-cev9iUuHW0)
 
 
 
 2.  We continue creating our application
 
-
 ![](https://lh7-us.googleusercontent.com/f0RRfJZf2L_RvYW9ekPvUi-XsEdsCSBnjPQa5f_XnxdTa4yKeBcdkds_DTRjQd11uH6DvFPrV35TsL3-GoZtzNqwcRIcEweuBKTJ3ziVnFn3NoR4UEjJpNQohENP0Q1IVjvmEl7JyePZ_wD1TSwKYDM)
 
 
 
-
-
-
 3.  We neet to assign a name, and then proceed to create
-
 
 ![](https://lh7-us.googleusercontent.com/ovAlHNFMnqXicLK1ADK4hsVDZXNoqxy8UbKQZXGCb6nXrApM8PYeaN-oLKNuL5bwENU3-u45EKaR-s3ZekS_EO17VSUl4Xb89fKerBC7uqjpgUv0sfHFN_55NR8kWAvRb-4R8EGTQgEGWoZ3nwjw_GQ)
 
@@ -402,13 +391,14 @@ We need to enter to [clip account](https://dashboard.clip.mx/reporting) and foll
 
 4.  When our application is created, it is important to save the API Key and Secret Key in a safe place. We need to use after
 
-
 ![](https://lh7-us.googleusercontent.com/1DhQJKhCYbwT2xr8cJtn1VXTQN5fhSGuWsIupZsDp8_V6ftHm7IgZh5-m01AhoOjR7pa-UBH0GvhUcH6hiVQwdntBxvSYoPGphaxkmmb2-9Iw94Dohpw6_-V9DP2QUj1_dXa-P4cMvJNLjrilXm1TSk)
+
 
 
 5.  Finally, in the [Clip developers portal](https://developer.clip.mx/reference/token-de-autenticacion) with our previous keys, put the values in the fields as we can see in the next image.
 
-	![](https://lh7-us.googleusercontent.com/FwyfiponSVsmYmoIXtWUhGmEwRHGTLW7ik4N1lfR4DTdTdqpcsAUvltQ_BjDK9VAeij_8TvZSREpwVAQOM4-VJuVb-el72kQAAnT015V1fuhl0ExYBXJOhVGBSYi3RVeb1De-Qrpjqgn_PjUFlKPvs8)
+(https://lh7-us.googleusercontent.com/FwyfiponSVsmYmoIXtWUhGmEwRHGTLW7ik4N1lfR4DTdTdqpcsAUvltQ_BjDK9VAeij_8TvZSREpwVAQOM4-VJuVb-el72kQAAnT015V1fuhl0ExYBXJOhVGBSYi3RVeb1De-Qrpjqgn_PjUFlKPvs8)
+
 
 
 Finally we have a Basic value token for our next steps creating a request to the API in header authentication.
@@ -440,17 +430,14 @@ With the last reference, we will continue to make our first request:
 
 
 
-
-
-| Field name | Description | Type | Notes | Required |
-|--|--|--|--|--|
-| amount | Transaction amount. | Number |  | yes |
-| assigned_user | User identifier | String | User account email, For security, in this version will be applied | yes |
-| reference | external reference id | String |  | yes |
-| auto_return | Param for configuration terminal process when finish | Boolean | For configuration it is optional | no |
-| is_tip_enabled | Param for screen configuration terminal tip | Boolean | For configuration, it is optional | no |
-| serial_number_pos | Clip terminal serial number | String | | yes
-
+| Field name        | Description                                          | Type    | Notes                                                             | Required |
+|-------------------|------------------------------------------------------|---------|-------------------------------------------------------------------|----------|
+| amount            | Transaction amount.                                  | Number  |                                                                   | yes      |
+| assigned_user     | User identifier                                      | String  | User account email, For security, in this version will be applied | yes      |
+| reference         | external reference id                                | String  |                                                                   | yes      |
+| auto_return       | Param for configuration terminal process when finish | Boolean | For configuration it is optional                                  | no       |
+| is_tip_enabled    | Param for screen configuration terminal tip          | Boolean | For configuration, it is optional                                 | no       |
+| serial_number_pos | Clip terminal serial number                          | String  |                                                                   | yes      |
 
 ### Payments Result
 <a name="payment-result"></a>
@@ -518,43 +505,43 @@ mechanism to resume the payment process within our POS Android terminal.
 
 In the event of an error during the transaction process, the client may return one of the following error codes along with a description of the error:
 
-| CODE | DESCRIPTION |  
-| --- | --- |  
-| EMPTY_AMOUNT | Amount should not be 0.0. |  
-| EMPTY_MESSAGE | Message should not be empty. |  
-| GENERIC_DECLINE | The transaction was declined for unspecified reasons. |  
-| RECEIVE_DECLINE_CALL_ISSUER | The transaction was declined. Please call the card issuer for further assistance. |  
-| INSUFFICIENT_FUNDS | Insufficient funds available for the transaction. |  
-| RECEIVE_DECLINE_CALL_ISSUER_2 | Another instance of transaction decline. Please call the card issuer for further assistance. |  
-| NO_CONN | No connection available during the transaction. |  
-| MC_FALLBACK | Mastercard fallback transaction initiated. |  
-| VISA_CTLS_FALLBACK | Visa contactless fallback transaction initiated. |  
-| AMEX_MERCHANT_BLOCKED | American Express transaction declined due to merchant blocking. |  
-| NOT_SUFFICIENT_FUNDS | Insufficient funds available for the transaction. |  
-| DO_NOT_HONOR | The card issuer declined the transaction. |  
-| DESTINATION_NOT_AVAILABLE | The destination for the transaction is not available. |  
-| INVALID_MERCHANT | Invalid merchant for the transaction. |  
-| RESTRICTED_CARD | The card used for the transaction is restricted. |  
-| INVALID_TRANSACTION | The transaction is invalid. |  
-| TRANSACTION_NOT_PERMITTED_TO_CARDHOLDER | The transaction is not permitted to the cardholder. |  
-| ISSUER_OR_SWITCH_IS_INOPERATIVE | The card issuer or switch is inoperative. |  
-| PICK_UP_CARD | The card should be picked up by the merchant. |  
-| EXPIRED_CARD | The card used for the transaction has expired. |  
-| EXCEEDS_WITHDRAWAL_AMOUNT_LIMIT | The transaction amount exceeds the withdrawal limit. |  
-| FAIL_3DS_AUTHENTICATION | 3DS authentication for the transaction failed. |  
-| ALLOWABLE_NUMBER_OF_PIN_TRIES_EXCEEDED | Maximum allowable number of PIN tries exceeded. |  
-| INVALID_CARD_NUMBER_NO_SUCH_NUMBER | Invalid card number provided. |  
-| GENERIC_ERROR | Generic error occurred during the transaction. |  
-| REFER_TO_CARD_ISSUER | The transaction should be referred to the card issuer. |  
-| INVALID_AMOUNT | The transaction amount is invalid. |  
-| INVALID_PIN_ONE_TIME | Invalid one-time PIN provided. |  
-| CONTACTLESS_FALLBACK_VISA_MASTERCARD | Contactless fallback transaction for Visa or Mastercard initiated |  
-| QPS_FALLBACK_FOREIGN_CARDS | Quick Payment Service (QPS) fallback transaction for foreign cards initiated. |  
-| BILLER_SYSTEM_UNAVAILABLE | Biller system is unavailable for the transaction. |  
-| TERMINAL_ERROR | Error occurred at the terminal. |  
-| NO_CONNECTION | No connection detected during the transaction. |  
-| CANCELLED | The transaction was cancelled. |  
-| UNKNOWN_ERROR | An unknown error occurred. |  
+| CODE                                    | DESCRIPTION                                                                                  |  
+|-----------------------------------------|----------------------------------------------------------------------------------------------|  
+| EMPTY_AMOUNT                            | Amount should not be 0.0.                                                                    |  
+| EMPTY_MESSAGE                           | Message should not be empty.                                                                 |  
+| GENERIC_DECLINE                         | The transaction was declined for unspecified reasons.                                        |  
+| RECEIVE_DECLINE_CALL_ISSUER             | The transaction was declined. Please call the card issuer for further assistance.            |  
+| INSUFFICIENT_FUNDS                      | Insufficient funds available for the transaction.                                            |  
+| RECEIVE_DECLINE_CALL_ISSUER_2           | Another instance of transaction decline. Please call the card issuer for further assistance. |  
+| NO_CONN                                 | No connection available during the transaction.                                              |  
+| MC_FALLBACK                             | Mastercard fallback transaction initiated.                                                   |  
+| VISA_CTLS_FALLBACK                      | Visa contactless fallback transaction initiated.                                             |  
+| AMEX_MERCHANT_BLOCKED                   | American Express transaction declined due to merchant blocking.                              |  
+| NOT_SUFFICIENT_FUNDS                    | Insufficient funds available for the transaction.                                            |  
+| DO_NOT_HONOR                            | The card issuer declined the transaction.                                                    |  
+| DESTINATION_NOT_AVAILABLE               | The destination for the transaction is not available.                                        |  
+| INVALID_MERCHANT                        | Invalid merchant for the transaction.                                                        |  
+| RESTRICTED_CARD                         | The card used for the transaction is restricted.                                             |  
+| INVALID_TRANSACTION                     | The transaction is invalid.                                                                  |  
+| TRANSACTION_NOT_PERMITTED_TO_CARDHOLDER | The transaction is not permitted to the cardholder.                                          |  
+| ISSUER_OR_SWITCH_IS_INOPERATIVE         | The card issuer or switch is inoperative.                                                    |  
+| PICK_UP_CARD                            | The card should be picked up by the merchant.                                                |  
+| EXPIRED_CARD                            | The card used for the transaction has expired.                                               |  
+| EXCEEDS_WITHDRAWAL_AMOUNT_LIMIT         | The transaction amount exceeds the withdrawal limit.                                         |  
+| FAIL_3DS_AUTHENTICATION                 | 3DS authentication for the transaction failed.                                               |  
+| ALLOWABLE_NUMBER_OF_PIN_TRIES_EXCEEDED  | Maximum allowable number of PIN tries exceeded.                                              |  
+| INVALID_CARD_NUMBER_NO_SUCH_NUMBER      | Invalid card number provided.                                                                |  
+| GENERIC_ERROR                           | Generic error occurred during the transaction.                                               |  
+| REFER_TO_CARD_ISSUER                    | The transaction should be referred to the card issuer.                                       |  
+| INVALID_AMOUNT                          | The transaction amount is invalid.                                                           |  
+| INVALID_PIN_ONE_TIME                    | Invalid one-time PIN provided.                                                               |  
+| CONTACTLESS_FALLBACK_VISA_MASTERCARD    | Contactless fallback transaction for Visa or Mastercard initiated                            |  
+| QPS_FALLBACK_FOREIGN_CARDS              | Quick Payment Service (QPS) fallback transaction for foreign cards initiated.                |  
+| BILLER_SYSTEM_UNAVAILABLE               | Biller system is unavailable for the transaction.                                            |  
+| TERMINAL_ERROR                          | Error occurred at the terminal.                                                              |  
+| NO_CONNECTION                           | No connection detected during the transaction.                                               |  
+| CANCELLED                               | The transaction was cancelled.                                                               |  
+| UNKNOWN_ERROR                           | An unknown error occurred.                                                                   |  
 
 
 ## Stay Updated

@@ -12,14 +12,16 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
     override fun getClipIntent(
         reference: String,
         amount: Double,
-        autoReturn: Boolean,
+        isAutoReturnEnabled: Boolean,
+        isRetryEnabled: Boolean,
         preferences: PaymentPreferences
     ): Intent {
         return Intent(Intent.ACTION_MAIN).apply {
             component = ComponentName(PINPAD_PACKAGE, PINPAD_ENTRY_ACTIVITY)
             putExtra(PAYMENT_REFERENCE_EXTRA, reference)
             putExtra(PAYMENT_AMOUNT_EXTRA, amount.toString())
-            putExtra(PAYMENT_AUTO_RETURN_EXTRA, autoReturn)
+            putExtra(PAYMENT_AUTO_RETURN_EXTRA, isAutoReturnEnabled)
+            putExtra(PAYMENT_RETRY_EXTRA, isRetryEnabled)
             putExtra(PAYMENT_PREFERENCES_EXTRA, preferences)
         }
     }
@@ -32,8 +34,12 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         return intent.extras?.getString(PAYMENT_AMOUNT_EXTRA)
     }
 
-    override fun getAutoReturn(intent: Intent): Boolean? {
+    override fun isAutoReturnEnabled(intent: Intent): Boolean? {
         return intent.extras?.getBoolean(PAYMENT_AUTO_RETURN_EXTRA)
+    }
+
+    override fun isRetryEnabled(intent: Intent): Boolean? {
+        return intent.extras?.getBoolean(PAYMENT_RETRY_EXTRA)
     }
 
     @Suppress("DEPRECATION")
@@ -54,7 +60,8 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
 
         private const val PAYMENT_REFERENCE_EXTRA = "PAYMENT_REFERENCE"
         private const val PAYMENT_AMOUNT_EXTRA = "PAYMENT_AMOUNT"
+        private const val PAYMENT_RETRY_EXTRA = "PAYMENT_RETRY"
         private const val PAYMENT_AUTO_RETURN_EXTRA = "PAYMENT_AUTO_RETURN"
-        private const val PAYMENT_PREFERENCES_EXTRA = "PAYMENT_PREFERENCES_ENABLED"
+        private const val PAYMENT_PREFERENCES_EXTRA = "PAYMENT_PREFERENCES"
     }
 }
