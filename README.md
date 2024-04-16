@@ -128,31 +128,21 @@ You'll need an API key to authenticate with our services. If you don't have one 
 To download the SDK dependency, you'll need to add JitPack to your Maven repositories. Follow these steps:
 
 ```settings.gradle.kts  
-  
 dependencyResolutionManagement {  
-  
 	repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)  
-  
-	repositories {  
-  
-	mavenCentral()  
-  
-	maven { url = uri("https://maven.pkg.github.com/ClipMX/mobile.android.blaze.pinpad.sdk") }  
-  }  
+  	repositories {  
+		mavenCentral()  
+		maven { url = uri("https://maven.pkg.github.com/ClipMX/mobile.android.blaze.pinpad.sdk") }  
+	}  
 }  
-  
 ```  
 
 And then add the dependency to `build.gradle.kts`.
 
 ```build.gradle.kts  
-  
 dependencies {  
-  
-	implementation("com.blaze.pinpad:pinpad-sdk:latest-version")  
-  
+	implementation("com.github.ClipMX:mobile.android.blaze.pinpad.sdk:latest-version")  
 }  
-  
 ```  
 
 #### Installing dependency
@@ -199,7 +189,7 @@ fun PaymentScreen() {
 					amount = AMOUNT,
 					message = MESSAGE
 				)
-		   }
+			}
 		}
 	) {
 		...
@@ -305,14 +295,6 @@ scope.launch {
 Our payment SDK offers several additional configuration parameters to customize your integration experience. Below are explanations of each parameter and examples of how to use them:
 
 
-- **isDemo**: This parameter allows you to toggle the usage of the Clip Demo Server. By default, it is set to false, meaning it operates with the production server for real payments. Setting it to true enables the use of the demo server, which is useful for testing purposes. By default, it is set to false.
-
-```Payment.kt  
-ClipPayment.Builder()  
-	.isDemo(isDemo: Boolean)  
-```  
-
-
 
 - **isAutoReturnEnabled**: This parameter sets the return mode for the terminal after a transaction. When set to true, the terminal automatically returns to your application after completing or encountering an error during the transaction process. If set to false, the terminal displays its own detailed screen explaining the situation. By default, it is set to false.
 
@@ -341,15 +323,6 @@ ClipPayment.Builder()
 
 
 
-- **setLoadingState**: This parameter provides you with a loading state while our SDK is performing various tasks such as calling APIs. It accepts a MutableStateFlow<Boolean> parameter, allowing you to manage the loading state within your application.
-
-```Payment.kt  
-	ClipPayment.Builder()  
-		.setLoadingState(state: MutableStateFlow<Boolean>)  
-```  
-
-
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>  
 
 
@@ -363,7 +336,7 @@ Having a Clip account will give you access to the Clip Dashboard, where you can 
 
 To create your Clip account:
 
-1.- Go to [https://dashboard.clip.mx/onboard/register](https://dashboard.clip.mx/onboard/register)
+1. Go to [https://dashboard.clip.mx/onboard/register](https://dashboard.clip.mx/onboard/register)
 
 Once we have our Clip Account created, we continue to generate token key values.
 
@@ -371,33 +344,33 @@ We need to enter to [clip account](https://dashboard.clip.mx/reporting) and foll
 
 
 
-1.  Go to the developers portal.
+a.  Go to the developers portal.
 
-(https://lh7-us.googleusercontent.com/3P72h6R6Nvx19vv6JUBiFqdcKaqa3voGd2WO2yDZQICvXr4GTwSmXTi4bQ8z5iN5UJcScqH60brw-T1glAkb4I6BmObPBx4bzHh-f3HJ4CAMhjuvFGoVnXaJQYZyK5GA22YODqDUZAH8-cev9iUuHW0)
+![](https://lh7-us.googleusercontent.com/3P72h6R6Nvx19vv6JUBiFqdcKaqa3voGd2WO2yDZQICvXr4GTwSmXTi4bQ8z5iN5UJcScqH60brw-T1glAkb4I6BmObPBx4bzHh-f3HJ4CAMhjuvFGoVnXaJQYZyK5GA22YODqDUZAH8-cev9iUuHW0)
 
 
 
-2.  We continue creating our application
+b.  We continue creating our application
 
 ![](https://lh7-us.googleusercontent.com/f0RRfJZf2L_RvYW9ekPvUi-XsEdsCSBnjPQa5f_XnxdTa4yKeBcdkds_DTRjQd11uH6DvFPrV35TsL3-GoZtzNqwcRIcEweuBKTJ3ziVnFn3NoR4UEjJpNQohENP0Q1IVjvmEl7JyePZ_wD1TSwKYDM)
 
 
 
-3.  We neet to assign a name, and then proceed to create
+c.  We neet to assign a name, and then proceed to create
 
 ![](https://lh7-us.googleusercontent.com/ovAlHNFMnqXicLK1ADK4hsVDZXNoqxy8UbKQZXGCb6nXrApM8PYeaN-oLKNuL5bwENU3-u45EKaR-s3ZekS_EO17VSUl4Xb89fKerBC7uqjpgUv0sfHFN_55NR8kWAvRb-4R8EGTQgEGWoZ3nwjw_GQ)
 
 
 
-4.  When our application is created, it is important to save the API Key and Secret Key in a safe place. We need to use after
+d.  When our application is created, it is important to save the API Key and Secret Key in a safe place. We need to use after
 
 ![](https://lh7-us.googleusercontent.com/1DhQJKhCYbwT2xr8cJtn1VXTQN5fhSGuWsIupZsDp8_V6ftHm7IgZh5-m01AhoOjR7pa-UBH0GvhUcH6hiVQwdntBxvSYoPGphaxkmmb2-9Iw94Dohpw6_-V9DP2QUj1_dXa-P4cMvJNLjrilXm1TSk)
 
 
 
-5.  Finally, in the [Clip developers portal](https://developer.clip.mx/reference/token-de-autenticacion) with our previous keys, put the values in the fields as we can see in the next image.
+e.  Finally, in the [Clip developers portal](https://developer.clip.mx/reference/token-de-autenticacion) with our previous keys, put the values in the fields as we can see in the next image.
 
-(https://lh7-us.googleusercontent.com/FwyfiponSVsmYmoIXtWUhGmEwRHGTLW7ik4N1lfR4DTdTdqpcsAUvltQ_BjDK9VAeij_8TvZSREpwVAQOM4-VJuVb-el72kQAAnT015V1fuhl0ExYBXJOhVGBSYi3RVeb1De-Qrpjqgn_PjUFlKPvs8)
+![](https://lh7-us.googleusercontent.com/FwyfiponSVsmYmoIXtWUhGmEwRHGTLW7ik4N1lfR4DTdTdqpcsAUvltQ_BjDK9VAeij_8TvZSREpwVAQOM4-VJuVb-el72kQAAnT015V1fuhl0ExYBXJOhVGBSYi3RVeb1De-Qrpjqgn_PjUFlKPvs8)
 
 
 
