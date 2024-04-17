@@ -428,9 +428,14 @@ The API URL is configured and reached for the ME :
     --data '{
 	    "reference": "abc",
 	    "amount": 0.23,
-	    "auto_return": false,
-	    "is_tip_enabled": true,
 	    "serial_number_pos": "{SN}"
+		"options": {
+			"auto_return": true,
+			"is_tip_enabled": true,
+			"is_msi_enabled": true,
+			"is_mci_enabled": true,
+			"is_dcc_enabled": true
+		}
     }'
 
 
@@ -442,14 +447,18 @@ With the last reference, we will continue to make our first request:
 
 
 
-| Field name | Description | Type | Notes | Required |
-|--|--|--|--|--|
-| amount | Transaction amount. | Number |  | yes |
-| assigned_user | User identifier | String | User account email, For security, in this version will be applied | yes |
-| reference | external reference id | String |  | yes |
-| auto_return | Param for configuration terminal process when finish | Boolean | For configuration it is optional | no |
-| is_tip_enabled | Param for screen configuration terminal tip | Boolean | For configuration, it is optional | no |
-| serial_number_pos | Clip terminal serial number | String | | yes
+| Field name             | Description                                          | Type    | Notes                                                             | Required  | Default value  |
+|------------------------|------------------------------------------------------|---------|-------------------------------------------------------------------|-----------|----------------|
+| amount                 | Transaction amount.                                  | Number  |                                                                   | Yes       | --             
+| assigned_user          | User identifier                                      | String  | User account email, For security, in this version will be applied | Yes       | --             
+| reference              | external reference id                                | String  |                                                                   | Yes       | --             
+| serial_number_pos      | Clip terminal serial number                          | String  |                                                                   | Yes       | --             
+| options                | values customizables                                 | Object  | Options that can enable or disable                                | No        | --             |
+| options.auto_return    | Param for configuration terminal process when finish | Boolean | For configuration it is optional                                  | No        | false          
+| options.is_tip_enabled | Param for screen configuration terminal tip          | Boolean | For configuration, it is optional                                 | No        | false          
+| options.is_msi_enabled | Param for enable installments                        | Boolean | To learn terms and condtitions about installments visit Clip site | No        | true           
+| options.is_mci_enabled |                                                      | Boolean |                                                                   | No        | true           
+| options.is_dcc_enabled | Param to enable dynamic current convertion           | Boolean |                                                                   | No        | true           
 
 
 ### Payments Result
