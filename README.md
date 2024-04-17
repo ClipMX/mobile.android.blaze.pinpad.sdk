@@ -428,7 +428,7 @@ The API URL is configured and reached for the ME :
     --data '{
 	    "reference": "abc",
 	    "amount": 0.23,
-	    "serial_number_pos": "{SN}"
+	    "serial_number_pos": "{SN}",
 		"options": {
 			"auto_return": true,
 			"is_tip_enabled": true,
