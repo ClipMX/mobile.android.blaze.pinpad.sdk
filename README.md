@@ -422,22 +422,21 @@ The API URL is configured and reached for the ME :
 [https://api.payclip.io/f2f/pinpad/v1/payment](https://api.payclip.io/f2f/pinpad/v1/payment)
 
 
-    curl --location 'https://api.payclip.io/f2f/pinpad/v1/payment' \
-    --header 'Authorization: Basic {TOKEN}' \
-    --header 'Content-Type: application/json' \
-    --data '{
-	    "reference": "abc",
-	    "amount": 0.23,
-	    "serial_number_pos": "{SN}",
-		"options": {
-		"auto_return": true,
-		"is_tip_enabled": true,
-		"is_msi_enabled": true,
-		"is_mci_enabled": true,
-		"is_dcc_enabled": true
-		}
-    }'
-
+	curl --location 'https://api.payclip.io/f2f/pinpad/v1/payment' \
+	--header 'Authorization: Basic {TOKEN}' \
+	--header 'Content-Type: application/json' \
+	--data '{
+    	"reference": "dasdada",
+    	"amount": 0.1,
+    	"serial_number_pos": "MySnPOS12345",
+    	"options": {
+    		"auto_return": true,
+    		"is_tip_enabled": true,
+    		"is_msi_enabled": true,
+    		"is_mci_enabled": true,
+    		"is_dcc_enabled": true
+    	}
+	}'
 
 With the last reference, we will continue to make our first request:
 
