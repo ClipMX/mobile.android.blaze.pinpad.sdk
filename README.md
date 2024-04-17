@@ -429,13 +429,13 @@ The API URL is configured and reached for the ME :
 	    "reference": "abc",
 	    "amount": 0.23,
 	    "serial_number_pos": "{SN}",
-	"options": {
+		"options": {
 		"auto_return": true,
 		"is_tip_enabled": true,
 		"is_msi_enabled": true,
 		"is_mci_enabled": true,
 		"is_dcc_enabled": true
-	}
+		}
     }'
 
 
