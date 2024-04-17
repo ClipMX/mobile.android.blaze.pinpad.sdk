@@ -422,34 +422,41 @@ The API URL is configured and reached for the ME :
 [https://api.payclip.io/f2f/pinpad/v1/payment](https://api.payclip.io/f2f/pinpad/v1/payment)
 
 
-    curl --location 'https://api.payclip.io/f2f/pinpad/v1/payment' \
-    --header 'Authorization: Basic {TOKEN}' \
-    --header 'Content-Type: application/json' \
-    --data '{
-	    "reference": "abc",
-	    "amount": 0.23,
-	    "auto_return": false,
-	    "is_tip_enabled": true,
-	    "serial_number_pos": "{SN}"
-    }'
-
+	curl --location 'https://api.payclip.io/f2f/pinpad/v1/payment' \
+	--header 'Authorization: Basic {TOKEN}' \
+	--header 'Content-Type: application/json' \
+	--data '{
+    	"reference": "dasdada",
+    	"amount": 0.1,
+    	"serial_number_pos": "MySnPOS12345",
+    	"options": {
+    		"auto_return": true,
+    		"is_tip_enabled": true,
+    		"is_msi_enabled": true,
+    		"is_mci_enabled": true,
+    		"is_dcc_enabled": true
+    	}
+	}'
 
 With the last reference, we will continue to make our first request:
 
-![](https://lh7-us.googleusercontent.com/eytFFmYe1X1lncS2-UGx9h4NgjZaO-HrNOAYJS-gtWJDFYIScUBxkD-LXwYWFfQ6bRc2jBRTAF8pEyU67FwCHI05SCcr4IqNsfFta4hAXm1fu-CvD9em5f6jElQhhS5CDpbk4ibSY6_o-qNn6J8JTmM)
+![](https://lh7-us.googleusercontent.com/HbpSPJ3LJziKg6ipsc-WYJ_RYktyHoM6pfcXGPww4-N6wVa8Kfmr5-4yeDMBx9GBBOMNxYjD1hzvsbS5MDdtThA6SjO58fgVdVRkLc0Bmllvi1jeEGcEXwiArd4NfPa5dpa4xczJI0eiyOUR5OjEtg)
 
 
 
 
-
-| Field name | Description | Type | Notes | Required |
-|--|--|--|--|--|
-| amount | Transaction amount. | Number |  | yes |
-| assigned_user | User identifier | String | User account email, For security, in this version will be applied | yes |
-| reference | external reference id | String |  | yes |
-| auto_return | Param for configuration terminal process when finish | Boolean | For configuration it is optional | no |
-| is_tip_enabled | Param for screen configuration terminal tip | Boolean | For configuration, it is optional | no |
-| serial_number_pos | Clip terminal serial number | String | | yes
+| Field name             | Description                                          | Type    | Notes                                                             | Required | Default value  |
+|------------------------|------------------------------------------------------|---------|-------------------------------------------------------------------|----------|----------------|
+| amount                 | Transaction amount.                                  | Number  |                                                                   | Yes      | --             
+| assigned_user          | User identifier                                      | String  | User account email, For security, in this version will be applied | Yes      | --             
+| reference              | external reference id                                | String  |                                                                   | Yes      | --             
+| serial_number_pos      | Clip terminal serial number                          | String  |                                                                   | Yes      | --             
+| options                | values customizables                                 | Object  | Options that can enable or disable                                | No       | --             |
+| options.auto_return    | Param for configuration terminal process when finish | Boolean |                                                                   | No       | false          
+| options.is_tip_enabled | Param for screen configuration terminal tip          | Boolean |                                                                   | No       | false          
+| options.is_msi_enabled | Param for enable installments without interests      | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true           
+| options.is_mci_enabled | Param to enable installments with interests          | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true           
+| options.is_dcc_enabled | Param to enable dynamic current convertion           | Boolean |                                                                   | No       | true           
 
 
 ### Payments Result
