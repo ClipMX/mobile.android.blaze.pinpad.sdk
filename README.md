@@ -440,8 +440,7 @@ The API URL is configured and reached for the ME :
 
 With the last reference, we will continue to make our first request:
 
-![](https://lh7-us.googleusercontent.com/eytFFmYe1X1lncS2-UGx9h4NgjZaO-HrNOAYJS-gtWJDFYIScUBxkD-LXwYWFfQ6bRc2jBRTAF8pEyU67FwCHI05SCcr4IqNsfFta4hAXm1fu-CvD9em5f6jElQhhS5CDpbk4ibSY6_o-qNn6J8JTmM)
-
+![](https://lh7-us.googleusercontent.com/HbpSPJ3LJziKg6ipsc-WYJ_RYktyHoM6pfcXGPww4-N6wVa8Kfmr5-4yeDMBx9GBBOMNxYjD1hzvsbS5MDdtThA6SjO58fgVdVRkLc0Bmllvi1jeEGcEXwiArd4NfPa5dpa4xczJI0eiyOUR5OjEtg)
 
 
 
