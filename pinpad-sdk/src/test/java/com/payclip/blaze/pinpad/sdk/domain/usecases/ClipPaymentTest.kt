@@ -26,6 +26,7 @@ class ClipPaymentTest {
     fun `create clip payment with builder, then verify that nothing crash`() = runTest {
         ClipPayment.Builder()
             .isAutoReturnEnabled(AUTO_RETURN)
+            .isRetryEnabled(RETRY)
             .setPaymentPreferences(getPaymentPreferences())
             .addListener(getEmptyListener())
             .build()
@@ -253,6 +254,7 @@ class ClipPaymentTest {
         private const val REFERENCE = "xyz"
 
         private const val AUTO_RETURN = false
+        private const val RETRY = true
 
         private const val IS_QPS_ENABLED = false
         private const val IS_MSI_ENABLED = true
