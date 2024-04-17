@@ -453,7 +453,7 @@ With the last reference, we will continue to make our first request:
 | reference              | external reference id                                | String  |                                                                   | Yes      | --             
 | serial_number_pos      | Clip terminal serial number                          | String  |                                                                   | Yes      | --             
 | options                | values customizables                                 | Object  | Options that can enable or disable                                | No       | --             |
-| options.auto_return    | Param for configuration terminal process when finish | Boolean |                                                                   |No        | false          
+| options.auto_return    | Param for configuration terminal process when finish | Boolean |                                                                   | No       | false          
 | options.is_tip_enabled | Param for screen configuration terminal tip          | Boolean |                                                                   | No       | false          
 | options.is_msi_enabled | Param for enable installments without interests      | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true           
 | options.is_mci_enabled | Param to enable installments with interests          | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true           
