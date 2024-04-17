@@ -455,8 +455,8 @@ With the last reference, we will continue to make our first request:
 | options                | values customizables                                 | Object  | Options that can enable or disable                                | No        | --             |
 | options.auto_return    | Param for configuration terminal process when finish | Boolean | For configuration it is optional                                  | No        | false          
 | options.is_tip_enabled | Param for screen configuration terminal tip          | Boolean | For configuration, it is optional                                 | No        | false          
-| options.is_msi_enabled | Param for enable installments                        | Boolean | To learn terms and condtitions about installments visit Clip site | No        | true           
-| options.is_mci_enabled |                                                      | Boolean |                                                                   | No        | true           
+| options.is_msi_enabled | Param for enable installments without interests      | Boolean | To learn terms and condtitions about installments visit Clip site | No        | true           
+| options.is_mci_enabled | Param to enable installments with interests          | Boolean | To learn terms and condtitions about installments visit Clip site | No        | true           
 | options.is_dcc_enabled | Param to enable dynamic current convertion           | Boolean |                                                                   | No        | true           
 
 
