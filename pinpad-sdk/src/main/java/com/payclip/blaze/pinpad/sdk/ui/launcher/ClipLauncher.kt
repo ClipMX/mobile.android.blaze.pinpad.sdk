@@ -46,14 +46,17 @@ internal interface ClipLauncher {
      *
      * @param reference The id or a reference of your payment.
      * @param amount The amount to be processed in payment process.
-     * @param autoReturn If it is true, when the payment process throw success or error, you will
+     * @param isAutoReturnEnabled If it is true, when the payment process throw success or error, you will
      * auto return to your application. Otherwise you will see a defined screen with information.
+     * @param isRetryEnabled If it is true, when the payment process throw error, you will
+     * have the chance to retry. Otherwise you will only be able to cancel.
      * @param preferences An object loaded with all payment configuration.
      */
     fun startPayment(
         reference: String,
         amount: Double,
-        autoReturn: Boolean = false,
+        isAutoReturnEnabled: Boolean = false,
+        isRetryEnabled: Boolean = true,
         preferences: PaymentPreferences
     )
 }

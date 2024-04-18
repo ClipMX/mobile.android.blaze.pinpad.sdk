@@ -18,6 +18,7 @@ class ClipPayment internal constructor(
     private val useCase: CreatePaymentUseCase,
     private val launcher: ClipLauncher,
     private val isAutoReturnEnabled: Boolean,
+    private val isRetryEnabled: Boolean,
     private val preferences: PaymentPreferences,
     private val listener: PaymentListener?
 ) {
@@ -29,6 +30,8 @@ class ClipPayment internal constructor(
     class Builder {
 
         private var isAutoReturnEnabled: Boolean = false
+
+        private var isRetryEnabled: Boolean = true
 
         private var preferences: PaymentPreferences = PaymentPreferences()
 
@@ -42,6 +45,16 @@ class ClipPayment internal constructor(
          */
         fun isAutoReturnEnabled(isEnabled: Boolean) = apply {
             this.isAutoReturnEnabled = isEnabled
+        }
+
+        /**
+         * Method to settle if retries will be enabled.
+         *
+         * @param isEnabled If it is true, when the payment process throw error, you will
+         * have the chance to retry. Otherwise you will only be able to cancel.
+         */
+        fun isRetryEnabled(isEnabled: Boolean) = apply {
+            this.isRetryEnabled = isEnabled
         }
 
         /**
@@ -75,6 +88,7 @@ class ClipPayment internal constructor(
                 useCase = useCase,
                 launcher = launcher,
                 isAutoReturnEnabled = isAutoReturnEnabled,
+                isRetryEnabled = isRetryEnabled,
                 preferences = preferences,
                 listener = listener
             )
@@ -127,7 +141,8 @@ class ClipPayment internal constructor(
                 launcher.startPayment(
                     reference = reference,
                     amount = amount,
-                    autoReturn = isAutoReturnEnabled,
+                    isAutoReturnEnabled = isAutoReturnEnabled,
+                    isRetryEnabled = isRetryEnabled,
                     preferences = preferences
                 )
             }

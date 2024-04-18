@@ -26,6 +26,7 @@ class ClipPaymentTest {
     fun `create clip payment with builder, then verify that nothing crash`() = runTest {
         ClipPayment.Builder()
             .isAutoReturnEnabled(AUTO_RETURN)
+            .isRetryEnabled(RETRY)
             .setPaymentPreferences(getPaymentPreferences())
             .addListener(getEmptyListener())
             .build()
@@ -40,20 +41,51 @@ class ClipPaymentTest {
 
         payment.start(REFERENCE, AMOUNT)
 
-        verify(launcher).startPayment(REFERENCE, AMOUNT, false, preferences)
+        verify(launcher).startPayment(
+            reference = REFERENCE,
+            amount = AMOUNT,
+            isAutoReturnEnabled = false,
+            isRetryEnabled = true,
+            preferences = preferences
+        )
     }
 
     @Test
     fun `create payment with success response and auto return and check if the result is right`() = runTest {
         val preferences = getPaymentPreferences()
-        val payment = getPaymentInstance(autoReturn = true)
+        val payment = getPaymentInstance(isAutoReturnEnabled = true)
 
         whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
 
         payment.start(REFERENCE, AMOUNT)
 
-        verify(launcher).startPayment(REFERENCE, AMOUNT, true, preferences)
+        verify(launcher).startPayment(
+            reference = REFERENCE,
+            amount = AMOUNT,
+            isAutoReturnEnabled = true,
+            isRetryEnabled = true,
+            preferences = preferences
+        )
     }
+
+    @Test
+    fun `create payment with success response and retries disabled and check if the result is right`() = runTest {
+        val preferences = getPaymentPreferences()
+        val payment = getPaymentInstance(isRetryEnabled = false)
+
+        whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+
+        payment.start(REFERENCE, AMOUNT)
+
+        verify(launcher).startPayment(
+            reference = REFERENCE,
+            amount = AMOUNT,
+            isAutoReturnEnabled = false,
+            isRetryEnabled = false,
+            preferences = preferences
+        )
+    }
+
 
     @Test
     fun `create payment with success response and qps enabled and check if the result is right`() = runTest {
@@ -64,7 +96,13 @@ class ClipPaymentTest {
 
         payment.start(REFERENCE, AMOUNT)
 
-        verify(launcher).startPayment(REFERENCE, AMOUNT, false, preferences)
+        verify(launcher).startPayment(
+            reference = REFERENCE,
+            amount = AMOUNT,
+            isAutoReturnEnabled = false,
+            isRetryEnabled = true,
+            preferences = preferences
+        )
     }
 
     @Test
@@ -76,7 +114,13 @@ class ClipPaymentTest {
 
         payment.start(REFERENCE, AMOUNT)
 
-        verify(launcher).startPayment(REFERENCE, AMOUNT, false, preferences)
+        verify(launcher).startPayment(
+            reference = REFERENCE,
+            amount = AMOUNT,
+            isAutoReturnEnabled = false,
+            isRetryEnabled = true,
+            preferences = preferences
+        )
     }
 
     @Test
@@ -88,7 +132,13 @@ class ClipPaymentTest {
 
         payment.start(REFERENCE, AMOUNT)
 
-        verify(launcher).startPayment(REFERENCE, AMOUNT, false, preferences)
+        verify(launcher).startPayment(
+            reference = REFERENCE,
+            amount = AMOUNT,
+            isAutoReturnEnabled = false,
+            isRetryEnabled = true,
+            preferences = preferences
+        )
     }
 
     @Test
@@ -100,7 +150,13 @@ class ClipPaymentTest {
 
         payment.start(REFERENCE, AMOUNT)
 
-        verify(launcher).startPayment(REFERENCE, AMOUNT, false, preferences)
+        verify(launcher).startPayment(
+            reference = REFERENCE,
+            amount = AMOUNT,
+            isAutoReturnEnabled = false,
+            isRetryEnabled = true,
+            preferences = preferences
+        )
     }
 
     @Test
@@ -112,7 +168,13 @@ class ClipPaymentTest {
 
         payment.start(REFERENCE, AMOUNT)
 
-        verify(launcher).startPayment(REFERENCE, AMOUNT, false, preferences)
+        verify(launcher).startPayment(
+            reference = REFERENCE,
+            amount = AMOUNT,
+            isAutoReturnEnabled = false,
+            isRetryEnabled = true,
+            preferences = preferences
+        )
     }
 
     @Test
@@ -147,12 +209,14 @@ class ClipPaymentTest {
     }
 
     private fun getPaymentInstance(
-        autoReturn: Boolean = false,
+        isAutoReturnEnabled: Boolean = false,
+        isRetryEnabled: Boolean = true,
         preferences: PaymentPreferences = getPaymentPreferences()
     ) = ClipPayment(
         useCase,
         launcher,
-        autoReturn,
+        isAutoReturnEnabled,
+        isRetryEnabled,
         preferences,
         listener
     )
@@ -190,6 +254,7 @@ class ClipPaymentTest {
         private const val REFERENCE = "xyz"
 
         private const val AUTO_RETURN = false
+        private const val RETRY = true
 
         private const val IS_QPS_ENABLED = false
         private const val IS_MSI_ENABLED = true
