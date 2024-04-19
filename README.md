@@ -403,37 +403,39 @@ The API URL is configured and reached for the ME :
 	--header 'Authorization: Basic {TOKEN}' \
 	--header 'Content-Type: application/json' \
 	--data '{
-    	"reference": "dasdada",
-    	"amount": 0.1,
-    	"serial_number_pos": "MySnPOS12345",
-    	"options": {
-    		"auto_return": true,
-    		"is_tip_enabled": true,
-    		"is_msi_enabled": true,
-    		"is_mci_enabled": true,
-    		"is_dcc_enabled": true
-    	}
+		"reference": "Dinner with my friends",
+		"amount": 25.5,
+		"serial_number_pos": "MySnPOS12345",
+		"preferences": {
+			"is_auto_return_enabled": true,
+			"is_tip_enabled": true,
+			"is_msi_enabled": true,
+			"is_mci_enabled": true,
+			"is_dcc_enabled": true,
+			"is_retry_enabled": true
+		}
 	}'
 
 With the last reference, we will continue to make our first request:
 
-![](https://lh7-us.googleusercontent.com/HbpSPJ3LJziKg6ipsc-WYJ_RYktyHoM6pfcXGPww4-N6wVa8Kfmr5-4yeDMBx9GBBOMNxYjD1hzvsbS5MDdtThA6SjO58fgVdVRkLc0Bmllvi1jeEGcEXwiArd4NfPa5dpa4xczJI0eiyOUR5OjEtg)
+![](https://lh7-us.googleusercontent.com/bP_0PUTbDtyICAb_62U0tp24SOiBH8fBLxig40JRU9UndBw-Pmbg2fyWPoYHlZGZYPJ9lpadedVefkFotLyvwsiXAGkJUSlDH10eog-GoeKAcvHMW0R38Pf0fU3VC_srU6QfA-ffvyBpBOTGmV0INQ)
 
 
 
+| Field name                         | Description                                                      | Type    | Notes                                                             | Required | Default value  |
+|------------------------------------|------------------------------------------------------------------|---------|-------------------------------------------------------------------|----------|----------------|
+| amount                             | Transaction amount.                                              | Number  |                                                                   | Yes      | --             
+| assigned_user                      | User identifier                                                  | String  | User account email, For security, in this version will be applied | Yes      | --             
+| reference                          | external reference id                                            | String  |                                                                   | Yes      | --             
+| serial_number_pos                  | Clip terminal serial number                                      | String  |                                                                   | Yes      | --             
+| preferences                        | values customizables                                             | Object  | Options that can enable or disable                                | No       | --             |
+| preferences.is_auto_return_enabled | Param for configuration terminal process when finish             | Boolean |                                                                   | No       | false          
+| preferences.is_tip_enabled         | Param for screen configuration terminal tip                      | Boolean |                                                                   | No       | false          
+| preferences.is_msi_enabled         | Param for enable installments without interests                  | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true           
+| preferences.is_mci_enabled         | Param to enable installments with interests                      | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true           
+| preferences.is_dcc_enabled         | Param to enable dynamic current convertion                       | Boolean |                                                                   | No       | true           
+| preferences.is_retry_enabled       | Param to enable to users retries their payments when these fails | Boolean |                                                                   | No       | true           
 
-| Field name             | Description                                          | Type    | Notes                                                             | Required | Default value  |
-|------------------------|------------------------------------------------------|---------|-------------------------------------------------------------------|----------|----------------|
-| amount                 | Transaction amount.                                  | Number  |                                                                   | Yes      | --             
-| assigned_user          | User identifier                                      | String  | User account email, For security, in this version will be applied | Yes      | --             
-| reference              | external reference id                                | String  |                                                                   | Yes      | --             
-| serial_number_pos      | Clip terminal serial number                          | String  |                                                                   | Yes      | --             
-| options                | values customizables                                 | Object  | Options that can enable or disable                                | No       | --             |
-| options.auto_return    | Param for configuration terminal process when finish | Boolean |                                                                   | No       | false          
-| options.is_tip_enabled | Param for screen configuration terminal tip          | Boolean |                                                                   | No       | false          
-| options.is_msi_enabled | Param for enable installments without interests      | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true           
-| options.is_mci_enabled | Param to enable installments with interests          | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true           
-| options.is_dcc_enabled | Param to enable dynamic current convertion           | Boolean |                                                                   | No       | true           
 
 
 ### Payments Result
@@ -458,6 +460,7 @@ Body Response
 
 
     {
+    	"pinpad_request_id": "string"
 	    "reference":  "string",
 	    "amount":  1000,
 	    "serial_number_pos":  "string"
