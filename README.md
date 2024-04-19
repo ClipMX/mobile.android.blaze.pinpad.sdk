@@ -460,8 +460,6 @@ Body Response
     {
 	    "reference":  "string",
 	    "amount":  1000,
-	    "auto_return":  true,
-	    "is_tip_enabled":  true,
 	    "serial_number_pos":  "string"
     }
 
