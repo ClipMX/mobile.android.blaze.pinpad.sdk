@@ -48,6 +48,7 @@ Whether you're an experienced developer or a beginner, integrating PayClip payme
 	 	-	<a href="#api-call"> Make your first API call</a> 
 	 	-	<a href="#payment-result"> Payment Results</a> 
 	 	-	<a href="#first-payment"> Your First Payment</a> 
+	 	-	<a href="#delete-a-payment"> Delete a payment</a> 
 
 - :arrows_counterclockwise: <a href="#stay-updated"> Stay Updated</a>
 
@@ -403,7 +404,7 @@ The API URL is configured and reached for the ME :
 	--header 'Authorization: Basic {TOKEN}' \
 	--header 'Content-Type: application/json' \
 	--data '{
-		"reference": "Dinner with my friends",
+		"reference": "Dinner",
 		"amount": 25.5,
 		"serial_number_pos": "MySnPOS12345",
 		"preferences": {
@@ -460,7 +461,7 @@ Body Response
 
 
     {
-    	"pinpad_request_id": "string"
+		"pinpad_request_id": "string"
 	    "reference":  "string",
 	    "amount":  1000,
 	    "serial_number_pos":  "string"
@@ -478,8 +479,24 @@ WebHook:
 
 This is explained elsewhere [https://developer.clip.mx/reference/referencia-postback-webhook](https://developer.clip.mx/reference/referencia-postback-webhook)
 
+<a name="delete-a-payment"></a>
+
+### Delete a Payment
+
+If just after sending a payment request and you need to delete this payment you have available an endpoint where you can request delete the payment by `pinpad_request_id`
+
+**IMPORTANT:** In case you want delete your payment but it already appears in your POS we will not be able to delete through this endpoint. Like work around the ideal solution is cancel the process in your terminal.
+
+#### Request
+
+	curl --location --request DELETE 'https://api.payclip.io/f2f/pinpad/v1/payment/{pinpad_request_id}' \
+	--header 'Authorization: Basic {TOKEN}' \
+	--data ''
+
+**Response 200 OK**
+
 ### Your First Payment
-<a name="payment-result"></a>
+<a name="first-payment"></a>
 
 After completing a payment intent creation successfully the app will trigger its wake up
 
