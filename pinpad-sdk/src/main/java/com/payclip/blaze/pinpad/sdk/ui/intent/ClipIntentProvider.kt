@@ -2,7 +2,6 @@ package com.payclip.blaze.pinpad.sdk.ui.intent
 
 import android.content.Intent
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
-import com.payclip.blaze.pinpad.sdk.ui.intent.system.SystemClipIntentProvider
 
 interface ClipIntentProvider {
 
@@ -15,6 +14,8 @@ interface ClipIntentProvider {
      * auto return to your application. Otherwise you will see a defined screen with information.
      * @param isRetryEnabled If it is true, when the payment process throw error, you will
      * have the chance to retry. Otherwise you will only be able to cancel.
+     * @param isShareEnabled If it is true, the terminal will you share options in success.
+     * If set to false, the terminal will not show share options in success.
      * @param preferences An object loaded with all payment configuration.
      *
      * @return [Intent] with extras pointing to PinPad application.
@@ -24,6 +25,7 @@ interface ClipIntentProvider {
         amount: Double,
         isAutoReturnEnabled: Boolean = false,
         isRetryEnabled: Boolean = true,
+        isShareEnabled: Boolean = true,
         preferences: PaymentPreferences
     ): Intent
 
@@ -62,6 +64,15 @@ interface ClipIntentProvider {
      * @return The retry availability state. If retry availability was not settled, null is returned.
      */
     fun isRetryEnabled(intent: Intent): Boolean?
+
+    /**
+     * Get share buttons availability from intent extras.
+     *
+     * @param intent activity intent with extras.
+     *
+     * @return The share buttons availability state. If share availability was not settled, null is returned.
+     */
+    fun isShareEnabled(intent: Intent): Boolean?
 
     /**
      * Get payment preferences from intent extras.

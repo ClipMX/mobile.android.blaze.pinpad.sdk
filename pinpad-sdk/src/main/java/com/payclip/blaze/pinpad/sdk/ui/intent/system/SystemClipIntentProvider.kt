@@ -14,6 +14,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         amount: Double,
         isAutoReturnEnabled: Boolean,
         isRetryEnabled: Boolean,
+        isShareEnabled: Boolean,
         preferences: PaymentPreferences
     ): Intent {
         return Intent(Intent.ACTION_MAIN).apply {
@@ -22,6 +23,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
             putExtra(PAYMENT_AMOUNT_EXTRA, amount.toString())
             putExtra(PAYMENT_AUTO_RETURN_EXTRA, isAutoReturnEnabled)
             putExtra(PAYMENT_RETRY_EXTRA, isRetryEnabled)
+            putExtra(PAYMENT_SHARE_EXTRA, isShareEnabled)
             putExtra(PAYMENT_PREFERENCES_EXTRA, preferences)
         }
     }
@@ -42,6 +44,10 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         return intent.extras?.getBoolean(PAYMENT_RETRY_EXTRA)
     }
 
+    override fun isShareEnabled(intent: Intent): Boolean? {
+        return intent.extras?.getBoolean(PAYMENT_SHARE_EXTRA)
+    }
+
     @Suppress("DEPRECATION")
     override fun getPaymentPreferences(intent: Intent): PaymentPreferences {
         val preferences = when {
@@ -60,6 +66,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
 
         private const val PAYMENT_REFERENCE_EXTRA = "PAYMENT_REFERENCE"
         private const val PAYMENT_AMOUNT_EXTRA = "PAYMENT_AMOUNT"
+        private const val PAYMENT_SHARE_EXTRA = "PAYMENT_SHARE"
         private const val PAYMENT_RETRY_EXTRA = "PAYMENT_RETRY"
         private const val PAYMENT_AUTO_RETURN_EXTRA = "PAYMENT_AUTO_RETURN"
         private const val PAYMENT_PREFERENCES_EXTRA = "PAYMENT_PREFERENCES"
