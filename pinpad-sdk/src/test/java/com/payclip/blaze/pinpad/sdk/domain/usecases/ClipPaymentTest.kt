@@ -27,6 +27,7 @@ class ClipPaymentTest {
         ClipPayment.Builder()
             .isAutoReturnEnabled(AUTO_RETURN)
             .isRetryEnabled(RETRY)
+            .isShareEnabled(SHARE)
             .setPaymentPreferences(getPaymentPreferences())
             .addListener(getEmptyListener())
             .build()
@@ -82,6 +83,25 @@ class ClipPaymentTest {
             amount = AMOUNT,
             isAutoReturnEnabled = false,
             isRetryEnabled = false,
+            preferences = preferences
+        )
+    }
+
+    @Test
+    fun `create payment with success response and share options disabled and check if the result is right`() = runTest {
+        val preferences = getPaymentPreferences()
+        val payment = getPaymentInstance(isShareEnabled = false)
+
+        whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+
+        payment.start(REFERENCE, AMOUNT)
+
+        verify(launcher).startPayment(
+            reference = REFERENCE,
+            amount = AMOUNT,
+            isAutoReturnEnabled = false,
+            isRetryEnabled = true,
+            isShareEnabled = false,
             preferences = preferences
         )
     }
@@ -211,12 +231,14 @@ class ClipPaymentTest {
     private fun getPaymentInstance(
         isAutoReturnEnabled: Boolean = false,
         isRetryEnabled: Boolean = true,
+        isShareEnabled: Boolean = true,
         preferences: PaymentPreferences = getPaymentPreferences()
     ) = ClipPayment(
         useCase,
         launcher,
         isAutoReturnEnabled,
         isRetryEnabled,
+        isShareEnabled,
         preferences,
         listener
     )
@@ -255,6 +277,7 @@ class ClipPaymentTest {
 
         private const val AUTO_RETURN = false
         private const val RETRY = true
+        private const val SHARE = true
 
         private const val IS_QPS_ENABLED = false
         private const val IS_MSI_ENABLED = true

@@ -315,6 +315,15 @@ ClipPayment.Builder()
 
 
 
+- **isShareEnabled**: This parameter sets if share buttons are available in transaction success. When set to true, the terminal will you share options in success. If set to false, the terminal will not show share options in success.
+
+```Payment.kt  
+ClipPayment.Builder()
+	.isShareEnabled(isShareEnabled: Boolean)
+```
+
+
+
 - **addListener**: With this parameter, you can register a listener to receive transaction results. This allows you to handle the outcome of the transaction within your application.
 
 ```Payment.kt  
