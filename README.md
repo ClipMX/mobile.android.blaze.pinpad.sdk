@@ -48,6 +48,7 @@ Whether you're an experienced developer or a beginner, integrating PayClip payme
 	 	-	<a href="#api-call"> Make your first API call</a> 
 	 	-	<a href="#payment-result"> Payment Results</a> 
 	 	-	<a href="#first-payment"> Your First Payment</a> 
+	 	-	<a href="#delete-a-payment"> Delete a payment</a> 
 
 - :arrows_counterclockwise: <a href="#stay-updated"> Stay Updated</a>
 
@@ -314,6 +315,15 @@ ClipPayment.Builder()
 
 
 
+- **isShareEnabled**: This parameter sets if share buttons are available in transaction success. When set to true, the terminal will you share options in success. If set to false, the terminal will not show share options in success.
+
+```Payment.kt  
+ClipPayment.Builder()
+	.isShareEnabled(isShareEnabled: Boolean)
+```
+
+
+
 - **addListener**: With this parameter, you can register a listener to receive transaction results. This allows you to handle the outcome of the transaction within your application.
 
 ```Payment.kt  
@@ -403,37 +413,39 @@ The API URL is configured and reached for the ME :
 	--header 'Authorization: Basic {TOKEN}' \
 	--header 'Content-Type: application/json' \
 	--data '{
-    	"reference": "dasdada",
-    	"amount": 0.1,
-    	"serial_number_pos": "MySnPOS12345",
-    	"options": {
-    		"auto_return": true,
-    		"is_tip_enabled": true,
-    		"is_msi_enabled": true,
-    		"is_mci_enabled": true,
-    		"is_dcc_enabled": true
-    	}
+		"reference": "Dinner",
+		"amount": 25.5,
+		"serial_number_pos": "MySnPOS12345",
+		"preferences": {
+			"is_auto_return_enabled": true,
+			"is_tip_enabled": true,
+			"is_msi_enabled": true,
+			"is_mci_enabled": true,
+			"is_dcc_enabled": true,
+			"is_retry_enabled": true
+		}
 	}'
 
 With the last reference, we will continue to make our first request:
 
-![](https://lh7-us.googleusercontent.com/HbpSPJ3LJziKg6ipsc-WYJ_RYktyHoM6pfcXGPww4-N6wVa8Kfmr5-4yeDMBx9GBBOMNxYjD1hzvsbS5MDdtThA6SjO58fgVdVRkLc0Bmllvi1jeEGcEXwiArd4NfPa5dpa4xczJI0eiyOUR5OjEtg)
+![](https://lh7-us.googleusercontent.com/bP_0PUTbDtyICAb_62U0tp24SOiBH8fBLxig40JRU9UndBw-Pmbg2fyWPoYHlZGZYPJ9lpadedVefkFotLyvwsiXAGkJUSlDH10eog-GoeKAcvHMW0R38Pf0fU3VC_srU6QfA-ffvyBpBOTGmV0INQ)
 
 
 
+| Field name                         | Description                                                      | Type    | Notes                                                             | Required | Default value  |
+|------------------------------------|------------------------------------------------------------------|---------|-------------------------------------------------------------------|----------|----------------|
+| amount                             | Transaction amount.                                              | Number  |                                                                   | Yes      | --             
+| assigned_user                      | User identifier                                                  | String  | User account email, For security, in this version will be applied | Yes      | --             
+| reference                          | external reference id                                            | String  |                                                                   | Yes      | --             
+| serial_number_pos                  | Clip terminal serial number                                      | String  |                                                                   | Yes      | --             
+| preferences                        | values customizables                                             | Object  | Options that can enable or disable                                | No       | --             |
+| preferences.is_auto_return_enabled | Param for configuration terminal process when finish             | Boolean |                                                                   | No       | false          
+| preferences.is_tip_enabled         | Param for screen configuration terminal tip                      | Boolean |                                                                   | No       | false          
+| preferences.is_msi_enabled         | Param for enable installments without interests                  | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true           
+| preferences.is_mci_enabled         | Param to enable installments with interests                      | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true           
+| preferences.is_dcc_enabled         | Param to enable dynamic current convertion                       | Boolean |                                                                   | No       | true           
+| preferences.is_retry_enabled       | Param to enable to users retries their payments when these fails | Boolean |                                                                   | No       | true           
 
-| Field name             | Description                                          | Type    | Notes                                                             | Required | Default value  |
-|------------------------|------------------------------------------------------|---------|-------------------------------------------------------------------|----------|----------------|
-| amount                 | Transaction amount.                                  | Number  |                                                                   | Yes      | --             
-| assigned_user          | User identifier                                      | String  | User account email, For security, in this version will be applied | Yes      | --             
-| reference              | external reference id                                | String  |                                                                   | Yes      | --             
-| serial_number_pos      | Clip terminal serial number                          | String  |                                                                   | Yes      | --             
-| options                | values customizables                                 | Object  | Options that can enable or disable                                | No       | --             |
-| options.auto_return    | Param for configuration terminal process when finish | Boolean |                                                                   | No       | false          
-| options.is_tip_enabled | Param for screen configuration terminal tip          | Boolean |                                                                   | No       | false          
-| options.is_msi_enabled | Param for enable installments without interests      | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true           
-| options.is_mci_enabled | Param to enable installments with interests          | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true           
-| options.is_dcc_enabled | Param to enable dynamic current convertion           | Boolean |                                                                   | No       | true           
 
 
 ### Payments Result
@@ -458,6 +470,7 @@ Body Response
 
 
     {
+		"pinpad_request_id": "string"
 	    "reference":  "string",
 	    "amount":  1000,
 	    "serial_number_pos":  "string"
@@ -475,8 +488,24 @@ WebHook:
 
 This is explained elsewhere [https://developer.clip.mx/reference/referencia-postback-webhook](https://developer.clip.mx/reference/referencia-postback-webhook)
 
+<a name="delete-a-payment"></a>
+
+### Delete a Payment
+
+If just after sending a payment request and you need to delete this payment you have available an endpoint where you can request delete the payment by `pinpad_request_id`
+
+**IMPORTANT:** In case you want delete your payment but it already appears in your POS we will not be able to delete through this endpoint. Like work around the ideal solution is cancel the process in your terminal.
+
+#### Request
+
+	curl --location --request DELETE 'https://api.payclip.io/f2f/pinpad/v1/payment/{pinpad_request_id}' \
+	--header 'Authorization: Basic {TOKEN}' \
+	--data ''
+
+**Response 200 OK**
+
 ### Your First Payment
-<a name="payment-result"></a>
+<a name="first-payment"></a>
 
 After completing a payment intent creation successfully the app will trigger its wake up
 

@@ -91,6 +91,7 @@ internal class ActivityClipLauncher constructor(
         amount: Double,
         isAutoReturnEnabled: Boolean,
         isRetryEnabled: Boolean,
+        isShareEnabled: Boolean,
         preferences: PaymentPreferences
     ) {
         val launcher = getLauncher()
@@ -99,6 +100,7 @@ internal class ActivityClipLauncher constructor(
             amount = amount,
             isAutoReturnEnabled = isAutoReturnEnabled,
             isRetryEnabled = isRetryEnabled,
+            isShareEnabled = isShareEnabled,
             preferences = preferences
         )
 

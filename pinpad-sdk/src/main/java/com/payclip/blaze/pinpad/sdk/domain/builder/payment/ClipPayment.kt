@@ -19,6 +19,7 @@ class ClipPayment internal constructor(
     private val launcher: ClipLauncher,
     private val isAutoReturnEnabled: Boolean,
     private val isRetryEnabled: Boolean,
+    private val isShareEnabled: Boolean,
     private val preferences: PaymentPreferences,
     private val listener: PaymentListener?
 ) {
@@ -32,6 +33,8 @@ class ClipPayment internal constructor(
         private var isAutoReturnEnabled: Boolean = false
 
         private var isRetryEnabled: Boolean = true
+
+        private var isShareEnabled: Boolean = true
 
         private var preferences: PaymentPreferences = PaymentPreferences()
 
@@ -55,6 +58,16 @@ class ClipPayment internal constructor(
          */
         fun isRetryEnabled(isEnabled: Boolean) = apply {
             this.isRetryEnabled = isEnabled
+        }
+
+        /**
+         * Method to settle if share buttons will be shown.
+         *
+         * @param isEnabled If it is true, the terminal will you share options in success.
+         * If set to false, the terminal will not show share options in success.
+         */
+        fun isShareEnabled(isEnabled: Boolean) = apply {
+            this.isShareEnabled = isEnabled
         }
 
         /**
@@ -89,6 +102,7 @@ class ClipPayment internal constructor(
                 launcher = launcher,
                 isAutoReturnEnabled = isAutoReturnEnabled,
                 isRetryEnabled = isRetryEnabled,
+                isShareEnabled = isShareEnabled,
                 preferences = preferences,
                 listener = listener
             )
@@ -143,6 +157,7 @@ class ClipPayment internal constructor(
                     amount = amount,
                     isAutoReturnEnabled = isAutoReturnEnabled,
                     isRetryEnabled = isRetryEnabled,
+                    isShareEnabled = isShareEnabled,
                     preferences = preferences
                 )
             }

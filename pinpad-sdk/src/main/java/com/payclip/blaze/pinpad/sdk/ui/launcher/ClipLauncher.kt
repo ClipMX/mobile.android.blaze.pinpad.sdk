@@ -50,6 +50,8 @@ internal interface ClipLauncher {
      * auto return to your application. Otherwise you will see a defined screen with information.
      * @param isRetryEnabled If it is true, when the payment process throw error, you will
      * have the chance to retry. Otherwise you will only be able to cancel.
+     * @param isShareEnabled If it is true, the terminal will you share options in success.
+     * If set to false, the terminal will not show share options in success.
      * @param preferences An object loaded with all payment configuration.
      */
     fun startPayment(
@@ -57,6 +59,7 @@ internal interface ClipLauncher {
         amount: Double,
         isAutoReturnEnabled: Boolean = false,
         isRetryEnabled: Boolean = true,
+        isShareEnabled: Boolean = true,
         preferences: PaymentPreferences
     )
 }
