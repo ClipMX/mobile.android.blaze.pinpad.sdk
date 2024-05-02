@@ -422,7 +422,8 @@ The API URL is configured and reached for the ME :
 			"is_msi_enabled": true,
 			"is_mci_enabled": true,
 			"is_dcc_enabled": true,
-			"is_retry_enabled": true
+			"is_retry_enabled": true,
+			"is_share_enabled": true
 		}
 	}'
 
@@ -432,20 +433,20 @@ With the last reference, we will continue to make our first request:
 
 
 
-| Field name                         | Description                                                      | Type    | Notes                                                             | Required | Default value  |
-|------------------------------------|------------------------------------------------------------------|---------|-------------------------------------------------------------------|----------|----------------|
-| amount                             | Transaction amount.                                              | Number  |                                                                   | Yes      | --             
-| assigned_user                      | User identifier                                                  | String  | User account email, For security, in this version will be applied | Yes      | --             
-| reference                          | external reference id                                            | String  |                                                                   | Yes      | --             
-| serial_number_pos                  | Clip terminal serial number                                      | String  |                                                                   | Yes      | --             
-| preferences                        | values customizables                                             | Object  | Options that can enable or disable                                | No       | --             |
-| preferences.is_auto_return_enabled | Param for configuration terminal process when finish             | Boolean |                                                                   | No       | false          
-| preferences.is_tip_enabled         | Param for screen configuration terminal tip                      | Boolean |                                                                   | No       | false          
-| preferences.is_msi_enabled         | Param for enable installments without interests                  | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true           
-| preferences.is_mci_enabled         | Param to enable installments with interests                      | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true           
-| preferences.is_dcc_enabled         | Param to enable dynamic current convertion                       | Boolean |                                                                   | No       | true           
-| preferences.is_retry_enabled       | Param to enable to users retries their payments when these fails | Boolean |                                                                   | No       | true           
-
+| Field name                         | Description                                                                                                                                                                     | Type    | Notes                                                             | Required | Default value  |
+|------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|-------------------------------------------------------------------|----------|----------------|
+| amount                             | Transaction amount.                                                                                                                                                             | Number  |                                                                   | Yes      | --             
+| assigned_user                      | User identifier                                                                                                                                                                 | String  | User account email, For security, in this version will be applied | Yes      | --             
+| reference                          | external reference id                                                                                                                                                           | String  |                                                                   | Yes      | --             
+| serial_number_pos                  | Clip terminal serial number                                                                                                                                                     | String  |                                                                   | Yes      | --             
+| preferences                        | values customizables                                                                                                                                                            | Object  | Options that can enable or disable                                | No       | --             |
+| preferences.is_auto_return_enabled | Param for configuration terminal process when finish                                                                                                                            | Boolean |                                                                   | No       | false          
+| preferences.is_tip_enabled         | Param for screen configuration terminal tip                                                                                                                                     | Boolean |                                                                   | No       | false          
+| preferences.is_msi_enabled         | Param for enable installments without interests                                                                                                                                 | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true           
+| preferences.is_mci_enabled         | Param to enable installments with interests                                                                                                                                     | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true           
+| preferences.is_dcc_enabled         | Param to enable dynamic current convertion                                                                                                                                      | Boolean |                                                                   | No       | true           
+| preferences.is_retry_enabled       | Param to enable to users retries their payments when these fails                                                                                                                | Boolean |                                                                   | No       | true           
+| preferences.is_share_enabled       | Param to enable in transaction success. When set to true the terminal will you share options in success. If set to false, the terminal will not show share options in success.  | Boolean |                                                                   | No       | true   
 
 
 ### Payments Result
@@ -476,6 +477,15 @@ Body Response
 	    "serial_number_pos":  "string"
     }
 
+**Response 400 Bad request:**
+
+We avoid overwrite data if a payment already exists
+
+	{
+	   "code": "PAYMENT_REQUEST_ISSUE",
+	   "message": "This POS has a pending payment to attend"
+	}
+
 
 Body Headers
 
@@ -503,6 +513,23 @@ If just after sending a payment request and you need to delete this payment you 
 	--data ''
 
 **Response 200 OK**
+
+    {
+	    "pinpad_request_id": "string"
+	    "reference":  "string",
+	    "amount":  1000,
+	    "serial_number_pos":  "string"
+    }
+
+**Response 400 Bad request:**
+
+The payment requested was removed or was taken successfully by CLIP POS
+
+	{
+	   "code": "PAYMENT_REQUEST_ISSUE",
+	   "message": "The payment requested was removed or was taken successfully by CLIP POS"
+	}
+
 
 ### Your First Payment
 <a name="first-payment"></a>
