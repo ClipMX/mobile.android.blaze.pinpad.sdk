@@ -7,7 +7,6 @@ import kotlinx.parcelize.Parcelize
 @Keep
 @Parcelize
 data class PaymentPreferences(
-    val isQPSEnabled: Boolean = false,
     val isMSIEnabled: Boolean = true,
     val isMCIEnabled: Boolean = true,
     val isDCCEnabled: Boolean = false,
