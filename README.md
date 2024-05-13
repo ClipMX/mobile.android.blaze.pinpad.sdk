@@ -334,10 +334,9 @@ ClipPayment.Builder()
 
 
 - **setPaymentPreferences**: This parameter sets payment preferences.
-	- **isQPSEnabled**: This parameter sets if the tip screen will be shown when the payment process starts or not. By default it is false, and the tip screen will not be shown.
-	- **isMSIEnabled**: This parameter sets if the monthly interest-free installments will be enabled. By default it is false, and the qps will be disabled.
-	- **isMCIEnabled**: This parameter sets if the monthly installments will be enabled. By default it is true, and the msi will be activated.
-	- **isDCCEnabled**: This parameter sets if the dynamic currency convert will be enabled. By default it is true, and the mci will be activated.
+	- **isMSIEnabled**: This parameter sets if the monthly interest-free installments will be enabled. By default it is false, and the msi will be disabled.
+	- **isMCIEnabled**: This parameter sets if the monthly installments will be enabled. By default it is true, and the mci will be activated.
+	- **isDCCEnabled**: This parameter sets if the dynamic currency convert will be enabled. By default it is true, and the dcc will be activated.
 	- **isTipEnabled**: This parameter sets if the tip screen will be shown when the payment process starts or not. By default it is false, and the tip screen will not be shown.
 
 ```Payment.kt
