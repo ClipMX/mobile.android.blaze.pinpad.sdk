@@ -413,7 +413,7 @@ The API URL is configured and reached for the ME :
 	--header 'Content-Type: application/json' \
 	--data '{
 		"reference": "Dinner",
-		"amount": 25.5,
+		"amount": "25.5",
 		"serial_number_pos": "MySnPOS12345",
 		"preferences": {
 			"is_auto_return_enabled": true,
@@ -434,7 +434,7 @@ With the last reference, we will continue to make our first request:
 
 | Field name                         | Description                                                                                                                                                                    | Type    | Notes                                                             | Required | Default value |
 |------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|-------------------------------------------------------------------|----------|---------------|
-| amount                             | Transaction amount.                                                                                                                                                            | Number  |                                                                   | Yes      | --            |
+| amount                             | Transaction amount.                                                                                                                                                            | String  |                                                                   | Yes      | --            |
 | assigned_user                      | User identifier                                                                                                                                                                | String  | User account email, For security, in this version will be applied | Yes      | --            |
 | reference                          | external reference id                                                                                                                                                          | String  |                                                                   | Yes      | --            |
 | serial_number_pos                  | Clip terminal serial number                                                                                                                                                    | String  |                                                                   | Yes      | --            |
@@ -471,7 +471,7 @@ Body Response
     {
 		"pinpad_request_id": "string"
 	    "reference":  "string",
-	    "amount":  1000,
+	    "amount":  "1000",
 	    "serial_number_pos":  "string"
     }
 
@@ -515,7 +515,7 @@ If just after sending a payment request and you need to delete this payment you 
     {
 	    "pinpad_request_id": "string"
 	    "reference":  "string",
-	    "amount":  1000,
+	    "amount":  "1000",
 	    "serial_number_pos":  "string"
     }
 
