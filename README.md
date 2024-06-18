@@ -334,10 +334,9 @@ ClipPayment.Builder()
 
 
 - **setPaymentPreferences**: This parameter sets payment preferences.
-	- **isQPSEnabled**: This parameter sets if the tip screen will be shown when the payment process starts or not. By default it is false, and the tip screen will not be shown.
-	- **isMSIEnabled**: This parameter sets if the monthly interest-free installments will be enabled. By default it is false, and the qps will be disabled.
-	- **isMCIEnabled**: This parameter sets if the monthly installments will be enabled. By default it is true, and the msi will be activated.
-	- **isDCCEnabled**: This parameter sets if the dynamic currency convert will be enabled. By default it is true, and the mci will be activated.
+	- **isMSIEnabled**: This parameter sets if the monthly interest-free installments will be enabled. By default it is false, and the msi will be disabled.
+	- **isMCIEnabled**: This parameter sets if the monthly installments will be enabled. By default it is true, and the mci will be activated.
+	- **isDCCEnabled**: This parameter sets if the dynamic currency convert will be enabled. By default it is true, and the dcc will be activated.
 	- **isTipEnabled**: This parameter sets if the tip screen will be shown when the payment process starts or not. By default it is false, and the tip screen will not be shown.
 
 ```Payment.kt
@@ -422,7 +421,8 @@ The API URL is configured and reached for the ME :
 			"is_msi_enabled": true,
 			"is_mci_enabled": true,
 			"is_dcc_enabled": true,
-			"is_retry_enabled": true
+			"is_retry_enabled": true,
+			"is_share_enabled": true
 		}
 	}'
 
@@ -432,21 +432,20 @@ With the last reference, we will continue to make our first request:
 
 
 
-| Field name                         | Description                                                      | Type    | Notes                                                             | Required | Default value  |
-|------------------------------------|------------------------------------------------------------------|---------|-------------------------------------------------------------------|----------|----------------|
-| amount                             | Transaction amount.                                              | Number  |                                                                   | Yes      | --             
-| assigned_user                      | User identifier                                                  | String  | User account email, For security, in this version will be applied | Yes      | --             
-| reference                          | external reference id                                            | String  |                                                                   | Yes      | --             
-| serial_number_pos                  | Clip terminal serial number                                      | String  |                                                                   | Yes      | --             
-| preferences                        | values customizables                                             | Object  | Options that can enable or disable                                | No       | --             |
-| preferences.is_auto_return_enabled | Param for configuration terminal process when finish             | Boolean |                                                                   | No       | false          
-| preferences.is_tip_enabled         | Param for screen configuration terminal tip                      | Boolean |                                                                   | No       | false          
-| preferences.is_msi_enabled         | Param for enable installments without interests                  | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true           
-| preferences.is_mci_enabled         | Param to enable installments with interests                      | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true           
-| preferences.is_dcc_enabled         | Param to enable dynamic current convertion                       | Boolean |                                                                   | No       | true           
-| preferences.is_retry_enabled       | Param to enable to users retries their payments when these fails | Boolean |                                                                   | No       | true           
-
-
+| Field name                         | Description                                                                                                                                                                    | Type    | Notes                                                             | Required | Default value |
+|------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|-------------------------------------------------------------------|----------|---------------|
+| amount                             | Transaction amount.                                                                                                                                                            | Number  |                                                                   | Yes      | --            |
+| assigned_user                      | User identifier                                                                                                                                                                | String  | User account email, For security, in this version will be applied | Yes      | --            |
+| reference                          | external reference id                                                                                                                                                          | String  |                                                                   | Yes      | --            |
+| serial_number_pos                  | Clip terminal serial number                                                                                                                                                    | String  |                                                                   | Yes      | --            |
+| preferences                        | values customizable                                                                                                                                                            | Object  | Options that can enable or disable                                | No       | --            |
+| preferences.is_auto_return_enabled | Param for configuration terminal process when finish                                                                                                                           | Boolean |                                                                   | No       | false         |
+| preferences.is_tip_enabled         | Param for screen configuration terminal tip                                                                                                                                    | Boolean |                                                                   | No       | false         |
+| preferences.is_msi_enabled         | Param for enable installments without interests                                                                                                                                | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true          |
+| preferences.is_mci_enabled         | Param to enable installments with interests                                                                                                                                    | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true          |
+| preferences.is_dcc_enabled         | Param to enable dynamic current conversion                                                                                                                                     | Boolean |                                                                   | No       | true          |
+| preferences.is_retry_enabled       | Param to enable to users retries their payments when these fails                                                                                                               | Boolean |                                                                   | No       | true          |
+| preferences.is_share_enabled       | Param to enable in transaction success. When set to true the terminal will you share options in success. If set to false, the terminal will not show share options in success. | Boolean |                                                                   | No       | true          |
 
 ### Payments Result
 <a name="payment-result"></a>
@@ -476,6 +475,15 @@ Body Response
 	    "serial_number_pos":  "string"
     }
 
+**Response 400 Bad request:**
+
+We avoid overwrite data if a payment already exists
+
+	{
+	   "code": "PAYMENT_REQUEST_ISSUE",
+	   "message": "This POS has a pending payment to attend"
+	}
+
 
 Body Headers
 
@@ -504,6 +512,23 @@ If just after sending a payment request and you need to delete this payment you 
 
 **Response 200 OK**
 
+    {
+	    "pinpad_request_id": "string"
+	    "reference":  "string",
+	    "amount":  1000,
+	    "serial_number_pos":  "string"
+    }
+
+**Response 400 Bad request:**
+
+The payment requested was removed or was taken successfully by CLIP POS
+
+	{
+	   "code": "PAYMENT_REQUEST_ISSUE",
+	   "message": "The payment requested was removed or was taken successfully by CLIP POS"
+	}
+
+
 ### Your First Payment
 <a name="first-payment"></a>
 
@@ -529,43 +554,103 @@ mechanism to resume the payment process within our POS Android terminal.
 
 In the event of an error during the transaction process, the client may return one of the following error codes along with a description of the error:
 
-| CODE                                    | DESCRIPTION                                                                                  |  
-|-----------------------------------------|----------------------------------------------------------------------------------------------|  
-| EMPTY_AMOUNT                            | Amount should not be 0.0.                                                                    |  
-| EMPTY_MESSAGE                           | Message should not be empty.                                                                 |  
-| GENERIC_DECLINE                         | The transaction was declined for unspecified reasons.                                        |  
-| RECEIVE_DECLINE_CALL_ISSUER             | The transaction was declined. Please call the card issuer for further assistance.            |  
-| INSUFFICIENT_FUNDS                      | Insufficient funds available for the transaction.                                            |  
-| RECEIVE_DECLINE_CALL_ISSUER_2           | Another instance of transaction decline. Please call the card issuer for further assistance. |  
-| NO_CONN                                 | No connection available during the transaction.                                              |  
-| MC_FALLBACK                             | Mastercard fallback transaction initiated.                                                   |  
-| VISA_CTLS_FALLBACK                      | Visa contactless fallback transaction initiated.                                             |  
-| AMEX_MERCHANT_BLOCKED                   | American Express transaction declined due to merchant blocking.                              |  
-| NOT_SUFFICIENT_FUNDS                    | Insufficient funds available for the transaction.                                            |  
-| DO_NOT_HONOR                            | The card issuer declined the transaction.                                                    |  
-| DESTINATION_NOT_AVAILABLE               | The destination for the transaction is not available.                                        |  
-| INVALID_MERCHANT                        | Invalid merchant for the transaction.                                                        |  
-| RESTRICTED_CARD                         | The card used for the transaction is restricted.                                             |  
-| INVALID_TRANSACTION                     | The transaction is invalid.                                                                  |  
-| TRANSACTION_NOT_PERMITTED_TO_CARDHOLDER | The transaction is not permitted to the cardholder.                                          |  
-| ISSUER_OR_SWITCH_IS_INOPERATIVE         | The card issuer or switch is inoperative.                                                    |  
-| PICK_UP_CARD                            | The card should be picked up by the merchant.                                                |  
-| EXPIRED_CARD                            | The card used for the transaction has expired.                                               |  
-| EXCEEDS_WITHDRAWAL_AMOUNT_LIMIT         | The transaction amount exceeds the withdrawal limit.                                         |  
-| FAIL_3DS_AUTHENTICATION                 | 3DS authentication for the transaction failed.                                               |  
-| ALLOWABLE_NUMBER_OF_PIN_TRIES_EXCEEDED  | Maximum allowable number of PIN tries exceeded.                                              |  
-| INVALID_CARD_NUMBER_NO_SUCH_NUMBER      | Invalid card number provided.                                                                |  
-| GENERIC_ERROR                           | Generic error occurred during the transaction.                                               |  
-| REFER_TO_CARD_ISSUER                    | The transaction should be referred to the card issuer.                                       |  
-| INVALID_AMOUNT                          | The transaction amount is invalid.                                                           |  
-| INVALID_PIN_ONE_TIME                    | Invalid one-time PIN provided.                                                               |  
-| CONTACTLESS_FALLBACK_VISA_MASTERCARD    | Contactless fallback transaction for Visa or Mastercard initiated                            |  
-| QPS_FALLBACK_FOREIGN_CARDS              | Quick Payment Service (QPS) fallback transaction for foreign cards initiated.                |  
-| BILLER_SYSTEM_UNAVAILABLE               | Biller system is unavailable for the transaction.                                            |  
-| TERMINAL_ERROR                          | Error occurred at the terminal.                                                              |  
-| NO_CONNECTION                           | No connection detected during the transaction.                                               |  
-| CANCELLED                               | The transaction was cancelled.                                                               |  
-| UNKNOWN_ERROR                           | An unknown error occurred.                                                                   |  
+| CODE                                               | DESCRIPTION                                                                       |  
+|----------------------------------------------------|-----------------------------------------------------------------------------------|  
+| TRANSACTION_ID_GENERATION_FAILED                   | Transaction ID generation failed.                                                 |
+| LIMIT_CHECK_FAILED                                 | Limit check failed.                                                               |
+| LIMIT_CHECK_ZERO_AMOUNT                            | Zero amount in limit check.                                                       |
+| LIMIT_CHECK_NO_LOCATION                            | No location in limit check.                                                       |
+| LIMIT_CHECK_REQUEST                                | Limit check request.                                                              |
+| LIMIT_CHECK_TIMEOUT                                | Limit check timeout.                                                              |
+| LIMIT_CHECK_OTHER                                  | Other limit check error.                                                          |
+| LIMIT_CHECK_CONTACTLESS                            | Contactless limit check error.                                                    |
+| INITIALIZED_ERROR_FAILED_TO_INITIALIZE             | Failed to initialize.                                                             |
+| PAYMENT_DECLINED                                   | Payment declined.                                                                 |
+| PAYMENT_CANCELLED                                  | Payment cancelled.                                                                |
+| PAYMENT_APPROVED_PAYMENT_CANCELLED                 | Approved payment cancelled.                                                       |
+| PAYMENT_ZERO_AMOUNT                                | Zero amount in payment.                                                           |
+| PAYMENT_NO_LOCATION                                | No location in payment.                                                           |
+| PAYMENT_NO_CARD                                    | No card in payment.                                                               |
+| PAYMENT_TIMEOUT                                    | Payment timeout.                                                                  |
+| PAYMENT_FULL_EMV_FAILED                            | Full EMV payment failed.                                                          |
+| PAYMENT_OTHER                                      | Other payment error.                                                              |
+| PAYMENT_REQUEST                                    | Payment request error.                                                            |
+| PAYMENT_LOCATION_ERROR                             | Payment location error.                                                           |
+| PAYMENT_POINTS                                     | Payment points error.                                                             |
+| PAYMENT_LOST_CONNECTION                            | Lost connection during payment.                                                   |
+| BILLER_SYSTEM_UNAVAILABLE                          | Biller system unavailable.                                                        |
+| TRANSACTION_CANCELLED_BY_READER                    | Transaction cancelled by reader.                                                  |
+| TRANSACTION_TIMEOUT                                | Transaction timeout.                                                              |
+| TRANSACTION_GENERAL_ERROR                          | General transaction error.                                                        |
+| READER_BATTERY_LOW                                 | Reader battery low.                                                               |
+| READER_BATTERY_DEAD                                | Reader battery dead.                                                              |
+| READER_TIMEOUT                                     | Reader timeout.                                                                   |
+| READER_DISCONNECTED                                | Reader disconnected.                                                              |
+| READER_GENERAL_ERROR                               | General reader error.                                                             |
+| READER_READ_APP_DATA_ERROR                         | Reader read app data error.                                                       |
+| READER_CARD_AUTH_ERROR                             | Reader card authentication error.                                                 |
+| READER_UPDATE_KSN_FAILED_ERROR                     | Reader update KSN failed error.                                                   |
+| READER_PIN_ERROR                                   | Reader PIN error.                                                                 |
+| READER_BYPASS_ERROR                                | Reader bypass error.                                                              |
+| READER_INPUT_AFTER_TIMEOUT_ERROR                   | Reader input after timeout error.                                                 |
+| READER_TLV_ENCRYPTION_FAILED_BEFORE_EMV_FLOW_ERROR | TLV encryption failed before EMV flow error.                                      |
+| READER_TLV_ENCRYPTION_FAILED_AFTER_EMV_FLOW_ERROR  | TLV encryption failed after EMV flow error.                                       |
+| READER_BLOCKED_CARD                                | Blocked card error.                                                               |
+| READER_CONTACTLESS_DENIED                          | Contactless denied error.                                                         |
+| READER_CARD_REMOVED_ERROR                          | Card removed error.                                                               |
+| READER_CARD_NOT_SUPPORTED_ERROR                    | Card not supported error.                                                         |
+| READER_CHIP_CANNOT_BE_READ_ERROR                   | Chip cannot be read error.                                                        |
+| CARD_MISSING_TRACK_INFORMATION                     | Missing track information error.                                                  |
+| CARD_NOT_CHIP_CARD                                 | Not a chip card error.                                                            |
+| CARD_PROCESS_AS_CHIP                               | Process as chip error.                                                            |
+| CARD_INTERRUPTED                                   | Card interrupted error.                                                           |
+| CARD_CARD_MISPARSED                                | Card misparsed error.                                                             |
+| CARD_TIMEOUT                                       | Card timeout error.                                                               |
+| CARD_GENERAL_ERROR                                 | General card error.                                                               |
+| CARD_MULTIPLE_CARDS                                | Multiple cards error.                                                             |
+| CARD_CARD_DECLINED                                 | Card declined error.                                                              |
+| CONTACTLESS_BAD_READING                            | Bad contactless reading error.                                                    |
+| CARD_PIN_ENTRY_TIMEOUT                             | PIN entry timeout error.                                                          |
+| LOCATION_NO_LOCATION                               | No location error.                                                                |
+| LOCATION_NOT_AUTHORIZED                            | Location not authorized error.                                                    |
+| LOCATION_OTHER                                     | Other location error.                                                             |
+| LOCATION_NO_HIGH_ACCURACY_ENABLED                  | No high accuracy location error.                                                  |
+| STATE_ERROR                                        | State error.                                                                      |
+| EMPTY_AMOUNT                                       | Amount should not be 0.0.                                                         |
+| EMPTY_REFERENCE                                    | Reference should not be empty.                                                    |
+| EMPTY_SESSION                                      | You should log in first.                                                          |
+| GENERIC_DECLINE                                    | The transaction was declined for unspecified reasons.                             |
+| RECEIVE_DECLINE_CALL_ISSUER                        | The transaction was declined. Please call the card issuer for further assistance. |
+| INSUFFICIENT_FUNDS                                 | Insufficient funds available for the transaction.                                 |
+| NO_CONN                                            | No connection available during the transaction.                                   |
+| MC_FALLBACK                                        | Mastercard fallback transaction initiated.                                        |
+| VISA_CTLS_FALLBACK                                 | Visa contactless fallback transaction initiated.                                  |
+| AMEX_MERCHANT_BLOCKED                              | American Express transaction declined due to merchant blocking.                   |
+| NOT_SUFFICIENT_FUNDS                               | Insufficient funds available for the transaction.                                 |
+| DO_NOT_HONOR                                       | The card issuer declined the transaction.                                         |
+| DESTINATION_NOT_AVAILABLE                          | The destination for the transaction is not available.                             |
+| INVALID_MERCHANT                                   | Invalid merchant for the transaction.                                             |
+| RESTRICTED_CARD                                    | The card used for the transaction is restricted.                                  |
+| INVALID_TRANSACTION                                | The transaction is invalid.                                                       |
+| TRANSACTION_NOT_PERMITTED_TO_CARDHOLDER            | The transaction is not permitted to the cardholder.                               |
+| ISSUER_OR_SWITCH_IS_INOPERATIVE                    | The card issuer or switch is inoperative.                                         |
+| PICK_UP_CARD                                       | The card should be picked up by the merchant.                                     |
+| EXPIRED_CARD                                       | The card used for the transaction has expired.                                    |
+| EXCEEDS_WITHDRAWAL_AMOUNT_LIMIT                    | The transaction amount exceeds the withdrawal limit.                              |
+| FAIL_3DS_AUTHENTICATION                            | 3DS authentication for the transaction failed.                                    |
+| ALLOWABLE_NUMBER_OF_PIN_TRIES_EXCEEDED             | Maximum allowable number of PIN tries exceeded.                                   |
+| INVALID_CARD_NUMBER_NO_SUCH_NUMBER                 | Invalid card number provided.                                                     |
+| GENERIC_ERROR                                      | Generic error occurred during the transaction.                                    |
+| REFER_TO_CARD_ISSUER                               | The transaction should be referred to the card issuer.                            |
+| INVALID_AMOUNT                                     | The transaction amount is invalid.                                                |
+| INVALID_PIN_ONE_TIME                               | Invalid one-time PIN provided.                                                    |
+| CONTACTLESS_FALLBACK_VISA_MASTERCARD               | Contactless fallback transaction for Visa or Mastercard initiated                 |
+| QPS_FALLBACK_FOREIGN_CARDS                         | Quick Payment Service (QPS) fallback transaction for foreign cards initiated.     |
+| BILLER_SYSTEM_UNAVAILABLE                          | Biller system is unavailable for the transaction.                                 |
+| TERMINAL_EXCEPTION                                 | Error occurred at the terminal.                                                   |
+| NO_CONNECTION                                      | No connection detected during the transaction.                                    |
+| CANCELLED                                          | The transaction was cancelled.                                                    |
+| UNKNOWN_ERROR                                      | An unknown error occurred.                                                        |
 
 
 ## Stay Updated
