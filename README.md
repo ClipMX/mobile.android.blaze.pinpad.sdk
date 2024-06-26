@@ -369,8 +369,7 @@ We need to enter to [clip account](https://dashboard.clip.mx/reporting) and foll
 
 a.  Go to the developers portal.
 
-![](https://lh7-us.googleusercontent.com/3P72h6R6Nvx19vv6JUBiFqdcKaqa3voGd2WO2yDZQICvXr4GTwSmXTi4bQ8z5iN5UJcScqH60brw-T1glAkb4I6BmObPBx4bzHh-f3HJ4CAMhjuvFGoVnXaJQYZyK5GA22YODqDUZAH8-cev9iUuHW0)
-
+<img src="https://lh7-us.googleusercontent.com/3P72h6R6Nvx19vv6JUBiFqdcKaqa3voGd2WO2yDZQICvXr4GTwSmXTi4bQ8z5iN5UJcScqH60brw-T1glAkb4I6BmObPBx4bzHh-f3HJ4CAMhjuvFGoVnXaJQYZyK5GA22YODqDUZAH8-cev9iUuHW0" alt="drawing" width="50%"/>
 
 
 b.  We continue creating our application
@@ -381,20 +380,16 @@ b.  We continue creating our application
 
 c.  We neet to assign a name, and then proceed to create
 
-![](https://lh7-us.googleusercontent.com/ovAlHNFMnqXicLK1ADK4hsVDZXNoqxy8UbKQZXGCb6nXrApM8PYeaN-oLKNuL5bwENU3-u45EKaR-s3ZekS_EO17VSUl4Xb89fKerBC7uqjpgUv0sfHFN_55NR8kWAvRb-4R8EGTQgEGWoZ3nwjw_GQ)
-
+<img src="https://lh7-us.googleusercontent.com/ovAlHNFMnqXicLK1ADK4hsVDZXNoqxy8UbKQZXGCb6nXrApM8PYeaN-oLKNuL5bwENU3-u45EKaR-s3ZekS_EO17VSUl4Xb89fKerBC7uqjpgUv0sfHFN_55NR8kWAvRb-4R8EGTQgEGWoZ3nwjw_GQ" alt="drawing" width="70%"/>
 
 
 d.  When our application is created, it is important to save the API Key and Secret Key in a safe place. We need to use after
 
-![](https://lh7-us.googleusercontent.com/1DhQJKhCYbwT2xr8cJtn1VXTQN5fhSGuWsIupZsDp8_V6ftHm7IgZh5-m01AhoOjR7pa-UBH0GvhUcH6hiVQwdntBxvSYoPGphaxkmmb2-9Iw94Dohpw6_-V9DP2QUj1_dXa-P4cMvJNLjrilXm1TSk)
-
-
+<img src="https://lh7-us.googleusercontent.com/1DhQJKhCYbwT2xr8cJtn1VXTQN5fhSGuWsIupZsDp8_V6ftHm7IgZh5-m01AhoOjR7pa-UBH0GvhUcH6hiVQwdntBxvSYoPGphaxkmmb2-9Iw94Dohpw6_-V9DP2QUj1_dXa-P4cMvJNLjrilXm1TSk" alt="drawing" width="75%"/>
 
 e.  Finally, in the [Clip developers portal](https://developer.clip.mx/reference/token-de-autenticacion) with our previous keys, put the values in the fields as we can see in the next image.
 
-![](https://lh7-us.googleusercontent.com/FwyfiponSVsmYmoIXtWUhGmEwRHGTLW7ik4N1lfR4DTdTdqpcsAUvltQ_BjDK9VAeij_8TvZSREpwVAQOM4-VJuVb-el72kQAAnT015V1fuhl0ExYBXJOhVGBSYi3RVeb1De-Qrpjqgn_PjUFlKPvs8)
-
+<img src="https://lh7-us.googleusercontent.com/FwyfiponSVsmYmoIXtWUhGmEwRHGTLW7ik4N1lfR4DTdTdqpcsAUvltQ_BjDK9VAeij_8TvZSREpwVAQOM4-VJuVb-el72kQAAnT015V1fuhl0ExYBXJOhVGBSYi3RVeb1De-Qrpjqgn_PjUFlKPvs8" alt="drawing" width="75%"/>
 
 
 Finally we have a Basic value token for our next steps creating a request to the API in header authentication.
@@ -545,8 +540,7 @@ After completing a payment intent creation successfully the app will trigger its
 mechanism to resume the payment process within our POS Android terminal.
 
 
-
-![](https://lh7-us.googleusercontent.com/JEYmMswZshDtroD5Q4XwsTFITeuAhoCqKrZ_xSnJnukjwFbFLwd3O_FbfEATIMps805ZDRkkHXI2Gd75xJ4VYwG8qyrYAW97fmcKFkhTOQmTKL8z3YOaGIhdj_dbZFpUA3TmhqFQvFjBqKHVb8Me0fU)
+<img src="https://lh7-us.googleusercontent.com/JEYmMswZshDtroD5Q4XwsTFITeuAhoCqKrZ_xSnJnukjwFbFLwd3O_FbfEATIMps805ZDRkkHXI2Gd75xJ4VYwG8qyrYAW97fmcKFkhTOQmTKL8z3YOaGIhdj_dbZFpUA3TmhqFQvFjBqKHVb8Me0fU" alt="drawing" width="40%"/>
 
 
 ### Error Codes in SDK
