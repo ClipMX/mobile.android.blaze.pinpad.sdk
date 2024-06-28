@@ -173,9 +173,9 @@ You'll need an API key to authenticate with our services. If you don't have one 
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)    
     repositories {    
 	    mavenCentral()    
-	    maven { 
-		    url = uri("https://maven.pkg.github.com/ClipMX/mobile.android.blaze.pinpad.sdk")
-		    }
+	    maven {
+	        url = uri("https://maven.pkg.github.com/ClipMX/mobile.android.blaze.pinpad.sdk")
+	    }
 	}
 }    
 ```   
@@ -263,7 +263,7 @@ val client = remember {
 **Activity**
 
 ```kotlin
-private val builder: ClipPayment by lazy { 
+private val builder: ClipPayment by lazy {
     ClipPayment.Builder().setUser(YOUR_CLIP_USER).setApiKey(YOUR_CLIP_TOKEN).build() 
 }
 ```
@@ -283,10 +283,10 @@ Steps to Initialize the Payment Handler:
 
 ```kotlin
 @Composable 
-fun PaymentScreen() { 
-	...
-	client.setPaymentHandler()  
-	...
+fun PaymentScreen() {
+    ...
+    client.setPaymentHandler()
+    ...
 }
 ```
 
@@ -311,12 +311,12 @@ Steps to Launch a Payment:
 
 
 ```kotlin 
-scope.launch {    
-  client.start(    
-	      reference = REFERENCE,    
-	      amount = AMOUNT,    
-	      message = MESSAGE
-      )
+scope.launch { 
+    client.start(
+        reference = REFERENCE,
+        amount = AMOUNT,
+        message = MESSAGE
+    )
 }
 ```
 
@@ -330,28 +330,28 @@ Our payment SDK offers several additional configuration parameters to customize 
 
 ```kotlin
 ClipPayment.Builder()
-	.isAutoReturnEnabled(isAutoReturnEnabled:  Boolean)    
+	.isAutoReturnEnabled(isAutoReturnEnabled: Boolean)    
 ```   
 
 - **isRetryEnabled**: This parameter sets if retries are available for the terminal after a transaction. When set to true, the terminal allows you to retry the payment in case of failure. If set to false, the terminal will only show “cancel option” in case of failure.
 
 ```kotlin    
 ClipPayment.Builder()
-	.isRetryEnabled(isRetryEnabled:  Boolean)
+	.isRetryEnabled(isRetryEnabled: Boolean)
 ```   
 
 - **isShareEnabled**: This parameter sets if share buttons are available in transaction success. When set to true, the terminal will share options in success. If set to false, the terminal will not show share options in success.
 
 ```kotlin
 ClipPayment.Builder()
-	.isShareEnabled(isShareEnabled:  Boolean)    
+	.isShareEnabled(isShareEnabled: Boolean)    
 ```
 
 - **addListener**: With this parameter, you can register a listener to receive transaction results. This allows you to handle the outcome of the transaction within your application.
 
 ```kotlin
 ClipPayment.Builder()
-			.addListener(listener: PaymentListener) 
+    .addListener(listener: PaymentListener) 
 ```   
 
 - **setPaymentPreferences**: This parameter sets payment preferences.
@@ -364,7 +364,7 @@ ClipPayment.Builder()
 
 ```kotlin
 ClipPayment.Builder()
-	.setPaymentPreferences(preferences:  PaymentPreferences) 
+    .setPaymentPreferences(preferences: PaymentPreferences) 
 ```
 
 **Example Configuration**
@@ -375,38 +375,37 @@ import com.clip.sdk.ClipPayment;
 import com.clip.sdk.PaymentListener;
 import kotlinx.coroutines.flow.MutableStateFlow;
 
-public  class PaymentActivity extends Activity {
-	private ClipPayment clipPayment;
-	private MutableStateFlow<Boolean> loadingState = new MutableStateFlow<>(false);
-	@Override
-	protected  void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_payment);
+public  class PaymentActivity extends Activity { 
+    private ClipPayment clipPayment
+    private MutableStateFlow<Boolean> loadingState = new MutableStateFlow<>(false)
+    @Override 
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_payment)
 		// Configure ClipPayment with additional parameters
-		clipPayment = new ClipPayment.Builder()
-			.isDemo(true) // Use demo server for testing
-			.isAutoReturnEnabled(true) // Enable auto return to app
-			.isTipEnabled(true) // Show tip screen
-			.addListener( new PaymentListener() {
-					@Override
-					public  void onPaymentSuccess(	TransactionResult result) {
-						// Handle payment success
-					}
-					@Override
-					public  void onPaymentFailure(TransactionError error) {
+        clipPayment = new ClipPayment.Builder()
+            .isDemo(true) // Use demo server for testing
+            .isAutoReturnEnabled(true) // Enable auto return to app
+            .isTipEnabled(true) // Show tip screen
+            .addListener( new PaymentListener() {
+                @Override
+                public void onPaymentSuccess(TransactionResult result) {
+                    // Handle payment success 
+                }
+                @Override 
+                public void onPaymentFailure(TransactionError error) {
 						// Handle payment failure
-					}
-				}
-			).build();
-	}
-	private  void launchPayment() {
-		// Amount to charge
-		double amount = 100.00;
-		// Descriptive message about the payment
-		String description = "Payment for Order #1234";
-		// Launch the payment process
-		clipPayment.launchPayment(amount, description);
-	}
+                } 
+            }).build() 
+    }
+    private void launchPayment() {
+		// Amount to charge 
+        double amount = 100.00
+        // Descriptive message about the payment 
+        String description = "Payment for Order #1234" 
+        // Launch the payment process
+        clipPayment.launchPayment(amount, description) 
+    }
 }
 ```
 
@@ -439,18 +438,16 @@ Example usage:
 
 ```kotlin
 
-clipPayment.launchPayment(amount, description, new PaymentListener() {
-		@Override
-		public  void onPaymentSuccess(TransactionResult result) {
-			// Handle successful payment result
-		}
-		
-		@Override
-		public  void onPaymentFailure(TransactionError error) {
-			// Handle failed payment result
-		}
-	}
-)
+clipPayment.launchPayment(amount, description, new PaymentListener() { 
+    @Override 
+    public  void onPaymentSuccess(TransactionResult result) { 
+        // Handle successful payment result 
+    }
+    @Override 
+    public  void onPaymentFailure(TransactionError error) {
+        // Handle failed payment result 
+    } 
+})
 ```
 
 ### Error Codes in Terminal SDK
@@ -559,7 +556,7 @@ Finally we have a Basic value token for our next steps creating a request to the
 
 **Schema**
 
-```json
+```cURL
 curl --location 'https://api.payclip.io/f2f/pinpad/v1/payment' \
 	--header 'Authorization: Basic {TOKEN}' \
 	--header 'Content-Type: application/json' \
@@ -602,7 +599,7 @@ If for some reason you need to cancel/delete a payment intent, you'll be able to
 
 **Schema**
 
-```json
+```cURL
 curl --location 
 	--request DELETE 'https://api.payclip.io/f2f/pinpad/v1/payment/{pinpad_request_id}' \
 	--header 'Authorization: Basic {TOKEN}' \
@@ -655,7 +652,7 @@ Body Response
 ```
 
 Body Headers
-```json 
+```cURL 
 content-type:  application/json 
 date:  Mon,15  Apr  2024  16:44:15  GMT 
 strict-transport-security:  max-age=15724800;  
