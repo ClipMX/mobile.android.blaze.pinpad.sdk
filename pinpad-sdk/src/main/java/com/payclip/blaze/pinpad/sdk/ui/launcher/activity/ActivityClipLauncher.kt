@@ -89,14 +89,18 @@ internal class ActivityClipLauncher constructor(
     override fun startPayment(
         reference: String,
         amount: Double,
-        autoReturn: Boolean,
+        isAutoReturnEnabled: Boolean,
+        isRetryEnabled: Boolean,
+        isShareEnabled: Boolean,
         preferences: PaymentPreferences
     ) {
         val launcher = getLauncher()
         val intent = intentProvider.getClipIntent(
             reference = reference,
             amount = amount,
-            autoReturn = autoReturn,
+            isAutoReturnEnabled = isAutoReturnEnabled,
+            isRetryEnabled = isRetryEnabled,
+            isShareEnabled = isShareEnabled,
             preferences = preferences
         )
 
