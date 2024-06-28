@@ -1,66 +1,69 @@
-<a name="readme-top"></a>  
+<a name="readme-top"></a>    
 <br />
-<div align="center">  
-<a href="https://github.com/ClipMX/mobile.android.blaze.pinpad.sdk">  
-<img src="https://assets-global.website-files.com/635aa55e76b13b5f73be2fe0/635ab4fc38f5e85102e32c6e_logo-clip-orange.svg" alt="Logo" width="80" height="80">  
-</a>  
-<h1 align="center">PinPad SDK</h1>  
-<a href="https://github.com/ClipMX/mobile.android.blaze.pinpad.sdk/actions"><img src="https://github.com/stripe/stripe-android/workflows/CI/badge.svg" alt="CI" style="max-width: 100%;"></a>  
-<a href="https://github.com/ClipMX/mobile.android.blaze.pinpad.sdk/releases"><img src="https://img.shields.io/badge/release-1.0.2-orange" alt="GitHub release" data-canonical-src="https://img.shields.io/badge/release-1.0.2-orange?maxAge=60" style="max-width: 100%;"></a>  
-<p align="center">  
-📄 Welcome to PinPad SDK documentation 📄  
-<br />  
-<br />  
-</p>  
-</div>  
+<div align="center">    
+<a href="https://github.com/ClipMX/mobile.android.blaze.pinpad.sdk">    
+<img src="https://assets-global.website-files.com/635aa55e76b13b5f73be2fe0/635ab4fc38f5e85102e32c6e_logo-clip-orange.svg" alt="Logo" width="80" height="80">    
+</a>    
+<h1 align="center">PinPad SDK</h1>    
+<a href="https://github.com/ClipMX/mobile.android.blaze.pinpad.sdk/actions"><img src="https://github.com/stripe/stripe-android/workflows/CI/badge.svg" alt="CI" style="max-width: 100%;"></a>    
+<a href="https://github.com/ClipMX/mobile.android.blaze.pinpad.sdk/releases"><img src="https://img.shields.io/badge/release-1.0.6-orange" alt="GitHub release" data-canonical-src="https://img.shields.io/badge/release-1.0.6-orange?maxAge=60" style="max-width: 100%;"></a>    
+<p align="center">    
+📄 PinPad SDK developer documentation 📄 <br />    
+<br />    
+</p>    
+</div>    
 
-<!-- ABOUT THE PROJECT -->  
+<!-- ABOUT THE PROJECT -->    
 # About The Project
 
-Tired of the hassle associated with integrating payment services into your application? Look no further! Our SDK is carefully tailored to your needs.  
-Whether you're an experienced developer or a beginner, integrating PayClip payment services into your checkout process has never been easier.
+The Clip SDK offers two robust solutions for integrating seamless payment processing into your applications. Whether you are developing a native Android app or working with a server-side application, Clip SDK provides the tools necessary to manage transactions efficiently. Our SDK is designed to simplify the integration process, ensuring secure and reliable payment experiences for your customers.
 
 
 # Table of contents
 
 - :question: <a href="#why-our-sdk">Why choose our SDK? </a>
-	- :dollar: <a href="#payment-process">Simplifying the Payment Process</a>
+    - :credit_card: <a href="#payment-process">Simplifying the Payment Process</a>
 
-		- :credit_card: <a href="#app-to-app">App-to-App SDK</a>
-		- :inbox_tray: <a href="#server-driven">Server driven integration</a>
+        - :iphone: <a href="#app-to-app">Terminal SDK</a>
+        - :computer: <a href="#server-driven">Server Side SDK</a>
 
-- :pencil: <a href="#getting-started"> Getting Started: Quick Guide</a>
+- :bulb: <a href="#getting-started"> Getting Started</a>
+- :gear: <a href="#supported-devices">Supported Devices</a>
+-  :iphone: <a href="#app-to-app-sdk"> Terminal SDK solution</a>
+    - :heavy_exclamation_mark: <a href="#prerequisites">Minimal requirements</a>
+    - :key: <a href="#api-key">API Key</a>
+    - :hammer_and_wrench: <a href="#installing-dependency">Installing dependency</a>
+    -  :sparkles: <a href="#how-to"> Terminal SDK code example</a>
+    - :wrench: <a href="#additional-config">Additional Configuration Parameters</a>
+    - :warning: <a href="#error-codes">Error Codes in Terminal SDK</a>
 
--  <a href="#app-to-app-sdk"> App to App SDK</a>  
+-   :computer: <a href="#server-driven-int"> Server Side SDK solution</a>
 
-	- <a href="#prerequisites">Prerequisites</a>
-	- <a href="#supported-devices">Supported Device</a>
-	- <a href="#api-key">API Key</a>
-	- <a href="#dependency">Dependency</a>
-	- <a href="#installing-dependency">Installing dependency</a>
-	- :iphone: <a href="#how-to"> How to use the SDK?</a>
-	- <a href="#additional-config">Additional Configuration Parameters</a>
-	- <a href="#error-codes">Error Codes in SDK</a>
+    - :key:  <a href="#token-aut"> Token Authentication</a>
+    - :envelope: <a href="#api-call"> API methods</a>
+        - <a href="#post-method"> Create payment request </a>
+        -  <a href="#delete-method"> Delete payment request </a>  
+    - :incoming_envelope: <a href="#payment-result"> Payment Results</a>
+    - :warning: <a href="error-codes-server">Error codes in Server Side SDK</a>
 
--	 <a href="#server-driven-int"> Server Driven Integration</a> 
-
-	 	-	<a href="#token-aut"> Token Authentication</a> 
-	 	-	<a href="#api-call"> Make your first API call</a> 
-	 	-	<a href="#payment-result"> Payment Results</a> 
-	 	-	<a href="#first-payment"> Your First Payment</a> 
-	 	-	<a href="#delete-a-payment"> Delete a payment</a> 
-
+-  <a href="#first-payment"> Terminal result process</a>   
 - :arrows_counterclockwise: <a href="#stay-updated"> Stay Updated</a>
 
 
 ## Why choose our SDK?
 <a name="why-our-sdk"></a>
 
-- Seamless integration: Easily integrate PayClip's secure payment services while continuing to use your own applications to sell your products and services.
 
-- Streamline Transactions: Eliminate the complexity of credit card transaction management. Our SDK allows you to delegate the entire transaction process to PayClip, ensuring smooth and hassle-free payments.
+-   Comprehensive SDK Solutions: Clip offers tailored solutions to suit both Android and non-Android environments, ensuring a wide range of compatibility.
 
-– Peace of Mind: Worried about the security of your customer data? With our SDK, you can rest assured that all your transaction information is securely handled by PayClip. Say goodbye to the stress of developing and maintaining your own payment system.
+-   Easy Integration: Our detailed documentation and support resources make the integration process straightforward and quick.
+
+-   Secure and Compliant: Clip ensures that all transactions are secure and compliant with industry standards, giving you and your customers peace of mind.
+
+-   Exceptional Support: Our dedicated support team is available to assist with any questions or issues that may arise during integration.
+
+
+- Proven Reliability: Trusted by businesses of all sizes, Clip's payment solutions are reliable and scalable, capable of handling high transaction volumes.
 
 
 ### Simplifying the Payment Process
@@ -72,48 +75,84 @@ With Clip, you can unlock the full potential of your application by integrating 
 
 Before you can start, let's take an overview of the current available solutions:
 
-#### App to App SDK
-<a name="server-driven"></a>
-
-
-Clip's app-to-app integration will allow you to run your POS app within our Clip hardware device and accept in-person payments completely integrated with our Pinpad like application.
-
-**![](https://lh7-us.googleusercontent.com/YEONKiX7FM4Q7gZvvXs7UwT2mjJjCIYuEEuE3jtuowbRPeL5RrG4KPcAGux5_1M5F-6KxpEfCG4DfrFddbS_zqVMD72CH1Pmrdi1bOtOKm-bNotg3Xc6GL1Biqw_cYD39CRlaJWmlTqUKYaUP20ik_Q)**
-> **Note:** App-to-App integration is only available on our Clip Total Terminals. Bluetooth integration SDK is under development.
-
-#### Server Driven Solution
+#### Terminal SDK
 <a name="app-to-app"></a>
 
 
-With Clip's Punto de Venta API you'll be able to create payment intents from your backend that can then be processed by our payment terminals using our Clip classic app or our Pinpad version.
+The Terminal SDK is designed specifically for native Android applications, providing a seamless app-to-app integration for processing payments. This solution allows merchants to install their application on Clip's Android devices, initiate sales within their app, and handle the entire transactional flow in the Clip app. Once the transaction is completed, control returns to the merchant's application with the transaction details.
+
+**![](https://lh7-us.googleusercontent.com/YEONKiX7FM4Q7gZvvXs7UwT2mjJjCIYuEEuE3jtuowbRPeL5RrG4KPcAGux5_1M5F-6KxpEfCG4DfrFddbS_zqVMD72CH1Pmrdi1bOtOKm-bNotg3Xc6GL1Biqw_cYD39CRlaJWmlTqUKYaUP20ik_Q)**
+> **Note:** Terminal SDK integration is only available on Clip Total and Clip Pro 2 devices.
+
+#### Server Side SDK
+<a name="server-driven"></a>
+
+
+The Server Side SDK is designed for applications that are not running on Android. This solution enables backend systems to initiate sales by consuming the Clip PinPad API. Once a new payment intent gets posted to our Pinpad API, the device will  wake up a Clip from sleep mode to handle the transaction. The entire transaction flow occurs on the Clip device without requiring a physical connection, and the transaction details are sent back to the backend via webhooks.
 
 **![](https://lh7-us.googleusercontent.com/nrFry0a5ZIs-bIsFBvOpuKkNKtjc6eCIH3jH5sX70-bPpAKRIJfTPlPUHJj8rdbV-Tpi2Zvd3IrdpFJNMgIsVjYE4IgSIyteAqYrqpU6ePP8gavNU02Ep4_fSB9UfK-kiAbr0dWi5EDeDTNbLf9Lk-c)**
 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>  
+<p align="right">(<a href="#readme-top">back to top</a>)</p>    
 
-<!-- GETTING STARTED -->  
+<!-- GETTING STARTED -->    
 
 
-## Getting Started: Quick Guide
+## Getting Started
 <a name="getting-started"></a>
 
 
-Welcome to the quick guide to get you started with our SDK! In just a few simple steps, you'll be up and running with our library in a few minutes.
+To facilitate the integration testing process, follow the steps below to request a test POS device from our team:
+
+Reach Out to Us
+
+-   Email: Contact our integration support team at [sdk@clip.mx](mailto:sdk@clip.mx)
 
 
-### Prerequisites
-<a name="prerequisites"></a>
+Provide Details
 
-Before you begin, make sure you have the following:
+-   Your Information: Include your name, contact information, company name, and industry.
 
+-   Integration Requirements: Provide a brief overview of your integration requirements and goals.
 
+-   Timeline: Indicate your preferred timeline for testing and integration.
 
-#### Supported Device
+Request a Test POS Device
+
+Mention in your email or message that you would like to request a test POS device for integration testing purposes. Our team will review your request and get in touch to discuss further details.
+
+Arrange Shipment
+
+Once your request is approved, we will arrange for the shipment of a test POS device to your designated address. Tracking information will be provided so you can monitor the delivery status.
+
+## Supported Devices
 <a name="supported-devices"></a>
 
-Please note that our SDK is currently only supported on Clip Total devices, as it requires integration with the PinPad application installed on these devices.
+The Terminal SDK is supported on the following Clip devices:
 
+-   Clip Pro 2
+-   Clip Total
+-   Clip Total 2
+
+These devices come pre-installed with the Clip application necessary for this SDK integration.
+
+
+## Terminal SDK Solution
+<a name="app-to-app-sdk"></a>  
+Clip's Terminal SDK allows you to integrate your POS app seamlessly within our Clip hardware devices, enabling you to accept in-person payments through our PinPad application. This integration ensures a smooth and secure transactional flow for both merchants and customers.
+
+### Mininal requirements
+<a name="prerequisites"></a>
+
+To successfully use the Terminal SDK integration, ensure the following:
+
+-   Contact with Sales Team: You should be in contact with our Sales Team and have received your test POS terminals.
+
+-   Native Android: Your APK should be for a Native Android application.
+
+-   Security Check: You’ll need to share your APK with our InfoSec team for a security check.
+
+-   APK Installation: Once the app is approved by the InfoSec team, it will be installed in the devices.
 
 
 #### API Key
@@ -123,534 +162,549 @@ You'll need an API key to authenticate with our services. If you don't have one 
 
 
 
-#### Dependency
-<a name="dependency"></a>
-
-To download the SDK dependency, you'll need to add JitPack to your Maven repositories. Follow these steps:
-
-```settings.gradle.kts  
-dependencyResolutionManagement {  
-	repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)  
-  	repositories {  
-		mavenCentral()  
-		maven { url = uri("https://maven.pkg.github.com/ClipMX/mobile.android.blaze.pinpad.sdk") }  
-	}  
-}  
-```  
-
-And then add the dependency to `build.gradle.kts`.
-
-```build.gradle.kts  
-dependencies {  
-	implementation("com.github.ClipMX:mobile.android.blaze.pinpad.sdk:latest-version")  
-}  
-```  
 
 #### Installing dependency
 <a name="installing-dependency"></a>
 
+- Add JitPack Repository: Open your settings file and add the JitPack repository to your Maven repositories list.
 
-- Add JitPack Repository: Open your settings.gradle.kts file and add the JitPack repository to your Maven repositories list.
+- Add Dependency: Open your build file and add the SDK dependency.
 
-- Add Dependency: Open your build.gradle.kts file and add the SDK dependency.
+```gradle
+ dependencyResolutionManagement {    
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)    
+    repositories {    
+	    mavenCentral()    
+	    maven {
+	        url = uri("https://maven.pkg.github.com/ClipMX/mobile.android.blaze.pinpad.sdk")
+	    }
+	}
+}    
+```   
+
+Example for adding the dependency into `build.gradle.kts` kotlin file.
+
+```gradle 
+dependencies {
+	implementation("com.blaze.pinpad:pinpad-sdk:latest-version")
+}    
+```  
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>    
 
 
-
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>  
-
-
-
-
-
-## How to use the SDK?
+##  Terminal SDK code example
 <a name="how-to"></a>
-
 
 Our payment SDK is designed to be incredibly user-friendly, allowing you to configure the client according to your specific needs. Below is an example implementation for basic usage in a Compose application:
 
-Compose
+**Compose**
 
-```Payment.kt  
+```kotlin
 @Composable
-fun PaymentScreen() {
-	val scope = rememberCoroutineScope()
-	val client = remember {
-		ClipPayment.Builder()
-			.build()
-	}
-
-	client.setPaymentHandler()
-
-	Button(
-		onClick = {
-			scope.launch {
-				client.start(
-					amount = AMOUNT,
-					message = MESSAGE
-				)
-			}
-		}
-	) {
-		...
-	}
+fun PaymentScreen() { 
+    val scope = rememberCoroutineScope() 
+    val client = remember { ClipPayment.Builder().build() }
+    client.setPaymentHandler()
+    Button( onClick = { 
+        scope.launch { 
+            client.start(amount = AMOUNT, message = MESSAGE)
+        } 
+    }
+    ) { 
+        ... 
+    }
 }
-```  
+``` 
 
-Activity
+**Activity**
 
-```Payment.kt  
-class MainActivity : ComponentActivity() {
-
-	private val builder: ClipPayment by lazy {
-		ClipPayment.Builder()
-			.build()
-	}
-
-	init {
-		builder.setPaymentHandler(this@MainActivity)
-	}
-
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-
-		lifecycleScope.launch {
-			builder.start(
-				reference = REFERENCE,
-				amount = AMOUNT
-			)
-		}
-	}
+```kotlin  
+class MainActivity: ComponentActivity()  { 
+    private val builder: ClipPayment by lazy{ 
+        ClipPayment.Builder().build() 
+    }
+    init { 
+        builder.setPaymentHandler(this@MainActivity) 
+    }
+    override fun onCreate(savedInstanceState: Bundle?){ 
+        super.onCreate(savedInstanceState)
+        lifecycleScope.launch { 
+            builder.start( reference = REFERENCE, amount = AMOUNT ) 
+        } 
+    }
 }
-```  
+```
 
+Taking the last code example we will obtain the next step from a screen view from the client terminal UI.
 
 
 In this example, there are three vital components for client configuration:
 
-1. **Client Initialization**: You must instantiate the client in your application.
+**1. Client Initialization**
 
-Compose
+To begin using the Clip API in your application, you need to initialize the client. This involves creating an instance of the client with the necessary credentials. The client requires two mandatory parameters: your Clip user and the API key you generated earlier.
 
-```Payment.kt  
-val client = remember {
-	ClipPayment.Builder()
-		.build()
-}
-```  
+Steps to Initialize the Client:
 
-Activity
+1.  Instantiate the Client
+-   In your application's code, create a new instance of the Clip client.
+2.  Provide Mandatory Parameters
+-   Ensure you pass the following parameters when instantiating the client:
+-   Clip User: Your Clip user account identifier.
+-   API Key: The API key you generated from the Clip Developers Portal.
 
-```Payment.kt  
-private val builder: ClipPayment by lazy {
-	ClipPayment.Builder()
-		.build()
-}
-```  
+**Compose**
 
-
-
-2. **Payment Handler**: Payment handling is mandatory as the client needs to know the composable context to launch activities and handle results. If you are using Activity, be sure to call handler before activity onCreate.
-
-Compose
-
-```Payment.kt  
-@Composable
-fun PaymentScreen() {
-	...
-
-	client.setPaymentHandler()
-
-	...
+```kotlin
+val client = remember { 
+	ClipPayment.Builder().setUser(YOUR_CLIP_USER).setApiKey(YOUR_CLIP_TOKEN).build()
 }
 ```
 
-Activity
+**Activity**
 
-```Payment.kt  
-init {
+```kotlin
+private val builder: ClipPayment by lazy {
+    ClipPayment.Builder().setUser(YOUR_CLIP_USER).setApiKey(YOUR_CLIP_TOKEN).build() 
+}
+```
+
+**2. Payment Handler**
+
+Initializing the payment handler is crucial for the Clip client to properly manage payment activities and handle results. This setup ensures the client knows the composable context needed to launch activities and process their outcomes.
+
+Steps to Initialize the Payment Handler:
+
+1.  Initialize the Payment Handler
+-   Make sure to initialize the payment handler within your activity.
+2.  Call the Handler Before Activity's onCreate
+-   If you are using an Activity, ensure you call the handler before the onCreate method of your activity.
+
+**Compose**
+
+```kotlin
+@Composable 
+fun PaymentScreen() {
+    ...
+    client.setPaymentHandler()
+    ...
+}
+```
+
+**Activity**
+
+```kotlin  
+init { 
 	builder.setPaymentHandler(this@MainActivity)
 }
-```  
+```
+
+**3. Payment Launch**
+
+Once you have instantiated the client and configured the payment handler, you can proceed to launch the payment process. The payment launch method requires two parameters: the amount to charge and a descriptive message about the payment.
+
+Steps to Launch a Payment:
+
+1.  Ensure Client and Payment Handler are Initialized
+-   Confirm that the client and payment handler have been properly set up as described in previous sections.
+2. Call the Payment Launcher
+-   Use the payment handler to initiate the payment process by providing the necessary parameters
 
 
-
-3. **Payment Launch**: With the client instantiated and the payment handler configured, you can call the launcher. This method requires two parameters: the amount to charge and a descriptive message about the payment.
-
-
-```Payment.kt  
-scope.launch {  
-  client.start(  
-	  reference = REFERENCE,  
-	  amount = AMOUNT
-  )  
-}  
+```kotlin 
+scope.launch { 
+    client.start(
+        reference = REFERENCE,
+        amount = AMOUNT,
+        message = MESSAGE
+    )
+}
 ```
 
 
 ### Additional Configuration Parameters
 <a name="additional-config"></a>
 
-
 Our payment SDK offers several additional configuration parameters to customize your integration experience. Below are explanations of each parameter and examples of how to use them:
-
-
 
 - **isAutoReturnEnabled**: This parameter sets the return mode for the terminal after a transaction. When set to true, the terminal automatically returns to your application after completing or encountering an error during the transaction process. If set to false, the terminal displays its own detailed screen explaining the situation. By default, it is set to false.
 
-```Payment.kt  
+```kotlin
 ClipPayment.Builder()
-	.isAutoReturnEnabled(isAutoReturnEnabled: Boolean)
-```  
+	.isAutoReturnEnabled(isAutoReturnEnabled: Boolean)    
+```   
 
+- **isRetryEnabled**: This parameter sets if retries are available for the terminal after a transaction. When set to true, the terminal allows you to retry the payment in case of failure. If set to false, the terminal will only show “cancel option” in case of failure.
 
-
-- **isRetryEnabled**: This parameter sets if retries are available for the terminal after a transaction. When set to true, the terminal allows you to retry the payment in case of failure. If set to false, the terminal will only show cancel option in case of failure.
-
-```Payment.kt  
+```kotlin    
 ClipPayment.Builder()
 	.isRetryEnabled(isRetryEnabled: Boolean)
-```
+```   
 
+- **isShareEnabled**: This parameter sets if share buttons are available in transaction success. When set to true, the terminal will share options in success. If set to false, the terminal will not show share options in success.
 
-
-- **isShareEnabled**: This parameter sets if share buttons are available in transaction success. When set to true, the terminal will you share options in success. If set to false, the terminal will not show share options in success.
-
-```Payment.kt  
+```kotlin
 ClipPayment.Builder()
-	.isShareEnabled(isShareEnabled: Boolean)
+	.isShareEnabled(isShareEnabled: Boolean)    
 ```
-
-
 
 - **addListener**: With this parameter, you can register a listener to receive transaction results. This allows you to handle the outcome of the transaction within your application.
 
-```Payment.kt  
+```kotlin
 ClipPayment.Builder()
-	.addListener(listener: PaymentListener)
-```  
-
-
+    .addListener(listener: PaymentListener) 
+```   
 
 - **setPaymentPreferences**: This parameter sets payment preferences.
-	- **isMSIEnabled**: This parameter sets if the monthly interest-free installments will be enabled. By default it is false, and the msi will be disabled.
-	- **isMCIEnabled**: This parameter sets if the monthly installments will be enabled. By default it is true, and the mci will be activated.
-	- **isDCCEnabled**: This parameter sets if the dynamic currency convert will be enabled. By default it is true, and the dcc will be activated.
-	- **isTipEnabled**: This parameter sets if the tip screen will be shown when the payment process starts or not. By default it is false, and the tip screen will not be shown.
+    - isMSIEnabled: This parameter sets if the monthly interest-free installments will be enabled. By default it is false, and the msi will be disabled.
 
-```Payment.kt
-    ClipPayment.Builder()
-        .setPaymentPreferences(preferences: PaymentPreferences)
+    - isMCIEnabled: This parameter sets if the monthly installments will be enabled. By default it is true, and the mci will be activated.
+
+    - isDCCEnabled: This parameter sets if the dynamic currency convert will be enabled. By default it is true, and the dcc will be activated.
+    -  isTipEnabled: This parameter sets if the tip screen will be shown when the payment process starts or not. By default it is false, and the tip screen will not be shown.
+
+```kotlin
+ClipPayment.Builder()
+    .setPaymentPreferences(preferences: PaymentPreferences) 
+```
+
+**Example Configuration**
+Here is an example of how to configure the SDK with all the parameters:
+```kotlin
+// Import necessary libraries
+import com.clip.sdk.ClipPayment;
+import com.clip.sdk.PaymentListener;
+import kotlinx.coroutines.flow.MutableStateFlow;
+
+public  class PaymentActivity extends Activity { 
+    private ClipPayment clipPayment
+    private MutableStateFlow<Boolean> loadingState = new MutableStateFlow<>(false)
+    @Override 
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_payment)
+		// Configure ClipPayment with additional parameters
+        clipPayment = new ClipPayment.Builder()
+            .isDemo(true) // Use demo server for testing
+            .isAutoReturnEnabled(true) // Enable auto return to app
+            .isTipEnabled(true) // Show tip screen
+            .addListener( new PaymentListener() {
+                @Override
+                public void onPaymentSuccess(TransactionResult result) {
+                    // Handle payment success 
+                }
+                @Override 
+                public void onPaymentFailure(TransactionError error) {
+						// Handle payment failure
+                } 
+            }).build() 
+    }
+    private void launchPayment() {
+		// Amount to charge 
+        double amount = 100.00
+        // Descriptive message about the payment 
+        String description = "Payment for Order #1234" 
+        // Launch the payment process
+        clipPayment.launchPayment(amount, description) 
+    }
+}
 ```
 
 
+By using these configuration parameters, you can customize the behavior of the Clip SDK to better fit your application needs and provide a seamless payment experience for your users.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>  
+Obtaining Payment Results
+
+There are two available methods to obtain payment results when using Clip's payment SDK:
+
+1.  Response from the code implementation as Payment Results
+
+2.  Webhook
 
 
+**Response from the Compose Session as Payment Results**
 
-### Server Driven Integration
+
+This channel provides payment results synchronously, meaning the response is received immediately after the payment transaction is completed. Here’s how it works:
+
+-   Synchronous Response: The payment results are directly returned as part of the compose session, typically in the form of a response object or data structure.
+
+-   Real-time Integration: Merchants can integrate this method into their application logic to handle payment results in real-time, allowing for immediate processing and response to the transaction outcome.
+
+-   Same Session Context: Since the response is synchronous, merchants can access the payment results directly within the same session context where the payment transaction was initiated.
+
+-   Advantages: This method offers simplicity and immediacy in accessing payment results, making it suitable for scenarios where real-time processing is required.
+
+Example usage:
+
+```kotlin
+
+clipPayment.launchPayment(amount, description, new PaymentListener() { 
+    @Override 
+    public  void onPaymentSuccess(TransactionResult result) { 
+        // Handle successful payment result 
+    }
+    @Override 
+    public  void onPaymentFailure(TransactionError error) {
+        // Handle failed payment result 
+    } 
+})
+```
+
+### Error Codes in Terminal SDK
+<a name="error-codes"></a>
+
+In the event of an error during the transaction process, the client may return one of the following error codes along with a description of the error:
+
+| CODE | DESCRIPTION | 
+| --- | --- | 
+| EMPTY_AMOUNT | Amount should not be 0.0. | 
+| EMPTY_MESSAGE | Message should not be empty. | 
+| GENERIC_DECLINE | The transaction was declined for unspecified reasons. | 
+| RECEIVE_DECLINE_CALL_ISSUER | The transaction was declined. Please call the card issuer for further assistance. | 
+| INSUFFICIENT_FUNDS | Insufficient funds available for the transaction. | 
+| RECEIVE_DECLINE_CALL_ISSUER_2 | Another instance of transaction decline. Please call the card issuer for further assistance. | 
+| NO_CONN | No connection available during the transaction. | 
+| MC_FALLBACK | Mastercard fallback transaction initiated. | 
+| VISA_CTLS_FALLBACK | Visa contactless fallback transaction initiated. | 
+| AMEX_MERCHANT_BLOCKED | American Express transaction declined due to merchant blocking. | 
+| NOT_SUFFICIENT_FUNDS | Insufficient funds available for the transaction. | 
+| DO_NOT_HONOR | The card issuer declined the transaction. | 
+| DESTINATION_NOT_AVAILABLE | The destination for the transaction is not available. |
+| INVALID_MERCHANT | Invalid merchant for the transaction. | 
+| RESTRICTED_CARD | The card used for the transaction is restricted. | 
+| INVALID_TRANSACTION | The transaction is invalid. | 
+| TRANSACTION_NOT_PERMITTED_TO_CARDHOLDER | The transaction is not permitted to the cardholder. | 
+| ISSUER_OR_SWITCH_IS_INOPERATIVE | The card issuer or switch is inoperative. | 
+| PICK_UP_CARD | The card should be picked up by the merchant. | 
+| EXPIRED_CARD | The card used for the transaction has expired. | 
+| EXCEEDS_WITHDRAWAL_AMOUNT_LIMIT | The transaction amount exceeds the withdrawal limit. | 
+| FAIL_3DS_AUTHENTICATION | 3DS authentication for the transaction failed. | 
+| ALLOWABLE_NUMBER_OF_PIN_TRIES_EXCEEDED | Maximum allowable number of PIN tries exceeded. | 
+| INVALID_CARD_NUMBER_NO_SUCH_NUMBER | Invalid card number provided. | 
+| GENERIC_ERROR | Generic error occurred during the transaction. | 
+| REFER_TO_CARD_ISSUER | The transaction should be referred to the card issuer. | 
+| INVALID_AMOUNT | The transaction amount is invalid. | 
+| INVALID_PIN_ONE_TIME | Invalid one-time PIN provided. | 
+| CONTACTLESS_FALLBACK_VISA_MASTERCARD | Contactless fallback transaction for Visa or Mastercard initiated | 
+| QPS_FALLBACK_FOREIGN_CARDS | Quick Payment Service (QPS) fallback transaction for foreign cards initiated. | 
+| BILLER_SYSTEM_UNAVAILABLE | Biller system is unavailable for the transaction. | 
+| TERMINAL_ERROR | Error occurred at the terminal. | 
+| NO_CONNECTION | No connection detected during the transaction. | 
+| CANCELLED | The transaction was cancelled. | 
+| UNKNOWN_ERROR | An unknown error occurred. |   
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>    
+
+
+## Server Side SDK solution
 <a name="server-driven-int"></a>
 
-It is necessary for you to register with Clip in order to develop with the APIs.
-
-Having a Clip account will give you access to the Clip Dashboard, where you can manage your Clip payment devices and general account settings. A Clip account is also required to access the Developer Dashboard.
-
-To create your Clip account:
-
-1. Go to [https://dashboard.clip.mx/onboard/register](https://dashboard.clip.mx/onboard/register)
-
-Once we have our Clip Account created, we continue to generate token key values.
-
-We need to enter to [clip account](https://dashboard.clip.mx/reporting) and follow next steps:
+The Server Side SDK allows non-Android apps to process in-person payments using Clip devices. This solution enables backend systems to initiate transactions via the Clip PinPad API, which wakes up the Clip device to handle the payment. Once the transaction is complete, the result is sent back to the backend via a webhook, and the device returns to sleep mode.
 
 
+### Minimal Requirements
 
-a.  Go to the developers portal.
+To use the Server Side SDK, ensure the following:
 
-![](https://lh7-us.googleusercontent.com/3P72h6R6Nvx19vv6JUBiFqdcKaqa3voGd2WO2yDZQICvXr4GTwSmXTi4bQ8z5iN5UJcScqH60brw-T1glAkb4I6BmObPBx4bzHh-f3HJ4CAMhjuvFGoVnXaJQYZyK5GA22YODqDUZAH8-cev9iUuHW0)
+-   Customer Account: You must have a Clip customer account to access and manage the necessary services.
+
+
+- API Endpoint Communication: Your backend should be able to communicate correctly with the Clip API URL endpoint to initiate and manage transactions.
 
 
 
-b.  We continue creating our application
+1. Go to the developers portal.
 
-![](https://lh7-us.googleusercontent.com/f0RRfJZf2L_RvYW9ekPvUi-XsEdsCSBnjPQa5f_XnxdTa4yKeBcdkds_DTRjQd11uH6DvFPrV35TsL3-GoZtzNqwcRIcEweuBKTJ3ziVnFn3NoR4UEjJpNQohENP0Q1IVjvmEl7JyePZ_wD1TSwKYDM)
-
-
-
-c.  We neet to assign a name, and then proceed to create
-
-![](https://lh7-us.googleusercontent.com/ovAlHNFMnqXicLK1ADK4hsVDZXNoqxy8UbKQZXGCb6nXrApM8PYeaN-oLKNuL5bwENU3-u45EKaR-s3ZekS_EO17VSUl4Xb89fKerBC7uqjpgUv0sfHFN_55NR8kWAvRb-4R8EGTQgEGWoZ3nwjw_GQ)
+<img src="https://lh7-us.googleusercontent.com/3P72h6R6Nvx19vv6JUBiFqdcKaqa3voGd2WO2yDZQICvXr4GTwSmXTi4bQ8z5iN5UJcScqH60brw-T1glAkb4I6BmObPBx4bzHh-f3HJ4CAMhjuvFGoVnXaJQYZyK5GA22YODqDUZAH8-cev9iUuHW0" alt="developer portal" width="200"/>
 
 
+3. We continue creating our application
 
-d.  When our application is created, it is important to save the API Key and Secret Key in a safe place. We need to use after
-
-![](https://lh7-us.googleusercontent.com/1DhQJKhCYbwT2xr8cJtn1VXTQN5fhSGuWsIupZsDp8_V6ftHm7IgZh5-m01AhoOjR7pa-UBH0GvhUcH6hiVQwdntBxvSYoPGphaxkmmb2-9Iw94Dohpw6_-V9DP2QUj1_dXa-P4cMvJNLjrilXm1TSk)
-
+<img src="https://lh7-us.googleusercontent.com/f0RRfJZf2L_RvYW9ekPvUi-XsEdsCSBnjPQa5f_XnxdTa4yKeBcdkds_DTRjQd11uH6DvFPrV35TsL3-GoZtzNqwcRIcEweuBKTJ3ziVnFn3NoR4UEjJpNQohENP0Q1IVjvmEl7JyePZ_wD1TSwKYDM" alt="developer portal"/>
 
 
-e.  Finally, in the [Clip developers portal](https://developer.clip.mx/reference/token-de-autenticacion) with our previous keys, put the values in the fields as we can see in the next image.
+3. We neet to assign a name, and then proceed to create
 
-![](https://lh7-us.googleusercontent.com/FwyfiponSVsmYmoIXtWUhGmEwRHGTLW7ik4N1lfR4DTdTdqpcsAUvltQ_BjDK9VAeij_8TvZSREpwVAQOM4-VJuVb-el72kQAAnT015V1fuhl0ExYBXJOhVGBSYi3RVeb1De-Qrpjqgn_PjUFlKPvs8)
+<img src="https://lh7-us.googleusercontent.com/ovAlHNFMnqXicLK1ADK4hsVDZXNoqxy8UbKQZXGCb6nXrApM8PYeaN-oLKNuL5bwENU3-u45EKaR-s3ZekS_EO17VSUl4Xb89fKerBC7uqjpgUv0sfHFN_55NR8kWAvRb-4R8EGTQgEGWoZ3nwjw_GQ" width="600" alt="developer portal"/>
 
 
+4. When our application is created, it is important to save the API Key and Secret Key in a safe place. We need to use after
+
+<img src="https://lh7-us.googleusercontent.com/1DhQJKhCYbwT2xr8cJtn1VXTQN5fhSGuWsIupZsDp8_V6ftHm7IgZh5-m01AhoOjR7pa-UBH0GvhUcH6hiVQwdntBxvSYoPGphaxkmmb2-9Iw94Dohpw6_-V9DP2QUj1_dXa-P4cMvJNLjrilXm1TSk" width="600" alt="developer portal"/>
+
+
+
+5. Finally, in the [Clip developers portal](https://developer.clip.mx/reference/token-de-autenticacion) with our previous keys, put the values in the fields as we can see in the next image.
+
+
+  <img src="https://lh7-us.googleusercontent.com/FwyfiponSVsmYmoIXtWUhGmEwRHGTLW7ik4N1lfR4DTdTdqpcsAUvltQ_BjDK9VAeij_8TvZSREpwVAQOM4-VJuVb-el72kQAAnT015V1fuhl0ExYBXJOhVGBSYi3RVeb1De-Qrpjqgn_PjUFlKPvs8" width="500" alt="developer portal"/>
 
 Finally we have a Basic value token for our next steps creating a request to the API in header authentication.
 
 
-### Make your first API call
+### API methods
 <a name="api-call"></a>
 
-The API URL is configured and reached for the ME :
+**Create payment request**
 
-[https://api.payclip.io/f2f/pinpad/v1/payment](https://api.payclip.io/f2f/pinpad/v1/payment)
+<a name="post-method"></a>
+
+> **Note:** You need to implement next URL to make a POST request :
 
 
-	curl --location 'https://api.payclip.io/f2f/pinpad/v1/payment' \
+<img src="https://img.shields.io/badge/POST-2175BF" alt="method" style="max-width: 100%;">  [https://api.payclip.io/f2f/pinpad/v1/payment](https://api.payclip.io/f2f/pinpad/v1/payment)  
+
+**/Payment** method works to process new paymet request
+
+**Schema**
+
+```cURL
+curl --location 'https://api.payclip.io/f2f/pinpad/v1/payment' \
 	--header 'Authorization: Basic {TOKEN}' \
 	--header 'Content-Type: application/json' \
-	--data '{
-		"reference": "Dinner",
-		"amount": 25.5,
-		"serial_number_pos": "MySnPOS12345",
-		"preferences": {
-			"is_auto_return_enabled": true,
-			"is_tip_enabled": true,
-			"is_msi_enabled": true,
-			"is_mci_enabled": true,
-			"is_dcc_enabled": true,
-			"is_retry_enabled": true,
-			"is_share_enabled": true
+	--data '
+{
+	"reference": "Dinner",
+	"amount": 25.5,
+	"serial_number_pos": "MySnPOS12345",
+	"preferences": {
+		"is_auto_return_enabled": false,
+		"is_tip_enabled": false,
+		"is_msi_enabled": false,
+		"is_mci_enabled": false,
+		"is_dcc_enabled": false,
+		"is_retry_enabled": false
 		}
-	}'
+}
+'  
+``` 
 
-With the last reference, we will continue to make our first request:
+| Field name | Description | Type | Notes | Required |  Default value |
+|--|--|--|--|--|--|
+| amount | Transaction amount. | Number | -- | yes | -- |
+| reference | external reference id | String | -- | yes | -- |
+| serial_number_pos | Clip terminal serial number | Identifier | String | yes | -- |
+| preferences | customizable values | Object | Options that can enable or disable | No | -- |
+| preferences.is_auto_return_enabled | Param for configuration terminal process when finish | Boolean | -- | No | -- |
+| preferences.is_tip_enabled | Param for screen configuration terminal tip | Boolean| -- | No | -- |
+| preferences.is_msi_enabled | Param for enable installments without interests | Boolean | To learn terms and conditions about installments visit Clip site | No | -- |
+| preferences.is_mci_enabled | Param to enable installments with interests | Boolean | To learn terms and conditions about installments visit Clip site | No | -- |
+| preferences.is_dcc_enabled | Param to enable dynamic current convertion | Boolean |  -- |No | -- |
+| preferences.is_retry_enabled | Param to enable to users retries their payments when these fails | Boolean | -- | No | -- |
 
-![](https://lh7-us.googleusercontent.com/bP_0PUTbDtyICAb_62U0tp24SOiBH8fBLxig40JRU9UndBw-Pmbg2fyWPoYHlZGZYPJ9lpadedVefkFotLyvwsiXAGkJUSlDH10eog-GoeKAcvHMW0R38Pf0fU3VC_srU6QfA-ffvyBpBOTGmV0INQ)
+
+**Delete payment request**
+
+<a name="delete-method"></a>
+
+If for some reason you need to cancel/delete a payment intent, you'll be able to do so using an available DELETE endpoint passing the pinpad_request_id parameter as shown below
+
+<img src="https://img.shields.io/badge/DELETE-CA3823" alt="method" style="max-width: 100%;"> https://api.payclip.io/f2f/pinpad/v1/payment/{pinpad_request_id}  
+
+**Schema**
+
+```cURL
+curl --location 
+	--request DELETE 'https://api.payclip.io/f2f/pinpad/v1/payment/{pinpad_request_id}' \
+	--header 'Authorization: Basic {TOKEN}' \
+	--data ''  
+```
+
+**/Payment** method works for delete payment request
+
+> Url param -  **pinpad_request_id:** Identifier created for payment request
+
+| Field name | Description | Type | Notes | Required |  Default value |
+| -- | -- | -- | -- | -- | -- |
+| pinpad_request_id | url param for request identifier created |  String| --  |  yes | -- |
 
 
+>  **IMPORTANT**: this will only work as long as the payment intent hasn't been picked up by the terminal yet. If that's the case and you still want to abort the payment, you can still do so by canceling the process within the Pin Pad app or closing the app entirely.
 
-| Field name                         | Description                                                                                                                                                                    | Type    | Notes                                                             | Required | Default value |
-|------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|-------------------------------------------------------------------|----------|---------------|
-| amount                             | Transaction amount.                                                                                                                                                            | Number  |                                                                   | Yes      | --            |
-| assigned_user                      | User identifier                                                                                                                                                                | String  | User account email, For security, in this version will be applied | Yes      | --            |
-| reference                          | external reference id                                                                                                                                                          | String  |                                                                   | Yes      | --            |
-| serial_number_pos                  | Clip terminal serial number                                                                                                                                                    | String  |                                                                   | Yes      | --            |
-| preferences                        | values customizable                                                                                                                                                            | Object  | Options that can enable or disable                                | No       | --            |
-| preferences.is_auto_return_enabled | Param for configuration terminal process when finish                                                                                                                           | Boolean |                                                                   | No       | false         |
-| preferences.is_tip_enabled         | Param for screen configuration terminal tip                                                                                                                                    | Boolean |                                                                   | No       | false         |
-| preferences.is_msi_enabled         | Param for enable installments without interests                                                                                                                                | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true          |
-| preferences.is_mci_enabled         | Param to enable installments with interests                                                                                                                                    | Boolean | To learn terms and condtitions about installments visit Clip site | No       | true          |
-| preferences.is_dcc_enabled         | Param to enable dynamic current conversion                                                                                                                                     | Boolean |                                                                   | No       | true          |
-| preferences.is_retry_enabled       | Param to enable to users retries their payments when these fails                                                                                                               | Boolean |                                                                   | No       | true          |
-| preferences.is_share_enabled       | Param to enable in transaction success. When set to true the terminal will you share options in success. If set to false, the terminal will not show share options in success. | Boolean |                                                                   | No       | true          |
 
 ### Payments Result
 <a name="payment-result"></a>
 
 This integration offers two ways to communicate with your backend for payment results:
 
--   Response from the payment intent
+- Response from the payment intent
 
--   Webhook
+- Webhook
 
-Response from the payment intent:
+**Response from the payment intent**
 
 We obtained a new payment in our PinPad SDK and the process wake up the terminal, proceeding to end pay.
 
-**Response 200 OK**
-
-The payment order was created successfully
-
+|  | |
+| --| --|
+| <img src="https://img.shields.io/badge/-16B10C" alt="method" style="max-width: 100%;"> 200 | The payment order was created successfully  | 
+|<img src="https://img.shields.io/badge/-CA3823" alt="method" style="max-width: 100%;"> 401 | Unauthorized. |
+| <img src="https://img.shields.io/badge/-CA3823" alt="method" style="max-width: 100%;"> 403 | Forbidden. |
+| <img src="https://img.shields.io/badge/-CA3823" alt="method" style="max-width: 100%;"> 404 | Wrong param |
+| <img src="https://img.shields.io/badge/-CA3823" alt="method" style="max-width: 100%;"> 500 | Internal Server Error.
 
 Body Response
 
-
-    {
-		"pinpad_request_id": "string"
-	    "reference":  "string",
-	    "amount":  1000,
-	    "serial_number_pos":  "string"
-    }
-
-**Response 400 Bad request:**
-
-We avoid overwrite data if a payment already exists
-
-	{
-	   "code": "PAYMENT_REQUEST_ISSUE",
-	   "message": "This POS has a pending payment to attend"
-	}
-
+```json 
+{ 
+	 "reference":  "string", 
+	 "amount":  1000, 
+	 "auto_return":  true, 
+	 "is_tip_enabled":  true, 
+	 "serial_number_pos":  "string" 
+}  
+```
 
 Body Headers
+```cURL 
+content-type:  application/json 
+date:  Mon,15  Apr  2024  16:44:15  GMT 
+strict-transport-security:  max-age=15724800;  
+includeSubDomains 
+``` 
 
-    content-type:  application/json
-    date:  Mon,15  Apr  2024  16:44:15  GMT
-    strict-transport-security:  max-age=15724800;  includeSubDomains
-
-
-WebHook:
+**WebHook**
 
 This is explained elsewhere [https://developer.clip.mx/reference/referencia-postback-webhook](https://developer.clip.mx/reference/referencia-postback-webhook)
 
-<a name="delete-a-payment"></a>
+### Error codes in Server Side SDK
 
-### Delete a Payment
+In the event of an error during the transaction process, it is important to understand the different types of errors that may occur. The Server Side SDK manages errors that happen before the payment is completed, while webhook handle errors that occur after the payment process.
 
-If just after sending a payment request and you need to delete this payment you have available an endpoint where you can request delete the payment by `pinpad_request_id`
+| Error | Note |
+| -- | -- | 
+| 400 Bad Request | Check request body | 
 
-**IMPORTANT:** In case you want delete your payment but it already appears in your POS we will not be able to delete through this endpoint. Like work around the ideal solution is cancel the process in your terminal.
+**Example**
+```json 
+{
+	"code":  "ERROR_BODY_STRUCTURE",
+	"message":  "Amount  must  be  a  number"
+}
+```
 
-#### Request
+ Error | Note |
+| -- | -- | 
+| 401 Unauthorized | Check api credentials |
 
-	curl --location --request DELETE 'https://api.payclip.io/f2f/pinpad/v1/payment/{pinpad_request_id}' \
-	--header 'Authorization: Basic {TOKEN}' \
-	--data ''
-
-**Response 200 OK**
-
-    {
-	    "pinpad_request_id": "string"
-	    "reference":  "string",
-	    "amount":  1000,
-	    "serial_number_pos":  "string"
-    }
-
-**Response 400 Bad request:**
-
-The payment requested was removed or was taken successfully by CLIP POS
-
-	{
-	   "code": "PAYMENT_REQUEST_ISSUE",
-	   "message": "The payment requested was removed or was taken successfully by CLIP POS"
-	}
+**Example**
+```json 
+{
+	"message":  "Unauthorized"
+}
+```
 
 
-### Your First Payment
+
+### Terminal result process
 <a name="first-payment"></a>
 
-After completing a payment intent creation successfully the app will trigger its wake up
 
-mechanism to resume the payment flow in our POS terminal. More details described in the next
+After completing a payment intent creation by terminal SDK solution or Server Side SDK solution successfull,  the app will trigger its wake up  mechanism to resume the payment process within our POS Android terminal.
 
-section.
-
-
-
-After completing a payment intent creation successfully the app will trigger its wake up
-
-mechanism to resume the payment process within our POS Android terminal.
-
-
-
-![](https://lh7-us.googleusercontent.com/JEYmMswZshDtroD5Q4XwsTFITeuAhoCqKrZ_xSnJnukjwFbFLwd3O_FbfEATIMps805ZDRkkHXI2Gd75xJ4VYwG8qyrYAW97fmcKFkhTOQmTKL8z3YOaGIhdj_dbZFpUA3TmhqFQvFjBqKHVb8Me0fU)
-
-
-### Error Codes in SDK
-<a name="error-codes"></a>
-
-In the event of an error during the transaction process, the client may return one of the following error codes along with a description of the error:
-
-| CODE                                               | DESCRIPTION                                                                       |  
-|----------------------------------------------------|-----------------------------------------------------------------------------------|  
-| TRANSACTION_ID_GENERATION_FAILED                   | Transaction ID generation failed.                                                 |
-| LIMIT_CHECK_FAILED                                 | Limit check failed.                                                               |
-| LIMIT_CHECK_ZERO_AMOUNT                            | Zero amount in limit check.                                                       |
-| LIMIT_CHECK_NO_LOCATION                            | No location in limit check.                                                       |
-| LIMIT_CHECK_REQUEST                                | Limit check request.                                                              |
-| LIMIT_CHECK_TIMEOUT                                | Limit check timeout.                                                              |
-| LIMIT_CHECK_OTHER                                  | Other limit check error.                                                          |
-| LIMIT_CHECK_CONTACTLESS                            | Contactless limit check error.                                                    |
-| INITIALIZED_ERROR_FAILED_TO_INITIALIZE             | Failed to initialize.                                                             |
-| PAYMENT_DECLINED                                   | Payment declined.                                                                 |
-| PAYMENT_CANCELLED                                  | Payment cancelled.                                                                |
-| PAYMENT_APPROVED_PAYMENT_CANCELLED                 | Approved payment cancelled.                                                       |
-| PAYMENT_ZERO_AMOUNT                                | Zero amount in payment.                                                           |
-| PAYMENT_NO_LOCATION                                | No location in payment.                                                           |
-| PAYMENT_NO_CARD                                    | No card in payment.                                                               |
-| PAYMENT_TIMEOUT                                    | Payment timeout.                                                                  |
-| PAYMENT_FULL_EMV_FAILED                            | Full EMV payment failed.                                                          |
-| PAYMENT_OTHER                                      | Other payment error.                                                              |
-| PAYMENT_REQUEST                                    | Payment request error.                                                            |
-| PAYMENT_LOCATION_ERROR                             | Payment location error.                                                           |
-| PAYMENT_POINTS                                     | Payment points error.                                                             |
-| PAYMENT_LOST_CONNECTION                            | Lost connection during payment.                                                   |
-| BILLER_SYSTEM_UNAVAILABLE                          | Biller system unavailable.                                                        |
-| TRANSACTION_CANCELLED_BY_READER                    | Transaction cancelled by reader.                                                  |
-| TRANSACTION_TIMEOUT                                | Transaction timeout.                                                              |
-| TRANSACTION_GENERAL_ERROR                          | General transaction error.                                                        |
-| READER_BATTERY_LOW                                 | Reader battery low.                                                               |
-| READER_BATTERY_DEAD                                | Reader battery dead.                                                              |
-| READER_TIMEOUT                                     | Reader timeout.                                                                   |
-| READER_DISCONNECTED                                | Reader disconnected.                                                              |
-| READER_GENERAL_ERROR                               | General reader error.                                                             |
-| READER_READ_APP_DATA_ERROR                         | Reader read app data error.                                                       |
-| READER_CARD_AUTH_ERROR                             | Reader card authentication error.                                                 |
-| READER_UPDATE_KSN_FAILED_ERROR                     | Reader update KSN failed error.                                                   |
-| READER_PIN_ERROR                                   | Reader PIN error.                                                                 |
-| READER_BYPASS_ERROR                                | Reader bypass error.                                                              |
-| READER_INPUT_AFTER_TIMEOUT_ERROR                   | Reader input after timeout error.                                                 |
-| READER_TLV_ENCRYPTION_FAILED_BEFORE_EMV_FLOW_ERROR | TLV encryption failed before EMV flow error.                                      |
-| READER_TLV_ENCRYPTION_FAILED_AFTER_EMV_FLOW_ERROR  | TLV encryption failed after EMV flow error.                                       |
-| READER_BLOCKED_CARD                                | Blocked card error.                                                               |
-| READER_CONTACTLESS_DENIED                          | Contactless denied error.                                                         |
-| READER_CARD_REMOVED_ERROR                          | Card removed error.                                                               |
-| READER_CARD_NOT_SUPPORTED_ERROR                    | Card not supported error.                                                         |
-| READER_CHIP_CANNOT_BE_READ_ERROR                   | Chip cannot be read error.                                                        |
-| CARD_MISSING_TRACK_INFORMATION                     | Missing track information error.                                                  |
-| CARD_NOT_CHIP_CARD                                 | Not a chip card error.                                                            |
-| CARD_PROCESS_AS_CHIP                               | Process as chip error.                                                            |
-| CARD_INTERRUPTED                                   | Card interrupted error.                                                           |
-| CARD_CARD_MISPARSED                                | Card misparsed error.                                                             |
-| CARD_TIMEOUT                                       | Card timeout error.                                                               |
-| CARD_GENERAL_ERROR                                 | General card error.                                                               |
-| CARD_MULTIPLE_CARDS                                | Multiple cards error.                                                             |
-| CARD_CARD_DECLINED                                 | Card declined error.                                                              |
-| CONTACTLESS_BAD_READING                            | Bad contactless reading error.                                                    |
-| CARD_PIN_ENTRY_TIMEOUT                             | PIN entry timeout error.                                                          |
-| LOCATION_NO_LOCATION                               | No location error.                                                                |
-| LOCATION_NOT_AUTHORIZED                            | Location not authorized error.                                                    |
-| LOCATION_OTHER                                     | Other location error.                                                             |
-| LOCATION_NO_HIGH_ACCURACY_ENABLED                  | No high accuracy location error.                                                  |
-| STATE_ERROR                                        | State error.                                                                      |
-| EMPTY_AMOUNT                                       | Amount should not be 0.0.                                                         |
-| EMPTY_REFERENCE                                    | Reference should not be empty.                                                    |
-| EMPTY_SESSION                                      | You should log in first.                                                          |
-| GENERIC_DECLINE                                    | The transaction was declined for unspecified reasons.                             |
-| RECEIVE_DECLINE_CALL_ISSUER                        | The transaction was declined. Please call the card issuer for further assistance. |
-| INSUFFICIENT_FUNDS                                 | Insufficient funds available for the transaction.                                 |
-| NO_CONN                                            | No connection available during the transaction.                                   |
-| MC_FALLBACK                                        | Mastercard fallback transaction initiated.                                        |
-| VISA_CTLS_FALLBACK                                 | Visa contactless fallback transaction initiated.                                  |
-| AMEX_MERCHANT_BLOCKED                              | American Express transaction declined due to merchant blocking.                   |
-| NOT_SUFFICIENT_FUNDS                               | Insufficient funds available for the transaction.                                 |
-| DO_NOT_HONOR                                       | The card issuer declined the transaction.                                         |
-| DESTINATION_NOT_AVAILABLE                          | The destination for the transaction is not available.                             |
-| INVALID_MERCHANT                                   | Invalid merchant for the transaction.                                             |
-| RESTRICTED_CARD                                    | The card used for the transaction is restricted.                                  |
-| INVALID_TRANSACTION                                | The transaction is invalid.                                                       |
-| TRANSACTION_NOT_PERMITTED_TO_CARDHOLDER            | The transaction is not permitted to the cardholder.                               |
-| ISSUER_OR_SWITCH_IS_INOPERATIVE                    | The card issuer or switch is inoperative.                                         |
-| PICK_UP_CARD                                       | The card should be picked up by the merchant.                                     |
-| EXPIRED_CARD                                       | The card used for the transaction has expired.                                    |
-| EXCEEDS_WITHDRAWAL_AMOUNT_LIMIT                    | The transaction amount exceeds the withdrawal limit.                              |
-| FAIL_3DS_AUTHENTICATION                            | 3DS authentication for the transaction failed.                                    |
-| ALLOWABLE_NUMBER_OF_PIN_TRIES_EXCEEDED             | Maximum allowable number of PIN tries exceeded.                                   |
-| INVALID_CARD_NUMBER_NO_SUCH_NUMBER                 | Invalid card number provided.                                                     |
-| GENERIC_ERROR                                      | Generic error occurred during the transaction.                                    |
-| REFER_TO_CARD_ISSUER                               | The transaction should be referred to the card issuer.                            |
-| INVALID_AMOUNT                                     | The transaction amount is invalid.                                                |
-| INVALID_PIN_ONE_TIME                               | Invalid one-time PIN provided.                                                    |
-| CONTACTLESS_FALLBACK_VISA_MASTERCARD               | Contactless fallback transaction for Visa or Mastercard initiated                 |
-| QPS_FALLBACK_FOREIGN_CARDS                         | Quick Payment Service (QPS) fallback transaction for foreign cards initiated.     |
-| BILLER_SYSTEM_UNAVAILABLE                          | Biller system is unavailable for the transaction.                                 |
-| TERMINAL_EXCEPTION                                 | Error occurred at the terminal.                                                   |
-| NO_CONNECTION                                      | No connection detected during the transaction.                                    |
-| CANCELLED                                          | The transaction was cancelled.                                                    |
-| UNKNOWN_ERROR                                      | An unknown error occurred.                                                        |
+  <img src="https://lh7-us.googleusercontent.com/docsz/AD_4nXfpjKtwLIuBdGBfC8vrffPhLR5iUnQKHfQAWoPNpdwaMwWkigA2mm0eyFSYadrbuLQ6U3hr8TVa4WgXnVbECfsyGGR0mmPJt8qlglxZWFIg9r1KKxQRTz_wS8I6cma5nMRPvqKxuvLc8TIDWooI9VYB0Uc?key=Y9d8E1pWDfJ9scqtsvGnUQ" alt="developer portal" width="800"/>
 
 
 ## Stay Updated
