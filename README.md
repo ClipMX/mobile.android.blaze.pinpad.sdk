@@ -168,7 +168,7 @@ You'll need an API key to authenticate with our services. If you don't have one 
 
 - Add Dependency: Open your build file and add the SDK dependency.
 
-```json
+```gradle
  dependencyResolutionManagement {    
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)    
     repositories {    
@@ -182,7 +182,7 @@ You'll need an API key to authenticate with our services. If you don't have one 
 
 Example for adding the dependency into `build.gradle.kts` kotlin file.
 
-```json  
+```gradle 
 dependencies {
 	implementation("com.blaze.pinpad:pinpad-sdk:latest-version")
 }    
@@ -200,37 +200,37 @@ Our payment SDK is designed to be incredibly user-friendly, allowing you to conf
 
 ```kotlin
 @Composable
-fun PaymentScreen() {
-	val scope = rememberCoroutineScope()
-	val client = remember { ClipPayment.Builder().build() }
-	client.setPaymentHandler()
-	Button( onClick = { 
-				scope.launch {
-					client.start(amount = AMOUNT, message = MESSAGE)
-				}
-			}
-		){
-			...
-		}
+fun PaymentScreen() { 
+    val scope = rememberCoroutineScope() 
+    val client = remember { ClipPayment.Builder().build() }
+    client.setPaymentHandler()
+    Button( onClick = { 
+        scope.launch { 
+            client.start(amount = AMOUNT, message = MESSAGE)
+        } 
+    }
+    ) { 
+        ... 
+    }
 }
 ``` 
 
 **Activity**
 
 ```kotlin  
-class MainActivity  :  ComponentActivity()  {
-	private val  builder:  ClipPayment  by  lazy  {
-			ClipPayment.Builder().build()
-		}
-	init  { 
-		builder.setPaymentHandler(this@MainActivity)
-	}
-	override  fun  onCreate(savedInstanceState:  Bundle?)  {
-		super.onCreate(savedInstanceState)
-		lifecycleScope.launch  {
-			builder.start( reference  =  REFERENCE, amount  =  AMOUNT )
-		}
-	}
+class MainActivity: ComponentActivity()  { 
+    private val builder: ClipPayment by lazy{ 
+        ClipPayment.Builder().build() 
+    }
+    init { 
+        builder.setPaymentHandler(this@MainActivity) 
+    }
+    override fun onCreate(savedInstanceState: Bundle?){ 
+        super.onCreate(savedInstanceState)
+        lifecycleScope.launch { 
+            builder.start( reference = REFERENCE, amount = AMOUNT ) 
+        } 
+    }
 }
 ```
 
@@ -263,8 +263,8 @@ val client = remember {
 **Activity**
 
 ```kotlin
-private val builder: ClipPayment by lazy {
-	ClipPayment.Builder().setUser(YOUR_CLIP_USER).setApiKey(YOUR_CLIP_TOKEN).build()
+private val builder: ClipPayment by lazy { 
+    ClipPayment.Builder().setUser(YOUR_CLIP_USER).setApiKey(YOUR_CLIP_TOKEN).build() 
 }
 ```
 
