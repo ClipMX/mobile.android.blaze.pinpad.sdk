@@ -40,7 +40,9 @@ The Clip SDK offers two robust solutions for integrating seamless payment proces
 -   :computer: <a href="#server-driven-int"> Server Side SDK solution</a>
 
     - :key:  <a href="#token-aut"> Token Authentication</a>
-    - :envelope: <a href="#api-call"> Make your first API call</a>
+    - :envelope: <a href="#api-call"> API methods</a>
+        - <a href="#post-method"> Create payment request </a>
+        -  <a href="#delete-method"> Delete payment request </a>  
     - :incoming_envelope: <a href="#payment-result"> Payment Results</a>
     - :warning: <a href="error-codes-server">Error codes in Server Side SDK</a>
 
@@ -542,10 +544,12 @@ To use the Server Side SDK, ensure the following:
 Finally we have a Basic value token for our next steps creating a request to the API in header authentication.
 
 
-### Make your first API call
+### API methods
 <a name="api-call"></a>
 
 **Create payment request**
+
+<a name="post-method"></a>
 
 > **Note:** You need to implement next URL to make a POST request :
 
@@ -592,6 +596,8 @@ curl --location 'https://api.payclip.io/f2f/pinpad/v1/payment' \
 
 
 **Delete payment request**
+
+<a name="delete-method"></a>
 
 If for some reason you need to cancel/delete a payment intent, you'll be able to do so using an available DELETE endpoint passing the pinpad_request_id parameter as shown below
 
