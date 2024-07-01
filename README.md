@@ -674,7 +674,6 @@ This system notifies the status changes of your transactions via a webhook. Plea
 
 The application will notify you of the following transaction status changes:
 
-- `PENDING`
 - `IN_PROCESS`
 - `CANCELED`
 - `REJECTED`
@@ -684,12 +683,14 @@ The application will notify you of the following transaction status changes:
 
 When a transaction status changes, the application will send a POST request to the URL you have configured. The body of the request will be as follows:
 
-```json
-{
+```sh
+curl --location 'https://yourdomain.com/some-webhook-path' \
+	--data '
+{ 
 	"id": "pinpad-51bf57ad-a186-4ac4-8a88-22133s8829",
 	"origin": "pinpad-payments-api",
 	"event_type": "PINPAD_INTENT_STATUS_CHANGED"
-}
+}'
 ```
 
 ##### Polling Strategy
