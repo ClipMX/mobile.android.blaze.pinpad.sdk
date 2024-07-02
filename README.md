@@ -665,9 +665,82 @@ strict-transport-security:  max-age=15724800;
 includeSubDomains 
 ``` 
 
-**WebHook**
+#### WebHook
+##### Overview
 
-This is explained elsewhere [https://developer.clip.mx/reference/referencia-postback-webhook](https://developer.clip.mx/reference/referencia-postback-webhook)
+This system notifies the status changes of your transactions via a webhook. Please ensure you have configured a webhook URL in your Clip portal. For more information, refer to the [Clip Webhook Documentation](https://developer.clip.mx/reference/referencia-postback-webhook).
+
+##### Notification Events
+
+The application will notify you of the following transaction status changes:
+
+- `IN_PROCESS`
+- `CANCELED`
+- `REJECTED`
+- `APPROVED`
+
+##### Webhook Notification Details
+
+<img src="https://img.shields.io/badge/POST-2175BF" alt="method" style="max-width: 100%;"> https://yourdomain.com/some-webhook-path
+
+**/your-webhook-path** you need to define a webhook path. Pinpad sends a POST to notify changes.
+
+When a transaction status changes, the application will send a POST request to the URL you have configured. The body of the request will be as follows:
+
+```sh
+curl --location 'https://yourdomain.com/some-webhook-path' \
+	--data '
+{ 
+	"id": "pinpad-51bf57ad-a186-4ac4-8a88-22133s8829",
+	"origin": "pinpad-payments-api",
+	"event_type": "PINPAD_INTENT_STATUS_CHANGED"
+}'
+```
+
+##### Json payload
+
+| Field name | Description                                                          | Type   |
+| ---------- | -------------------------------------------------------------------- | ------ |
+| id         | Represents the internal ID used to identify a transaction.           | String |
+| origin     | Indicates the application that generated and sent this notification. | String |
+| event_type | Indicates the application that generated and sent this notification. | String |
+
+
+
+##### Polling Strategy
+
+We use a polling strategy for notifications. This means that our system will notify you that there is an update for a specific transaction. To retrieve the details of the update, you need to make a GET request to the following URL:
+
+<img src="https://img.shields.io/badge/GET-2175BF" alt="method" style="max-width: 100%;"> https://api.payclip.io/f2f/pinpad/v1/payment?pinpadRequestId={id}
+
+Example: `GET https://api.payclip.io/f2f/pinpad/v1/payment?pinpadRequestId=pinpad-51bf57ad-a186-4ac4-8a88-22133s8829`
+
+
+###### Response body schema
+```json
+{
+	"pinpadRequestId": "string",
+	"reference": "string",
+	"amount": "string",
+	"createDate": "string",
+	"status": "string"
+}
+```
+
+| Field name      | Description                                                       | Type   |
+| --------------- | ----------------------------------------------------------------- | ------ |
+| pinpadRequestId | Represents the internal ID used to identify a transaction.        | String |
+| reference       | Represents the reference you choose when creating the transaction | String |
+| amount          | Represents the amount of the transaction                          | String |
+| createDate      | Represents the creation date of the transaction                   | String |
+| status          | Representes the status of the transaction                         | String |
+
+
+> **Important Note**
+>
+> Ensure your webhook URL is correctly configured in the Clip portal.
+The notification only indicates that there has been a status change; you must query the provided URL to get detailed information about the transaction update.
+
 
 ### Error codes in Server Side SDK
 
