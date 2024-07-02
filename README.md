@@ -6,7 +6,7 @@
 </a>    
 <h1 align="center">PinPad SDK</h1>    
 <a href="https://github.com/ClipMX/mobile.android.blaze.pinpad.sdk/actions"><img src="https://github.com/stripe/stripe-android/workflows/CI/badge.svg" alt="CI" style="max-width: 100%;"></a>    
-<a href="https://github.com/ClipMX/mobile.android.blaze.pinpad.sdk/releases"><img src="https://img.shields.io/badge/release-1.0.6-orange" alt="GitHub release" data-canonical-src="https://img.shields.io/badge/release-1.0.6-orange?maxAge=60" style="max-width: 100%;"></a>    
+<a href="https://github.com/ClipMX/mobile.android.blaze.pinpad.sdk/releases"><img src="https://img.shields.io/badge/release-1.0.6-orange" alt="GitHub release" data-canonical-src="	/badge/release-1.0.6-orange?maxAge=60" style="max-width: 100%;"></a>    
 <p align="center">    
 📄 PinPad SDK developer documentation 📄 <br />    
 <br />    
@@ -681,6 +681,10 @@ The application will notify you of the following transaction status changes:
 
 ##### Webhook Notification Details
 
+<img src="https://img.shields.io/badge/POST-2175BF" alt="method" style="max-width: 100%;"> https://yourdomain.com/some-webhook-path
+
+**/your-webhook-path** you need to define a webhook path. Pinpad sends a POST to notify changes.
+
 When a transaction status changes, the application will send a POST request to the URL you have configured. The body of the request will be as follows:
 
 ```sh
@@ -693,15 +697,26 @@ curl --location 'https://yourdomain.com/some-webhook-path' \
 }'
 ```
 
+##### Json payload
+
+| Field name | Description                                                          | Type   |
+| ---------- | -------------------------------------------------------------------- | ------ |
+| id         | Represents the internal ID used to identify a transaction.           | String |
+| origin     | Indicates the application that generated and sent this notification. | String |
+| event_type | Indicates the application that generated and sent this notification. | String |
+
+
+
 ##### Polling Strategy
 
-We use a polling strategy for notifications. This means that our system will notify you that there is an update for a specific transaction. To retrieve the details of the update, you need to make a GET request to the following URL:https://api.payclip.io/f2f/pinpad/v1/payment?requestId={id}
+We use a polling strategy for notifications. This means that our system will notify you that there is an update for a specific transaction. To retrieve the details of the update, you need to make a GET request to the following URL:
 
+<img src="https://img.shields.io/badge/GET-2175BF" alt="method" style="max-width: 100%;"> https://api.payclip.io/f2f/pinpad/v1/payment?pinpadRequestId={id}
 
 Example: `GET https://api.payclip.io/f2f/pinpad/v1/payment?pinpadRequestId=pinpad-51bf57ad-a186-4ac4-8a88-22133s8829`
 
 
-Response body example:
+###### Response body schema
 ```json
 {
 	"pinpadRequestId": "string",
@@ -710,8 +725,16 @@ Response body example:
 	"createDate": "string",
 	"status": "string"
 }
-
 ```
+
+| Field name      | Description                                                       | Type   |
+| --------------- | ----------------------------------------------------------------- | ------ |
+| pinpadRequestId | Represents the internal ID used to identify a transaction.        | String |
+| reference       | Represents the reference you choose when creating the transaction | String |
+| amount          | Represents the amount of the transaction                          | String |
+| createDate      | Represents the creation date of the transaction                   | String |
+| status          | Representes the status of the transaction                         | String |
+
 
 > **Important Note**
 >
