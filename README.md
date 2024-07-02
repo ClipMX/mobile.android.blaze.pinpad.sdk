@@ -6,7 +6,7 @@
 </a>    
 <h1 align="center">PinPad SDK</h1>    
 <a href="https://github.com/ClipMX/mobile.android.blaze.pinpad.sdk/actions"><img src="https://github.com/stripe/stripe-android/workflows/CI/badge.svg" alt="CI" style="max-width: 100%;"></a>    
-<a href="https://github.com/ClipMX/mobile.android.blaze.pinpad.sdk/releases"><img src="https://img.shields.io/badge/release-1.0.6-orange" alt="GitHub release" data-canonical-src="	/badge/release-1.0.6-orange?maxAge=60" style="max-width: 100%;"></a>    
+<a href="https://github.com/ClipMX/mobile.android.blaze.pinpad.sdk/releases"><img src="https://img.shields.io/badge/release-1.0.6-orange" alt="GitHub release" data-canonical-src="https://img.shields.io/badge/release-1.0.6-orange?maxAge=60" style="max-width: 100%;"></a>    
 <p align="center">    
 📄 PinPad SDK developer documentation 📄 <br />    
 <br />    
