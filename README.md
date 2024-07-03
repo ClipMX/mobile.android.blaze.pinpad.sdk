@@ -44,6 +44,7 @@ The Clip SDK offers two robust solutions for integrating seamless payment proces
         - <a href="#post-method"> Create payment request </a>
         -  <a href="#delete-method"> Delete payment request </a>  
     - :incoming_envelope: <a href="#payment-result"> Payment Results</a>
+      - :link: <a href="#webhook-result"> Webhook</a> 
     - :warning: <a href="error-codes-server">Error codes in Server Side SDK</a>
 
 -  <a href="#first-payment"> Terminal result process</a>   
@@ -666,6 +667,7 @@ includeSubDomains
 ``` 
 
 #### WebHook
+<a name="webhook-result"></a>
 ##### Overview
 
 This system notifies the status changes of your transactions via a webhook. Please ensure you have configured a webhook URL in your Clip portal. For more information, refer to the [Clip Webhook Documentation](https://developer.clip.mx/reference/referencia-postback-webhook).
@@ -674,10 +676,11 @@ This system notifies the status changes of your transactions via a webhook. Plea
 
 The application will notify you of the following transaction status changes:
 
-- `IN_PROCESS`
-- `CANCELED`
-- `REJECTED`
-- `APPROVED`
+- `PENDING`: An external party wants to initiate a payment on the Clip terminal.
+- `IN_PROCESS`: The terminal accepted and started the payment process on the POS.
+- `CANCELED`: The external party canceled the transaction from their backend or from the terminal. They no longer want to continue with the payment process.
+- `REJECTED`: The terminal had an issue processing the payment and the operator chose to cancel the process on the terminal.
+- `APPROVED`: The payment process was successfully completed on the terminal.
 
 ##### Webhook Notification Details
 
