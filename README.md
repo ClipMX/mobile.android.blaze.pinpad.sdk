@@ -672,6 +672,7 @@ includeSubDomains
 ##### Overview
 
 ![](https://lh7-us.googleusercontent.com/docsz/AD_4nXei2d3U-rrOMp2UNTvYj4Ly_r9FDfjzpfFgsMUHJHQCbM3i0Dz_J62utgbcwlfrbE6SRqyzBUJUR4oUOM9pBt4Pff6Abj59Sp54MePNbtNPE5p-69MbilawiqJWnptSHmghw7nQNbuML1H0RQJcpC_zBQY?key=gc6WOPNG8yUyIZYN2Fwh-A)
+<sub>Diagram. Webhook integration for server side SDK<sub>
 
 This system notifies the status changes of your transactions via a webhook. Please ensure you have configured a webhook URL in your Clip portal. For more information, refer to the [Clip Webhook Documentation](https://developer.clip.mx/reference/referencia-postback-webhook).
 
