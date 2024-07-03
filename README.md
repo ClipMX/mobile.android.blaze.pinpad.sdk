@@ -668,6 +668,7 @@ includeSubDomains
 
 #### WebHook
 <a name="webhook-result"></a>
+
 ##### Overview
 
 This system notifies the status changes of your transactions via a webhook. Please ensure you have configured a webhook URL in your Clip portal. For more information, refer to the [Clip Webhook Documentation](https://developer.clip.mx/reference/referencia-postback-webhook).
