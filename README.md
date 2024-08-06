@@ -177,7 +177,7 @@ You'll need an API key to authenticate with our services. If you don't have one 
     repositories {    
 	    mavenCentral()    
 	    maven {
-	        url = uri("https://maven.pkg.github.com/ClipMX/mobile.android.blaze.pinpad.sdk")
+	        url = uri("https://jitpack.io")
 	    }
 	}
 }    
