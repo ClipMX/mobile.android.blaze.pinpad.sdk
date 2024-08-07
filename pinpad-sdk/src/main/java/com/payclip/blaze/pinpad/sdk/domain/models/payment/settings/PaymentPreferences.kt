@@ -9,6 +9,10 @@ import kotlinx.parcelize.Parcelize
 data class PaymentPreferences(
     val isMSIEnabled: Boolean = true,
     val isMCIEnabled: Boolean = true,
-    val isDCCEnabled: Boolean = false,
-    val isTipEnabled: Boolean = false
+    val isDCCEnabled: Boolean = true,
+    val isTipEnabled: Boolean = false,
+    /**
+     * When transaction is successful you can enable the auto print of your receipt in POS
+     */
+    val isAutoPrintReceiptEnabled: Boolean = false
 ) : Parcelable
