@@ -259,7 +259,7 @@ Steps to Initialize the Client:
 
 ```kotlin
 val client = remember { 
-	ClipPayment.Builder().setUser(YOUR_CLIP_USER).setApiKey(YOUR_CLIP_TOKEN).build()
+	ClipPayment.Builder().build()
 }
 ```
 
@@ -267,7 +267,7 @@ val client = remember {
 
 ```kotlin
 private val builder: ClipPayment by lazy {
-    ClipPayment.Builder().setUser(YOUR_CLIP_USER).setApiKey(YOUR_CLIP_TOKEN).build() 
+    ClipPayment.Builder().build() 
 }
 ```
 
