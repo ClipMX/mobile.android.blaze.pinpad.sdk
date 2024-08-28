@@ -6,7 +6,7 @@
 </a>    
 <h1 align="center">PinPad SDK</h1>    
 <a href="https://github.com/ClipMX/mobile.android.blaze.pinpad.sdk/actions"><img src="https://github.com/stripe/stripe-android/workflows/CI/badge.svg" alt="CI" style="max-width: 100%;"></a>    
-<a href="https://github.com/ClipMX/mobile.android.blaze.pinpad.sdk/releases"><img src="https://img.shields.io/badge/release-1.0.6-orange" alt="GitHub release" data-canonical-src="https://img.shields.io/badge/release-1.0.6-orange?maxAge=60" style="max-width: 100%;"></a>    
+<a href="https://github.com/ClipMX/mobile.android.blaze.pinpad.sdk/releases"><img src="https://img.shields.io/badge/release-1.0.7-orange" alt="GitHub release" data-canonical-src="https://img.shields.io/badge/release-1.0.7-orange?maxAge=60" style="max-width: 100%;"></a>    
 <p align="center">    
 📄 PinPad SDK developer documentation 📄 <br />    
 <br />    
@@ -363,7 +363,8 @@ ClipPayment.Builder()
     - isMCIEnabled: This parameter sets if the monthly installments will be enabled. By default it is true, and the mci will be activated.
 
     - isDCCEnabled: This parameter sets if the dynamic currency convert will be enabled. By default it is true, and the dcc will be activated.
-    -  isTipEnabled: This parameter sets if the tip screen will be shown when the payment process starts or not. By default it is false, and the tip screen will not be shown.
+    -  isTipEnabled: This parameter sets if the tip screen will be shown when the payment process starts or not. By default it is false, and the tip screen will not be shown. 
+    -  isAutoPrintReceiptEnabled: When transaction is successful you can enable the auto print of your receipt in POS.
 
 ```kotlin
 ClipPayment.Builder()
@@ -573,27 +574,31 @@ curl --location 'https://api.payclip.io/f2f/pinpad/v1/payment' \
 	"preferences": {
 		"is_auto_return_enabled": false,
 		"is_tip_enabled": false,
-		"is_msi_enabled": false,
-		"is_mci_enabled": false,
-		"is_dcc_enabled": false,
-		"is_retry_enabled": false
+		"is_msi_enabled": true,
+		"is_mci_enabled": true,
+		"is_dcc_enabled": true,
+		"is_retry_enabled": true,
+        "is_share_enabled": true,
+        "is_auto_print_receipt_enabled": false
 		}
 }
 '  
 ``` 
 
-| Field name | Description | Type | Notes | Required |  Default value |
-|--|--|--|--|--|--|
-| amount | Transaction amount. | Number | -- | yes | -- |
-| reference | external reference id | String | -- | yes | -- |
-| serial_number_pos | Clip terminal serial number | Identifier | String | yes | -- |
-| preferences | customizable values | Object | Options that can enable or disable | No | -- |
-| preferences.is_auto_return_enabled | Param for configuration terminal process when finish | Boolean | -- | No | -- |
-| preferences.is_tip_enabled | Param for screen configuration terminal tip | Boolean| -- | No | -- |
-| preferences.is_msi_enabled | Param for enable installments without interests | Boolean | To learn terms and conditions about installments visit Clip site | No | -- |
-| preferences.is_mci_enabled | Param to enable installments with interests | Boolean | To learn terms and conditions about installments visit Clip site | No | -- |
-| preferences.is_dcc_enabled | Param to enable dynamic current convertion | Boolean |  -- |No | -- |
-| preferences.is_retry_enabled | Param to enable to users retries their payments when these fails | Boolean | -- | No | -- |
+| Field name                                | Description                                                                         | Type       | Notes                                                            | Required | Default value |
+|-------------------------------------------|-------------------------------------------------------------------------------------|------------|------------------------------------------------------------------|----------|---------------|
+| amount                                    | Transaction amount.                                                                 | Number     | --                                                               | yes      | --            |
+| reference                                 | external reference id                                                               | String     | --                                                               | yes      | --            |
+| serial_number_pos                         | Clip terminal serial number                                                         | Identifier | String                                                           | yes      | --            |
+| preferences                               | customizable values                                                                 | Object     | Options that can enable or disable                               | No       | --            |
+| preferences.is_auto_return_enabled        | Param for configuration terminal process when finish                                | Boolean    | --                                                               | No       | false         |
+| preferences.is_tip_enabled                | Param for screen configuration terminal tip                                         | Boolean    | --                                                               | No       | false         |
+| preferences.is_msi_enabled                | Param for enable installments without interests                                     | Boolean    | To learn terms and conditions about installments visit Clip site | No       | true          |
+| preferences.is_mci_enabled                | Param to enable installments with interests                                         | Boolean    | To learn terms and conditions about installments visit Clip site | No       | true          |
+| preferences.is_dcc_enabled                | Param to enable dynamic current convertion                                          | Boolean    | --                                                               | No       | true          |
+| preferences.is_retry_enabled              | Param to enable to users retries their payments when these fails                    | Boolean    | --                                                               | No       | true          |
+| preferences.is_share_enabled              | Param to enable share options in the end of successful transaaction                 | Boolean    | --                                                               | No       | true          |
+| preferences.is_auto_print_receipt_enabled | When transaction is successful you can enable the auto print of your receipt in POS | Boolean    | --                                                               | No       | false         |
 
 
 **Delete payment request**
