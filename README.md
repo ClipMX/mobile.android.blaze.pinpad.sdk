@@ -495,7 +495,8 @@ In the event of an error during the transaction process, the client may return o
 | TERMINAL_ERROR | Error occurred at the terminal. | 
 | NO_CONNECTION | No connection detected during the transaction. | 
 | CANCELLED | The transaction was cancelled. | 
-| UNKNOWN_ERROR | An unknown error occurred. |   
+| UNKNOWN_ERROR | An unknown error occurred. |
+|PINPAD_TERMINAL_TIMEOUT_EXCEPTION | Unable to connect to pinpad terminal. Please check your internet connection in desired pinpad terminal or check that you have entered the correct serial_number_pos |
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>    
 
@@ -600,7 +601,7 @@ curl --location 'https://api.payclip.io/f2f/pinpad/v1/payment' \
 | preferences.is_share_enabled              | Param to enable share options in the end of successful transaaction                 | Boolean    | --                                                               | No       | true          |
 | preferences.is_auto_print_receipt_enabled | When transaction is successful you can enable the auto print of your receipt in POS | Boolean    | --                                                               | No       | false         |
 
-#### Wait for terminal response
+#### Wait for terminal response (OPTIONAL)
 
 You can use the header `Pinpad-Wait-Response` to process payments synchronously. You can wait for the payment to reach the terminal and receive an immediate response.
 
@@ -612,6 +613,8 @@ Include the `Pinpad-Wait-Response` header in the request. This header accepts `t
 
 - `true`: The client waits for the terminal to process the payment before receiving a response.
 - `false`: The response is returned immediately after registering the payment, without waiting for terminal confirmation (as in the previous version).
+
+If the Pinpad-Wait-Response header is not included in the request, the default value is false.
 
 ##### Timeout Behavior:
 
@@ -647,11 +650,10 @@ curl --location --globoff '{{pinpadUrl}}/v1/payment' \
 
 - **Successful Response (when payment reaches the terminal)**: If the payment reaches the terminal successfully, the response will be the same as in the previous flow where `Pinpad-Wait-Response` is not used or set to `false`.
     
-- **Error Response (Terminal Connection Failure)**: If the payment request cannot reach the terminal (e.g., no internet connection or incorrect `serial_number_pos`), the service will return the following error:
+- **Error Response (Terminal Connection Failure)**: If the payment request cannot reach the terminal (e.g., no internet connection or incorrect `serial_number_pos`), the service will return the following error (504 Gateway timeout):
     
 ``` json
 {
-// 504 Gateway timeout
     "code": "PINPAD_TERMINAL_TIMEOUT_EXCEPTION",
     "message": "Unable to connect to pinpad terminal. Please check your internet connection in the desired pinpad terminal or verify the correct serial_number_pos."
 }
