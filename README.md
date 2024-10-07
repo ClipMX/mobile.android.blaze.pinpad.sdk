@@ -42,7 +42,7 @@ The Clip SDK offers two robust solutions for integrating seamless payment proces
     - :key:  <a href="#token-aut"> Token Authentication</a>
     - :envelope: <a href="#api-call"> API methods</a>
         - <a href="#post-method"> Create payment request </a>
-          - <a name="post-method-syncronously"></a>
+          - <a href="#post-method-syncronously">Wait for terminal response (OPTIONAL)</a>
         -  <a href="#delete-method"> Delete payment request </a>  
     - :incoming_envelope: <a href="#payment-result"> Payment Results</a>
       - :link: <a href="#webhook-result"> Webhook</a> 
