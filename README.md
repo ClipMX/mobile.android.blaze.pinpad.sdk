@@ -42,6 +42,7 @@ The Clip SDK offers two robust solutions for integrating seamless payment proces
     - :key:  <a href="#token-aut"> Token Authentication</a>
     - :envelope: <a href="#api-call"> API methods</a>
         - <a href="#post-method"> Create payment request </a>
+          - <a name="post-method-syncronously"></a>
         -  <a href="#delete-method"> Delete payment request </a>  
     - :incoming_envelope: <a href="#payment-result"> Payment Results</a>
       - :link: <a href="#webhook-result"> Webhook</a> 
@@ -601,6 +602,7 @@ curl --location 'https://api.payclip.io/f2f/pinpad/v1/payment' \
 | preferences.is_share_enabled              | Param to enable share options in the end of successful transaaction                 | Boolean    | --                                                               | No       | true          |
 | preferences.is_auto_print_receipt_enabled | When transaction is successful you can enable the auto print of your receipt in POS | Boolean    | --                                                               | No       | false         |
 
+<a name="post-method-syncronously"></a>
 #### Wait for terminal response (OPTIONAL)
 
 You can use the header `Pinpad-Wait-Response` to process payments synchronously. You can wait for the payment to reach the terminal and receive an immediate response.
@@ -713,7 +715,8 @@ We obtained a new payment in our PinPad SDK and the process wake up the terminal
 |<img src="https://img.shields.io/badge/-CA3823" alt="method" style="max-width: 100%;"> 401 | Unauthorized. |
 | <img src="https://img.shields.io/badge/-CA3823" alt="method" style="max-width: 100%;"> 403 | Forbidden. |
 | <img src="https://img.shields.io/badge/-CA3823" alt="method" style="max-width: 100%;"> 404 | Wrong param |
-| <img src="https://img.shields.io/badge/-CA3823" alt="method" style="max-width: 100%;"> 500 | Internal Server Error.
+| <img src="https://img.shields.io/badge/-CA3823" alt="method" style="max-width: 100%;"> 500 | Internal Server Error. |
+| <img src="https://img.shields.io/badge/-CA3823" alt="method" style="max-width: 100%;"> 504 | Gateway Timeout |
 
 Body Response
 
