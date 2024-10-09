@@ -42,6 +42,7 @@ The Clip SDK offers two robust solutions for integrating seamless payment proces
     - :key:  <a href="#token-aut"> Token Authentication</a>
     - :envelope: <a href="#api-call"> API methods</a>
         - <a href="#post-method"> Create payment request </a>
+          - <a href="#post-method-syncronously">Wait for terminal response (OPTIONAL)</a>
         -  <a href="#delete-method"> Delete payment request </a>  
     - :incoming_envelope: <a href="#payment-result"> Payment Results</a>
       - :link: <a href="#webhook-result"> Webhook</a> 
@@ -495,7 +496,8 @@ In the event of an error during the transaction process, the client may return o
 | TERMINAL_ERROR | Error occurred at the terminal. | 
 | NO_CONNECTION | No connection detected during the transaction. | 
 | CANCELLED | The transaction was cancelled. | 
-| UNKNOWN_ERROR | An unknown error occurred. |   
+| UNKNOWN_ERROR | An unknown error occurred. |
+|PINPAD_TERMINAL_TIMEOUT_EXCEPTION | Unable to connect to pinpad terminal. Please check your internet connection in desired pinpad terminal or check that you have entered the correct serial_number_pos |
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>    
 
@@ -600,6 +602,70 @@ curl --location 'https://api.payclip.io/f2f/pinpad/v1/payment' \
 | preferences.is_share_enabled              | Param to enable share options in the end of successful transaaction                 | Boolean    | --                                                               | No       | true          |
 | preferences.is_auto_print_receipt_enabled | When transaction is successful you can enable the auto print of your receipt in POS | Boolean    | --                                                               | No       | false         |
 
+<a name="post-method-syncronously"></a>
+#### Wait for terminal response (OPTIONAL)
+
+You can use the header `Pinpad-Wait-Response` to process payments synchronously. You can wait for the payment to reach the terminal and receive an immediate response.
+
+##### Workflow:
+
+1. Client ----> Service ----> Terminal
+
+Include the `Pinpad-Wait-Response` header in the request. This header accepts `true` or `false` values:
+
+- `true`: The client waits for the terminal to process the payment before receiving a response.
+- `false`: The response is returned immediately after registering the payment, without waiting for terminal confirmation (as in the previous version).
+
+If the Pinpad-Wait-Response header is not included in the request, the default value is false.
+
+##### Timeout Behavior:
+
+When `Pinpad-Wait-Response` is set to `true`, the service will wait up to **60 seconds** for the terminal to respond. If the terminal takes longer than 60 seconds, the service will terminate the connection with a **timeout** error.
+
+##### Error Scenarios:
+
+If the service fails to connect to the terminal, the most likely causes are:
+
+- The terminal is offline (no internet connection).
+- The provided `serial_number_pos` is incorrect.
+
+##### Example Request
+
+``` bash
+curl --location --globoff '{{pinpadUrl}}/v1/payment' \
+--header 'Authorization: {{authClientToken}}' \
+--header 'Pinpad-Wait-Response: true' \
+--header 'Content-Type: application/json' \
+--data '{
+    "reference": "XYZ",
+    "amount": 200,
+    "serial_number_pos": "P8C12311200011AA",
+    "preferences": {
+        "is_auto_return_enabled": false,
+        "is_retry_enabled": true,
+        "is_tip_enabled": true
+    }
+}'
+```
+
+##### Responses
+
+- **Successful Response (when payment reaches the terminal)**: If the payment reaches the terminal successfully, the response will be the same as in the previous flow where `Pinpad-Wait-Response` is not used or set to `false`.
+    
+- **Error Response (Terminal Connection Failure)**: If the payment request cannot reach the terminal (e.g., no internet connection or incorrect `serial_number_pos`), the service will return the following error (504 Gateway timeout):
+    
+``` json
+{
+    "code": "PINPAD_TERMINAL_TIMEOUT_EXCEPTION",
+    "message": "Unable to connect to pinpad terminal. Please check your internet connection in the desired pinpad terminal or verify the correct serial_number_pos."
+}
+```
+
+##### Key Considerations
+
+- **`Pinpad-Wait-Response` Header**: Use this to control whether the client waits for the terminal response.
+- **Timeout Behavior**: Set to 60 seconds. Exceeding this results in a timeout.
+- **Common Errors**: Connectivity issues or incorrect terminal identifiers will trigger an exception response.
 
 **Delete payment request**
 
@@ -649,7 +715,8 @@ We obtained a new payment in our PinPad SDK and the process wake up the terminal
 |<img src="https://img.shields.io/badge/-CA3823" alt="method" style="max-width: 100%;"> 401 | Unauthorized. |
 | <img src="https://img.shields.io/badge/-CA3823" alt="method" style="max-width: 100%;"> 403 | Forbidden. |
 | <img src="https://img.shields.io/badge/-CA3823" alt="method" style="max-width: 100%;"> 404 | Wrong param |
-| <img src="https://img.shields.io/badge/-CA3823" alt="method" style="max-width: 100%;"> 500 | Internal Server Error.
+| <img src="https://img.shields.io/badge/-CA3823" alt="method" style="max-width: 100%;"> 500 | Internal Server Error. |
+| <img src="https://img.shields.io/badge/-CA3823" alt="method" style="max-width: 100%;"> 504 | Gateway Timeout |
 
 Body Response
 
