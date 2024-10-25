@@ -15,6 +15,7 @@ mockitoKotlin = "5.1.0"
 mockk = "1.13.7"
 okhttp = "4.11.0"
 retrofit = "2.9.0"
+auth = "0.8.0.3"
 
 [libraries]
 androidx-coreKtx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
@@ -36,6 +37,7 @@ retrofitCore = { group = "com.squareup.retrofit2", name = "retrofit", version.re
 gsonCore = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 okhttpCore = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttpLogging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+clip-auth = { group = "com.payclip.blaze", name = "auth", version.ref = "auth" }
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }

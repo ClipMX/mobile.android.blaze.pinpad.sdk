@@ -88,4 +88,7 @@ dependencies {
     implementation(libs.gsonCore)
     implementation(libs.okhttpCore)
     implementation(libs.okhttpLogging)
+
+    //blaze
+    implementation(libs.clip.auth)
 }
