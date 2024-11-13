@@ -7,6 +7,7 @@ import com.payclip.blaze.pinpad.sdk.di.ui.launcher.ClipLauncherFactory
 import com.payclip.blaze.pinpad.sdk.domain.listener.payment.PaymentListener
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyAmountException
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyReferenceException
+import com.payclip.blaze.pinpad.sdk.domain.models.payment.login.ClipPaymentLogin
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
 import com.payclip.blaze.pinpad.sdk.domain.usecases.payment.CreatePaymentUseCase
 import com.payclip.blaze.pinpad.sdk.ui.launcher.ClipLauncher
@@ -21,7 +22,8 @@ class ClipPayment internal constructor(
     private val isRetryEnabled: Boolean,
     private val isShareEnabled: Boolean,
     private val preferences: PaymentPreferences,
-    private val listener: PaymentListener?
+    private val listener: PaymentListener?,
+    private val loginCredentials: ClipPaymentLogin? = null
 ) {
 
     /**
@@ -37,6 +39,8 @@ class ClipPayment internal constructor(
         private var isShareEnabled: Boolean = true
 
         private var preferences: PaymentPreferences = PaymentPreferences()
+
+        private var loginCredentials: ClipPaymentLogin = ClipPaymentLogin()
 
         private var listener: PaymentListener? = null
 
@@ -77,6 +81,15 @@ class ClipPayment internal constructor(
          */
         fun setPaymentPreferences(preferences: PaymentPreferences) = apply {
             this.preferences = preferences
+        }
+
+        /**
+         * Method to settle login credentials.
+         *
+         * @param loginCredentials An object loaded with all login credentials.
+         */
+        fun setLoginCredentials(loginCredentials: ClipPaymentLogin) = apply {
+            this.loginCredentials = loginCredentials
         }
 
         /**
@@ -158,7 +171,8 @@ class ClipPayment internal constructor(
                     isAutoReturnEnabled = isAutoReturnEnabled,
                     isRetryEnabled = isRetryEnabled,
                     isShareEnabled = isShareEnabled,
-                    preferences = preferences
+                    preferences = preferences,
+                    clipLoginCredentials = loginCredentials
                 )
             }
             .onFailure {

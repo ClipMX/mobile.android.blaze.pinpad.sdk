@@ -5,6 +5,7 @@ import com.payclip.blaze.pinpad.sdk.domain.listener.payment.PaymentListener
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyAmountException
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyReferenceException
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.PaymentResult
+import com.payclip.blaze.pinpad.sdk.domain.models.payment.login.ClipPaymentLogin
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
 import com.payclip.blaze.pinpad.sdk.domain.usecases.payment.CreatePaymentUseCase
 import com.payclip.blaze.pinpad.sdk.ui.launcher.ClipLauncher
@@ -29,6 +30,7 @@ class ClipPaymentTest {
             .isRetryEnabled(RETRY)
             .isShareEnabled(SHARE)
             .setPaymentPreferences(getPaymentPreferences())
+            .setLoginCredentials(getLoginCredentialsTest())
             .addListener(getEmptyListener())
             .build()
     }
@@ -248,6 +250,11 @@ class ClipPaymentTest {
         isMCIEnabled = isMCIEnabled,
         isDCCEnabled = isDCCEnabled,
         isTipEnabled = isTipEnabled
+    )
+
+    private fun getLoginCredentialsTest() = ClipPaymentLogin(
+        userAccount = "",
+        passwordAccount = ""
     )
 
     companion object {
