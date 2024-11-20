@@ -620,7 +620,7 @@ If the Pinpad-Wait-Response header is not included in the request, the default v
 
 ##### Timeout Behavior:
 
-When `Pinpad-Wait-Response` is set to `true`, the service will wait up to **60 seconds** for the terminal to respond. If the terminal takes longer than 60 seconds, the service will terminate the connection with a **timeout** error.
+When `Pinpad-Wait-Response` is set to `true`, the service will wait up to **25 seconds** for the terminal to respond. If the terminal takes longer than 60 seconds, the service will terminate the connection with a **timeout** error.
 
 ##### Error Scenarios:
 
