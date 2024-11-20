@@ -40,7 +40,7 @@ class ClipPayment internal constructor(
 
         private var preferences: PaymentPreferences = PaymentPreferences()
 
-        private var loginCredentials: ClipPaymentLogin = ClipPaymentLogin()
+        private var loginCredentials: ClipPaymentLogin? = null
 
         private var listener: PaymentListener? = null
 
