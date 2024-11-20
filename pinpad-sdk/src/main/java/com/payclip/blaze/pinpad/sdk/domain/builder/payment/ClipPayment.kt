@@ -117,7 +117,8 @@ class ClipPayment internal constructor(
                 isRetryEnabled = isRetryEnabled,
                 isShareEnabled = isShareEnabled,
                 preferences = preferences,
-                listener = listener
+                listener = listener,
+                loginCredentials = loginCredentials
             )
         }
     }
