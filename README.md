@@ -613,14 +613,14 @@ You can use the header `Pinpad-Wait-Response` to process payments synchronously.
 
 Include the `Pinpad-Wait-Response` header in the request. This header accepts `true` or `false` values:
 
-- `true`: The client waits for the terminal to process the payment before receiving a response.
+- `true`: The client waits for the terminal to accept the payment before receiving a response.
 - `false`: The response is returned immediately after registering the payment, without waiting for terminal confirmation (as in the previous version).
 
 If the Pinpad-Wait-Response header is not included in the request, the default value is false.
 
 ##### Timeout Behavior:
 
-When `Pinpad-Wait-Response` is set to `true`, the service will wait up to **55 seconds** for the terminal to respond. If the terminal takes longer than 55 seconds, the service will terminate the connection with a **timeout** error.
+When `Pinpad-Wait-Response` is set to `true`, the service will wait up to **55 seconds** for the terminal to accept. If the terminal takes longer than 55 seconds, the service will terminate the connection with an error.
 
 ##### Error Scenarios:
 
@@ -628,6 +628,7 @@ If the service fails to connect to the terminal, the most likely causes are:
 
 - The terminal is offline (no internet connection).
 - The provided `serial_number_pos` is incorrect.
+- The merchantId used for authentication does not match the one used in the request.
 
 ##### Example Request
 
@@ -639,7 +640,7 @@ curl --location --globoff '{{pinpadUrl}}/v1/payment' \
 --data '{
     "reference": "XYZ",
     "amount": 200,
-    "serial_number_pos": "P8C12311200011AA",
+    "serial_number_pos": "P8C123456789",
     "preferences": {
         "is_auto_return_enabled": false,
         "is_retry_enabled": true,
@@ -665,7 +666,7 @@ curl --location --globoff '{{pinpadUrl}}/v1/payment' \
 
 - **`Pinpad-Wait-Response` Header**: Use this to control whether the client waits for the terminal response.
 - **Timeout Behavior**: Set to 55 seconds. Exceeding this results in a timeout.
-- **Common Errors**: Connectivity issues or incorrect terminal identifiers will trigger an exception response.
+- **Common Errors:** Connectivity issues, incorrect terminal identifiers, or mismatched merchantId used for authentication will trigger an exception response.
 
 **Delete payment request**
 
