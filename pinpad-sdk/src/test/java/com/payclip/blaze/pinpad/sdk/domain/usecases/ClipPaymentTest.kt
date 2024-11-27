@@ -35,6 +35,7 @@ class ClipPaymentTest {
             .setPaymentPreferences(getPaymentPreferences())
             .setLoginCredentials(getLoginCredentialsTest())
             .addListener(getEmptyListener())
+            .addLoginListener(getEmptyLoginListener())
             .build()
     }
 
@@ -240,6 +241,15 @@ class ClipPaymentTest {
         }
 
         override fun onFailure(code: String) {
+            // no-op
+        }
+    }
+
+    private fun getEmptyLoginListener() = object : LoginListener {
+        override fun onLoginSuccess(result: String) {
+            // no-op
+        }
+        override fun onLoginFailure(code: String, message: String?) {
             // no-op
         }
     }
