@@ -4,7 +4,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.TIRAMISU
-import com.payclip.blaze.pinpad.sdk.domain.models.payment.login.ClipPaymentLogin
+import com.payclip.blaze.pinpad.sdk.domain.models.login.ClipPaymentLogin
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
 import com.payclip.blaze.pinpad.sdk.ui.intent.ClipIntentProvider
 

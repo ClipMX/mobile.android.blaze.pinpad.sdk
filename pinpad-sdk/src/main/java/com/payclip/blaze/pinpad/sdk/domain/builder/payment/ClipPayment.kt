@@ -4,10 +4,12 @@ import android.annotation.SuppressLint
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import com.payclip.blaze.pinpad.sdk.di.ui.launcher.ClipLauncherFactory
+import com.payclip.blaze.pinpad.sdk.domain.listener.login.LoginListener
 import com.payclip.blaze.pinpad.sdk.domain.listener.payment.PaymentListener
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyAmountException
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyReferenceException
-import com.payclip.blaze.pinpad.sdk.domain.models.payment.login.ClipPaymentLogin
+import com.payclip.blaze.pinpad.sdk.domain.models.login.ClipPaymentLogin
+import com.payclip.blaze.pinpad.sdk.domain.models.login.LoginResult
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
 import com.payclip.blaze.pinpad.sdk.domain.usecases.payment.CreatePaymentUseCase
 import com.payclip.blaze.pinpad.sdk.ui.launcher.ClipLauncher
@@ -23,6 +25,7 @@ class ClipPayment internal constructor(
     private val isShareEnabled: Boolean,
     private val preferences: PaymentPreferences,
     private val listener: PaymentListener?,
+    private val loginListener: LoginListener?,
     private val loginCredentials: ClipPaymentLogin? = null
 ) {
 
@@ -43,6 +46,8 @@ class ClipPayment internal constructor(
         private var loginCredentials: ClipPaymentLogin? = null
 
         private var listener: PaymentListener? = null
+
+        private var clipLoginListener: LoginListener? = null
 
         /**
          * Method to settle return type.
@@ -102,6 +107,16 @@ class ClipPayment internal constructor(
         }
 
         /**
+         * Method to settle login listener.
+         *
+         * @param listener Listen the login process results.
+         */
+
+        fun addLoginListener(listener: LoginListener) = apply {
+            this.clipLoginListener = listener
+        }
+
+        /**
          * Method to build ClipPayment object.
          *
          * @return This method returns [ClipPayment] object with all parameters settled.
@@ -118,6 +133,7 @@ class ClipPayment internal constructor(
                 isShareEnabled = isShareEnabled,
                 preferences = preferences,
                 listener = listener,
+                loginListener = clipLoginListener,
                 loginCredentials = loginCredentials
             )
         }
@@ -149,6 +165,41 @@ class ClipPayment internal constructor(
             onSuccess = { listener?.onSuccess(it) },
             onCancelled = { listener?.onCancelled() },
             onFailure = { listener?.onFailure(it) }
+        )
+    }
+
+    /**
+     * This handler register activity contract in your Activity. It is very import to
+     * invoke this method before calling `startPayment` and user needs implement login.
+     *
+     * @param activity component activity needed to register activity contract.
+     * */
+    fun setLoginHandler(activity: ComponentActivity){
+        launcher.setLoginHandler(
+            activity = activity,
+            onSuccess = { loginResult: LoginResult ->
+                loginListener?.onLoginSuccess(loginResult.code)
+                        },
+            onFailure = { loginResult: LoginResult ->
+                loginListener?.onLoginFailure(loginResult.code, loginResult.detail)
+                        }
+        )
+    }
+
+    /**
+     * This handler register activity contract in your Activity. It is very import to
+     * invoke this method before calling `startPayment` and user needs.
+     */
+    @SuppressLint("ComposableNaming")
+    @Composable
+    fun setLoginHandler(){
+        launcher.setLoginHandler(
+            onSuccess = { loginResult: LoginResult ->
+                loginListener?.onLoginSuccess(loginResult.code)
+            },
+            onFailure = { loginResult: LoginResult ->
+                loginListener?.onLoginFailure(loginResult.code, loginResult.detail)
+            }
         )
     }
 

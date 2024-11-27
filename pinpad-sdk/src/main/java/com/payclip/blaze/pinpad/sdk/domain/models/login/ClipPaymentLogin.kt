@@ -1,4 +1,4 @@
-package com.payclip.blaze.pinpad.sdk.domain.models.payment.login
+package com.payclip.blaze.pinpad.sdk.domain.models.login
 
 import android.os.Parcelable
 import androidx.annotation.Keep

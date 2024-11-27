@@ -1,7 +1,7 @@
 package com.payclip.blaze.pinpad.sdk.ui.intent
 
 import android.content.Intent
-import com.payclip.blaze.pinpad.sdk.domain.models.payment.login.ClipPaymentLogin
+import com.payclip.blaze.pinpad.sdk.domain.models.login.ClipPaymentLogin
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
 
 interface ClipIntentProvider {

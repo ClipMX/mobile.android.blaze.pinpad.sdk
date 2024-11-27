@@ -3,6 +3,7 @@ package com.payclip.blaze.pinpad.sdk.ui.activity
 import android.app.Activity
 import android.content.Intent
 import androidx.activity.result.ActivityResult
+import com.payclip.blaze.pinpad.sdk.domain.models.login.LoginResult
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.PaymentResult
 
 interface ClipResultManager {
@@ -18,6 +19,32 @@ interface ClipResultManager {
         activity: Activity,
         reference: String,
         amount: String
+    )
+
+    /**
+     * Set result when login process is finished and has a successful response.
+     *
+     * @param activity The activity that will be finished.
+     * @param code code used in login process.
+     * @param successMessage message used in login process.
+     */
+    fun setLoginSuccessResult(
+        activity: Activity,
+        code: String,
+        successMessage: String
+    )
+
+    /**
+     * Set result when login process is finished and has a error response.
+     *
+     * @param activity The activity that will be finished.
+     * @param code code used in login process.
+     * @param errorMessage message used in login process.
+     */
+    fun setLoginErrorResult(
+        activity: Activity,
+        code: String,
+        errorMessage: String
     )
 
     /**
@@ -54,6 +81,25 @@ interface ClipResultManager {
     fun getErrorCode(result: ActivityResult): String?
 
     /**
+     * Get result from login process as string.
+     *
+     * @param result The result returned by activity contract in ClipLauncher.
+     *
+     * @return [String] the response from login process.
+     */
+    fun getLoginResponse(result: ActivityResult): String?
+
+    /**
+     * Get error code from error response returned by login process.
+     *
+     * @param code [String] the error code from login process.
+     * @param exceptionMessage [String] the error message from login process.
+     *
+     * @return [LoginResult] the response from login process.
+     */
+    fun getLoginExceptionResponse(code: String, exceptionMessage: String): LoginResult?
+
+    /**
      * Parse response to get payment object with result information.
      *
      * @param result The result returned by activity contract in ClipLauncher.
@@ -66,5 +112,12 @@ interface ClipResultManager {
         response: String,
         onSuccess: (result: PaymentResult) -> Unit,
         onFailure: (code: String) -> Unit
+    )
+
+    fun parseLoginResponse(
+        result: ActivityResult,
+        response: String,
+        onSuccess: (LoginResult) -> Unit,
+        onFailure: (LoginResult) -> Unit
     )
 }

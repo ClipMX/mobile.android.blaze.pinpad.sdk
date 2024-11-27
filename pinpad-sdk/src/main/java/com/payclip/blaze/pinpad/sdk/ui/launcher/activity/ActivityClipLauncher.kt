@@ -12,13 +12,14 @@ import androidx.compose.runtime.Composable
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.ApplicationNotFoundException
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.PaymentInitializationException
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.PaymentResult
-import com.payclip.blaze.pinpad.sdk.domain.models.payment.login.ClipPaymentLogin
+import com.payclip.blaze.pinpad.sdk.domain.models.login.ClipPaymentLogin
+import com.payclip.blaze.pinpad.sdk.domain.models.login.LoginResult
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
 import com.payclip.blaze.pinpad.sdk.ui.activity.ClipResultManager
 import com.payclip.blaze.pinpad.sdk.ui.intent.ClipIntentProvider
 import com.payclip.blaze.pinpad.sdk.ui.launcher.ClipLauncher
 
-internal class ActivityClipLauncher constructor(
+internal class ActivityClipLauncher(
     private val resultManager: ClipResultManager,
     private val intentProvider: ClipIntentProvider
 ) : ClipLauncher {
@@ -60,6 +61,67 @@ internal class ActivityClipLauncher constructor(
                 onCancelled = onCancelled,
                 onFailure = onFailure
             )
+        }
+    }
+
+    override fun setLoginHandler(
+        activity: ComponentActivity,
+        onSuccess: (LoginResult) -> Unit,
+        onFailure: (LoginResult) -> Unit,
+    ) {
+        aLauncher = activity.registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ){
+            onHandleLoginResult(
+                result = it,
+                onSuccess = onSuccess,
+                onFailure = onFailure
+            )
+        }
+    }
+
+    @Composable
+    override fun setLoginHandler(
+        onSuccess: (LoginResult) -> Unit,
+        onFailure: (LoginResult) -> Unit
+    ) {
+        cLauncher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult()
+        ){
+            onHandleLoginResult(
+                result = it,
+                onSuccess = onSuccess,
+                onFailure = onFailure
+            )
+        }
+    }
+
+    private fun onHandleLoginResult(
+        result: ActivityResult,
+        onSuccess: (LoginResult) -> Unit,
+        onFailure: (LoginResult) -> Unit,
+    ){
+        if (result.resultCode == Activity.RESULT_OK) {
+            val response = resultManager.getLoginResponse(result)
+
+            if(response != null){
+                resultManager.parseLoginResponse(
+                    result = result,
+                    response = response,
+                    onSuccess = onSuccess,
+                    onFailure = onFailure
+                )
+            } else {
+                resultManager.getLoginExceptionResponse(
+                    LOGIN_ACTIVITY_RESULT_EXCEPTION_CODE,
+                    LOGIN_ACTIVITY_RESULT_EXCEPTION_MESSAGE
+                )?.let { onFailure.invoke(it) }
+            }
+        }else {
+            resultManager.getLoginExceptionResponse(
+                LOGIN_ACTIVITY_RESPONSE_EXCEPTION_CODE,
+                LOGIN_ACTIVITY_RESPONSE_EXCEPTION_MESSAGE
+            )?.let { onFailure.invoke(it) }
         }
     }
 
@@ -124,5 +186,12 @@ internal class ActivityClipLauncher constructor(
         }
 
         throw PaymentInitializationException()
+    }
+
+    companion object {
+        private const val LOGIN_ACTIVITY_RESULT_EXCEPTION_CODE = "ACTIVITY_RESULT_FAILURE"
+        private const val LOGIN_ACTIVITY_RESULT_EXCEPTION_MESSAGE = "The activity result has not ok response"
+        private const val LOGIN_ACTIVITY_RESPONSE_EXCEPTION_CODE = "ACTIVITY_RESPONSE_FAILURE"
+        private const val LOGIN_ACTIVITY_RESPONSE_EXCEPTION_MESSAGE = "The activity response has not login response object"
     }
 }
