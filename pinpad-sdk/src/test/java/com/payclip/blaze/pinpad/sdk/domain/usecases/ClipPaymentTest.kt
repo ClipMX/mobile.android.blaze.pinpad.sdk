@@ -1,10 +1,12 @@
 package com.payclip.blaze.pinpad.sdk.domain.usecases
 
 import com.payclip.blaze.pinpad.sdk.domain.builder.payment.ClipPayment
+import com.payclip.blaze.pinpad.sdk.domain.listener.login.LoginListener
 import com.payclip.blaze.pinpad.sdk.domain.listener.payment.PaymentListener
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyAmountException
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyReferenceException
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.PaymentResult
+import com.payclip.blaze.pinpad.sdk.domain.models.login.ClipPaymentLogin
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
 import com.payclip.blaze.pinpad.sdk.domain.usecases.payment.CreatePaymentUseCase
 import com.payclip.blaze.pinpad.sdk.ui.launcher.ClipLauncher
@@ -22,6 +24,8 @@ class ClipPaymentTest {
 
     private val listener = mock<PaymentListener>()
 
+    private val loginListener = mock<LoginListener>()
+
     @Test
     fun `create clip payment with builder, then verify that nothing crash`() = runTest {
         ClipPayment.Builder()
@@ -29,7 +33,9 @@ class ClipPaymentTest {
             .isRetryEnabled(RETRY)
             .isShareEnabled(SHARE)
             .setPaymentPreferences(getPaymentPreferences())
+            .setLoginCredentials(getLoginCredentialsTest())
             .addListener(getEmptyListener())
+            .addLoginListener(getEmptyLoginListener())
             .build()
     }
 
@@ -221,7 +227,8 @@ class ClipPaymentTest {
         isRetryEnabled,
         isShareEnabled,
         preferences,
-        listener
+        listener,
+        loginListener
     )
 
     private fun getEmptyListener() = object : PaymentListener {
@@ -238,6 +245,15 @@ class ClipPaymentTest {
         }
     }
 
+    private fun getEmptyLoginListener() = object : LoginListener {
+        override fun onLoginSuccess(result: String) {
+            // no-op
+        }
+        override fun onLoginFailure(code: String, message: String?) {
+            // no-op
+        }
+    }
+
     private fun getPaymentPreferences(
         isMSIEnabled: Boolean = IS_MSI_ENABLED,
         isMCIEnabled: Boolean = IS_MCI_ENABLED,
@@ -248,6 +264,11 @@ class ClipPaymentTest {
         isMCIEnabled = isMCIEnabled,
         isDCCEnabled = isDCCEnabled,
         isTipEnabled = isTipEnabled
+    )
+
+    private fun getLoginCredentialsTest() = ClipPaymentLogin(
+        userAccount = "",
+        passwordAccount = ""
     )
 
     companion object {
