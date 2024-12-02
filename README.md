@@ -341,7 +341,7 @@ Steps to Launch a Payment:
 
 1.  Ensure Client and Payment Handler are Initialized
 -   Confirm that the client and payment handler have been properly set up as described in previous sections.
-1. Call the Payment Launcher
+2. Call the Payment Launcher
 -   Use the payment handler to initiate the payment process by providing the necessary parameters
 
 
