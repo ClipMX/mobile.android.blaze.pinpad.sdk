@@ -302,7 +302,38 @@ init {
 }
 ```
 
-**3. Payment Launch**
+**3. Optional step: Login Handler**
+
+Initizalizating the login handler is an optional configuration: Your app could  pass credentials as parameters and avoid the UI login flow in Pinpad App and start the payment flow automatically. 
+
+Like _Payment Handler_ the steps to Initialize the Login Handler are:
+
+1.  Initialize the Login Handler
+-   Make sure to initialize the payment handler within your activity.
+2.  Call the Handler Before Activity's onCreate
+-   If you are using an Activity, ensure you call the handler before the onCreate method of your activity.
+
+
+**Compose**
+
+```kotlin
+@Composable 
+fun PaymentScreen() {
+    ...
+    client.setLoginHandler()
+    ...
+}
+```
+
+**Activity**
+
+```kotlin  
+init { 
+	builder.setLoginHandler(this@MainActivity)
+}
+```
+
+**4. Payment Launch**
 
 Once you have instantiated the client and configured the payment handler, you can proceed to launch the payment process. The payment launch method requires two parameters: the amount to charge and a descriptive message about the payment.
 
@@ -310,7 +341,7 @@ Steps to Launch a Payment:
 
 1.  Ensure Client and Payment Handler are Initialized
 -   Confirm that the client and payment handler have been properly set up as described in previous sections.
-2. Call the Payment Launcher
+1. Call the Payment Launcher
 -   Use the payment handler to initiate the payment process by providing the necessary parameters
 
 
@@ -329,6 +360,7 @@ scope.launch {
 <a name="additional-config"></a>
 
 Our payment SDK offers several additional configuration parameters to customize your integration experience. Below are explanations of each parameter and examples of how to use them:
+
 
 - **isAutoReturnEnabled**: This parameter sets the return mode for the terminal after a transaction. When set to true, the terminal automatically returns to your application after completing or encountering an error during the transaction process. If set to false, the terminal displays its own detailed screen explaining the situation. By default, it is set to false.
 
@@ -357,6 +389,20 @@ ClipPayment.Builder()
 ClipPayment.Builder()
     .addListener(listener: PaymentListener) 
 ```   
+
+- **setLoginCredentials**: This OPTIONAL parameter sets clip credentials to make a payment. This allows you create a payment and avoid the UI login and start a payment. If you set the credentials you must to add a `Login Listener`.
+  
+```kotlin
+ClipPayment.Builder()
+    .setLoginCredentials(loginCredentials: ClipPaymentLogin) 
+```
+
+- **addLoginListener**: With this paramenter you can register a listener to receive information about if your credentials are processed successfully within your application.
+  
+```kotlin
+ClipPayment.Builder()
+    .addLoginListener(listener: LoginListener) 
+```    
 
 - **setPaymentPreferences**: This parameter sets payment preferences.
     - isMSIEnabled: This parameter sets if the monthly interest-free installments will be enabled. By default it is false, and the msi will be disabled.
