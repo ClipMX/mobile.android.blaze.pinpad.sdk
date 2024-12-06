@@ -14,11 +14,13 @@ interface ClipResultManager {
      * @param activity The activity that will be finished.
      * @param reference merchant invoice id used in payment process.
      * @param amount amount used in payment process.
+     * @param receiptNumber The receipt number associated with the successful payment.
      */
     fun setSuccessResult(
         activity: Activity,
         reference: String,
-        amount: String
+        amount: String,
+        receiptNumber: String,
     )
 
     /**
