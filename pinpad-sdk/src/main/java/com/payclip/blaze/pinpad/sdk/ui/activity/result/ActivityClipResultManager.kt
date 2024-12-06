@@ -14,12 +14,14 @@ class ActivityClipResultManager : ClipResultManager {
     override fun setSuccessResult(
         activity: Activity,
         reference: String,
-        amount: String
+        amount: String,
+        receiptNumber: String
     ) {
         val result = PaymentResult(
             reference = reference,
             status = PAYMENT_RESPONSE_APPROVED_STATUS,
-            amount = amount
+            amount = amount,
+            receiptNumber = receiptNumber
         )
 
         activity.setResult(
