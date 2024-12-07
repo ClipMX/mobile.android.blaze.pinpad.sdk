@@ -96,12 +96,12 @@ class ActivityClipResultManager : ClipResultManager {
         return result.data?.extras?.getString(LOGIN_RESPONSE_SUCCESS_EXTRA)
     }
 
-    override fun getLoginExceptionResponse(code: String, exceptionMessage: String): LoginResult {
+    /*override fun getLoginExceptionResponse(code: String, exceptionMessage: String): LoginResult {
         return loginResultStructure(
             code = code,
             message = exceptionMessage
         )
-    }
+    }*/
 
     override fun parseResponse(
         result: ActivityResult,

@@ -8,6 +8,7 @@ import com.payclip.blaze.pinpad.sdk.domain.listener.login.LoginListener
 import com.payclip.blaze.pinpad.sdk.domain.listener.payment.PaymentListener
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyAmountException
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyReferenceException
+import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.PaymentListenerInitializationException
 import com.payclip.blaze.pinpad.sdk.domain.models.login.ClipPaymentLogin
 import com.payclip.blaze.pinpad.sdk.domain.models.login.LoginResult
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
@@ -146,12 +147,15 @@ class ClipPayment internal constructor(
      * @param activity component activity needed to register activity contract.
      */
     fun setPaymentHandler(activity: ComponentActivity) {
-        launcher.setPaymentHandler(
-            activity = activity,
-            onSuccess = { listener?.onSuccess(it) },
-            onCancelled = { listener?.onCancelled() },
-            onFailure = { listener?.onFailure(it) }
-        )
+        if (listener != null) {
+            launcher.setPaymentHandler(
+                activity = activity,
+                paymentListener = listener,
+                loginListener = loginListener
+            )
+        } else {
+            throw PaymentListenerInitializationException()
+        }
     }
 
     /**
@@ -161,11 +165,14 @@ class ClipPayment internal constructor(
     @SuppressLint("ComposableNaming")
     @Composable
     fun setPaymentHandler() {
-        launcher.setPaymentHandler(
-            onSuccess = { listener?.onSuccess(it) },
-            onCancelled = { listener?.onCancelled() },
-            onFailure = { listener?.onFailure(it) }
-        )
+        if (listener != null) {
+            launcher.setPaymentHandler(
+                paymentListener = listener,
+                loginListener = loginListener
+            )
+        } else {
+            throw PaymentListenerInitializationException()
+        }
     }
 
     /**
@@ -174,15 +181,16 @@ class ClipPayment internal constructor(
      *
      * @param activity component activity needed to register activity contract.
      * */
-    fun setLoginHandler(activity: ComponentActivity){
+    @Deprecated("Use only paymentHandler")
+    fun setLoginHandler(activity: ComponentActivity) {
         launcher.setLoginHandler(
             activity = activity,
             onSuccess = { loginResult: LoginResult ->
                 loginListener?.onLoginSuccess(loginResult.code)
-                        },
+            },
             onFailure = { loginResult: LoginResult ->
                 loginListener?.onLoginFailure(loginResult.code, loginResult.detail)
-                        }
+            }
         )
     }
 
@@ -192,7 +200,8 @@ class ClipPayment internal constructor(
      */
     @SuppressLint("ComposableNaming")
     @Composable
-    fun setLoginHandler(){
+    @Deprecated("Use only paymentHandler")
+    fun setLoginHandler() {
         launcher.setLoginHandler(
             onSuccess = { loginResult: LoginResult ->
                 loginListener?.onLoginSuccess(loginResult.code)
@@ -215,7 +224,7 @@ class ClipPayment internal constructor(
         reference: String,
         amount: Double
     ) {
-       useCase.invoke(reference = reference, amount = amount)
+        useCase.invoke(reference = reference, amount = amount)
             .onSuccess {
                 launcher.startPayment(
                     reference = reference,
@@ -228,7 +237,7 @@ class ClipPayment internal constructor(
                 )
             }
             .onFailure {
-                val code = when(it) {
+                val code = when (it) {
                     is EmptyAmountException -> EmptyAmountException.ERROR_CODE
                     is EmptyReferenceException -> EmptyReferenceException.ERROR_CODE
                     else -> DEFAULT_ERROR

@@ -92,16 +92,6 @@ interface ClipResultManager {
     fun getLoginResponse(result: ActivityResult): String?
 
     /**
-     * Get error code from error response returned by login process.
-     *
-     * @param code [String] the error code from login process.
-     * @param exceptionMessage [String] the error message from login process.
-     *
-     * @return [LoginResult] the response from login process.
-     */
-    fun getLoginExceptionResponse(code: String, exceptionMessage: String): LoginResult?
-
-    /**
      * Parse response to get payment object with result information.
      *
      * @param result The result returned by activity contract in ClipLauncher.
