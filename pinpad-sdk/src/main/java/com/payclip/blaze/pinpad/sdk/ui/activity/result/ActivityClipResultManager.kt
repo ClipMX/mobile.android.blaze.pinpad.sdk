@@ -46,8 +46,6 @@ class ActivityClipResultManager : ClipResultManager {
                 putExtra(LOGIN_RESPONSE_SUCCESS_EXTRA, Gson().toJson(successResult))
             }
         )
-
-        activity.finish()
     }
 
     override fun setLoginErrorResult(activity: Activity, code: String, errorMessage: String) {
