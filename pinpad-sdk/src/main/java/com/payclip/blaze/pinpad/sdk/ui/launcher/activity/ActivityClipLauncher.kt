@@ -71,7 +71,7 @@ internal class ActivityClipLauncher(
     ) {
         aLauncher = activity.registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
-        ){
+        ) {
             onHandleLoginResult(
                 result = it,
                 onSuccess = onSuccess,
@@ -87,7 +87,7 @@ internal class ActivityClipLauncher(
     ) {
         cLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.StartActivityForResult()
-        ){
+        ) {
             onHandleLoginResult(
                 result = it,
                 onSuccess = onSuccess,
@@ -100,29 +100,23 @@ internal class ActivityClipLauncher(
         result: ActivityResult,
         onSuccess: (LoginResult) -> Unit,
         onFailure: (LoginResult) -> Unit,
-    ){
-        if (result.resultCode == Activity.RESULT_OK) {
-            val response = resultManager.getLoginResponse(result)
+    ) {
+        val response = resultManager.getLoginResponse(result)
 
-            if(response != null){
-                resultManager.parseLoginResponse(
-                    result = result,
-                    response = response,
-                    onSuccess = onSuccess,
-                    onFailure = onFailure
-                )
-            } else {
-                resultManager.getLoginExceptionResponse(
-                    LOGIN_ACTIVITY_RESULT_EXCEPTION_CODE,
-                    LOGIN_ACTIVITY_RESULT_EXCEPTION_MESSAGE
-                )?.let { onFailure.invoke(it) }
-            }
-        }else {
+        if (result.resultCode == Activity.RESULT_OK && response != null) {
+            resultManager.parseLoginResponse(
+                result = result,
+                response = response,
+                onSuccess = onSuccess,
+                onFailure = onFailure
+            )
+
+        } /*else {
             resultManager.getLoginExceptionResponse(
                 LOGIN_ACTIVITY_RESPONSE_EXCEPTION_CODE,
                 LOGIN_ACTIVITY_RESPONSE_EXCEPTION_MESSAGE
             )?.let { onFailure.invoke(it) }
-        }
+        }*/
     }
 
     private fun onHandleResult(
@@ -190,8 +184,10 @@ internal class ActivityClipLauncher(
 
     companion object {
         private const val LOGIN_ACTIVITY_RESULT_EXCEPTION_CODE = "ACTIVITY_RESULT_FAILURE"
-        private const val LOGIN_ACTIVITY_RESULT_EXCEPTION_MESSAGE = "The activity result has not ok response"
+        private const val LOGIN_ACTIVITY_RESULT_EXCEPTION_MESSAGE =
+            "The activity result has not ok response"
         private const val LOGIN_ACTIVITY_RESPONSE_EXCEPTION_CODE = "ACTIVITY_RESPONSE_FAILURE"
-        private const val LOGIN_ACTIVITY_RESPONSE_EXCEPTION_MESSAGE = "The activity response has not login response object"
+        private const val LOGIN_ACTIVITY_RESPONSE_EXCEPTION_MESSAGE =
+            "The activity response has not login response object"
     }
 }
