@@ -148,12 +148,4 @@ internal class ActivityClipLauncher(
         throw PaymentInitializationException()
     }
 
-    companion object {
-        private const val LOGIN_ACTIVITY_RESULT_EXCEPTION_CODE = "ACTIVITY_RESULT_FAILURE"
-        private const val LOGIN_ACTIVITY_RESULT_EXCEPTION_MESSAGE =
-            "The activity result has not ok response"
-        private const val LOGIN_ACTIVITY_RESPONSE_EXCEPTION_CODE = "ACTIVITY_RESPONSE_FAILURE"
-        private const val LOGIN_ACTIVITY_RESPONSE_EXCEPTION_MESSAGE =
-            "The activity response has not login response object"
-    }
 }
