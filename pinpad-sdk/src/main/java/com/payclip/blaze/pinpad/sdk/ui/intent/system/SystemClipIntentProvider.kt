@@ -58,20 +58,24 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
                 PAYMENT_PREFERENCES_EXTRA,
                 PaymentPreferences::class.java
             )
+
             else -> intent.extras?.getParcelable(PAYMENT_PREFERENCES_EXTRA)
         }
-        return  preferences ?: PaymentPreferences()
+        return preferences ?: PaymentPreferences()
     }
 
     override fun getPaymentLoginCredentials(intent: Intent): ClipPaymentLogin? {
-        val loginCredentials = when {
+        val loginCredentials: ClipPaymentLogin? = when {
             SDK_INT >= TIRAMISU -> intent.getParcelableExtra(
                 CLIP_LOGIN_CREDENTIALS_EXTRA,
                 ClipPaymentLogin::class.java
             )
+
             else -> intent.extras?.getParcelable(CLIP_LOGIN_CREDENTIALS_EXTRA)
         }
-        return loginCredentials
+
+        return if (loginCredentials?.userAccount.isNullOrEmpty() || loginCredentials?.passwordAccount.isNullOrEmpty())
+            return null else loginCredentials
     }
 
     companion object {
