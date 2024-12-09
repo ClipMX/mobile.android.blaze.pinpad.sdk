@@ -10,7 +10,6 @@ import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyAmountExceptio
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyReferenceException
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.PaymentListenerInitializationException
 import com.payclip.blaze.pinpad.sdk.domain.models.login.ClipPaymentLogin
-import com.payclip.blaze.pinpad.sdk.domain.models.login.LoginResult
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
 import com.payclip.blaze.pinpad.sdk.domain.usecases.payment.CreatePaymentUseCase
 import com.payclip.blaze.pinpad.sdk.ui.launcher.ClipLauncher
@@ -173,43 +172,6 @@ class ClipPayment internal constructor(
         } else {
             throw PaymentListenerInitializationException()
         }
-    }
-
-    /**
-     * This handler register activity contract in your Activity. It is very import to
-     * invoke this method before calling `startPayment` and user needs implement login.
-     *
-     * @param activity component activity needed to register activity contract.
-     * */
-    @Deprecated("Use only paymentHandler")
-    fun setLoginHandler(activity: ComponentActivity) {
-        launcher.setLoginHandler(
-            activity = activity,
-            onSuccess = { loginResult: LoginResult ->
-                loginListener?.onLoginSuccess(loginResult.code)
-            },
-            onFailure = { loginResult: LoginResult ->
-                loginListener?.onLoginFailure(loginResult.code, loginResult.detail)
-            }
-        )
-    }
-
-    /**
-     * This handler register activity contract in your Activity. It is very import to
-     * invoke this method before calling `startPayment` and user needs.
-     */
-    @SuppressLint("ComposableNaming")
-    @Composable
-    @Deprecated("Use only paymentHandler")
-    fun setLoginHandler() {
-        launcher.setLoginHandler(
-            onSuccess = { loginResult: LoginResult ->
-                loginListener?.onLoginSuccess(loginResult.code)
-            },
-            onFailure = { loginResult: LoginResult ->
-                loginListener?.onLoginFailure(loginResult.code, loginResult.detail)
-            }
-        )
     }
 
     /**
