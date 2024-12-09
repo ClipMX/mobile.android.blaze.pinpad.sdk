@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import com.payclip.blaze.pinpad.sdk.domain.listener.login.LoginListener
 import com.payclip.blaze.pinpad.sdk.domain.listener.payment.PaymentListener
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.ApplicationNotFoundException
+import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.LoginListenerInitializationException
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.PaymentInitializationException
 import com.payclip.blaze.pinpad.sdk.domain.models.login.ClipPaymentLogin
 import com.payclip.blaze.pinpad.sdk.domain.models.login.LoginResult
@@ -59,68 +60,15 @@ internal class ActivityClipLauncher(
         }
     }
 
-    @Deprecated("We use  only paymentHandler")
-    override fun setLoginHandler(
-        activity: ComponentActivity,
-        onSuccess: (LoginResult) -> Unit,
-        onFailure: (LoginResult) -> Unit,
-    ) {
-        aLauncher = activity.registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) {
-            onHandleLoginResult(
-                result = it,
-                onSuccess = onSuccess,
-                onFailure = onFailure
-            )
-        }
-    }
-
-    @Deprecated("We use  only paymentHandler")
-    @Composable
-    override fun setLoginHandler(
-        onSuccess: (LoginResult) -> Unit,
-        onFailure: (LoginResult) -> Unit
-    ) {
-        cLauncher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.StartActivityForResult()
-        ) {
-            onHandleLoginResult(
-                result = it,
-                onSuccess = onSuccess,
-                onFailure = onFailure
-            )
-        }
-    }
-
     private fun onHandleLoginResult(
-        result: ActivityResult,
-        onSuccess: (LoginResult) -> Unit,
-        onFailure: (LoginResult) -> Unit,
-    ) {
-        val response = resultManager.getLoginResponse(result)
-
-        if (result.resultCode == Activity.RESULT_OK && response != null) {
-            resultManager.parseLoginResponse(
-                result = result,
-                response = response,
-                onSuccess = onSuccess,
-                onFailure = onFailure
-            )
-        }
-        /*else {
-           resultManager.getLoginExceptionResponse(
-               LOGIN_ACTIVITY_RESPONSE_EXCEPTION_CODE,
-               LOGIN_ACTIVITY_RESPONSE_EXCEPTION_MESSAGE
-           )?.let { onFailure.invoke(it) }
-       }*/
-    }
-
-    private fun checkLoginResult(
         activityResult: ActivityResult,
-        response: String,
         loginListener: LoginListener?
     ) {
+        val responseSuccess = resultManager.getLoginResponse(activityResult)
+        val responseError = resultManager.getLoginErrorResponse(activityResult)
+
+        val response = responseSuccess ?: responseError.orEmpty()
+
         if (loginListener != null) {
             resultManager.parseLoginResponse(
                 result = activityResult,
@@ -133,6 +81,8 @@ internal class ActivityClipLauncher(
                     )
                 }
             )
+        } else {
+            throw LoginListenerInitializationException()
         }
     }
 
@@ -143,7 +93,6 @@ internal class ActivityClipLauncher(
     ) {
         if (result.resultCode == Activity.RESULT_OK) {
             val responsePayment = resultManager.getResponse(result)
-            val responseLogin = resultManager.getLoginResponse(result)
 
             if (responsePayment != null) {
                 resultManager.parseResponse(
@@ -153,14 +102,7 @@ internal class ActivityClipLauncher(
                     onFailure = paymentListener::onFailure
                 )
             } else {
-                if (responseLogin != null) {
-                    checkLoginResult(result, responseLogin, loginListener)
-                } else {
-                    loginListener?.onLoginFailure(
-                        LOGIN_ACTIVITY_RESPONSE_EXCEPTION_CODE,
-                        LOGIN_ACTIVITY_RESPONSE_EXCEPTION_MESSAGE
-                    )
-                }
+                onHandleLoginResult(result, loginListener)
             }
         } else {
             paymentListener.onCancelled()

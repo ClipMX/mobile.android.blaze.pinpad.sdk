@@ -42,34 +42,6 @@ internal interface ClipLauncher {
     )
 
     /**
-     * This handler register activity contract in your Activity. It is very import to
-     * invoke this method before calling 'startPayment' only if you want to login.
-     *  @param activity component activity needed to register activity contract.
-     *  @param onSuccess listener called when login process succeed.
-     *  @param onFailure listener called when login process fail.
-     */
-    @Deprecated(message = "We use  only paymentHandler")
-    fun setLoginHandler(
-        activity: ComponentActivity,
-        onSuccess: (LoginResult) -> Unit,
-        onFailure: (LoginResult) -> Unit,
-    )
-
-    /**
-     * This handler register activity contract in your Activity. It is very import to
-     * invoke this method before calling 'startPayment' only if you want to login.
-     *  @param onSuccess listener called when login process succeed.
-     *  @param onFailure listener called when login process fail.
-     */
-    @SuppressLint("ComposableNaming")
-    @Composable
-    @Deprecated(message = "We use  only paymentHandler")
-    fun setLoginHandler(
-        onSuccess: (LoginResult) -> Unit,
-        onFailure: (LoginResult) -> Unit
-    )
-
-    /**
      * Call this method when you want to start Clip payment process. Be sure to call
      * `setPaymentHandler` before, otherwise this method call will crash with no initialization
      * exception.

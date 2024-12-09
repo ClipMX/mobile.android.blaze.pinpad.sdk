@@ -1,7 +1,6 @@
 package com.payclip.blaze.pinpad.sdk.ui.activity
 
 import android.app.Activity
-import android.content.Intent
 import androidx.activity.result.ActivityResult
 import com.payclip.blaze.pinpad.sdk.domain.models.login.LoginResult
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.PaymentResult
@@ -90,6 +89,15 @@ interface ClipResultManager {
      * @return [String] the response from login process.
      */
     fun getLoginResponse(result: ActivityResult): String?
+
+    /**
+     * Get result from login process as string.
+     *
+     * @param result The result returned by activity contract in ClipLauncher.
+     *
+     * @return [String] the response from login process.
+     */
+    fun getLoginErrorResponse(result: ActivityResult): String?
 
     /**
      * Parse response to get payment object with result information.

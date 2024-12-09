@@ -96,12 +96,9 @@ class ActivityClipResultManager : ClipResultManager {
         return result.data?.extras?.getString(LOGIN_RESPONSE_SUCCESS_EXTRA)
     }
 
-    /*override fun getLoginExceptionResponse(code: String, exceptionMessage: String): LoginResult {
-        return loginResultStructure(
-            code = code,
-            message = exceptionMessage
-        )
-    }*/
+    override fun getLoginErrorResponse(result: ActivityResult): String? {
+        return result.data?.extras?.getString(LOGIN_RESPONSE_ERROR_EXTRA)
+    }
 
     override fun parseResponse(
         result: ActivityResult,
@@ -174,6 +171,8 @@ class ActivityClipResultManager : ClipResultManager {
 
         private const val LOGIN_DEFAULT_ERROR = "LOGIN_UNKNOWN_ERROR"
         private const val LOGIN_RESPONSE_SUCCESS_CODE = "LOGIN_SUCCESS"
+        private const val LOGIN_RESPONSE_ERROR_CODE = "LOGIN_ERROR"
+
 
         private const val LOGIN_RESPONSE_SUCCESS_EXTRA = "LOGIN_SUCCESS_EXTRA"
         private const val LOGIN_RESPONSE_ERROR_EXTRA = "LOGIN_ERROR_EXTRA"
