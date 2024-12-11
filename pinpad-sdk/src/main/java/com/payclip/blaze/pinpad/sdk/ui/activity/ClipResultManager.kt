@@ -1,7 +1,6 @@
 package com.payclip.blaze.pinpad.sdk.ui.activity
 
 import android.app.Activity
-import android.content.Intent
 import androidx.activity.result.ActivityResult
 import com.payclip.blaze.pinpad.sdk.domain.models.login.LoginResult
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.PaymentResult
@@ -14,11 +13,13 @@ interface ClipResultManager {
      * @param activity The activity that will be finished.
      * @param reference merchant invoice id used in payment process.
      * @param amount amount used in payment process.
+     * @param receiptNumber The receipt number associated with the successful payment.
      */
     fun setSuccessResult(
         activity: Activity,
         reference: String,
-        amount: String
+        amount: String,
+        receiptNumber: String,
     )
 
     /**
@@ -90,14 +91,13 @@ interface ClipResultManager {
     fun getLoginResponse(result: ActivityResult): String?
 
     /**
-     * Get error code from error response returned by login process.
+     * Get result from login process as string.
      *
-     * @param code [String] the error code from login process.
-     * @param exceptionMessage [String] the error message from login process.
+     * @param result The result returned by activity contract in ClipLauncher.
      *
-     * @return [LoginResult] the response from login process.
+     * @return [String] the response from login process.
      */
-    fun getLoginExceptionResponse(code: String, exceptionMessage: String): LoginResult?
+    fun getLoginErrorResponse(result: ActivityResult): String?
 
     /**
      * Parse response to get payment object with result information.

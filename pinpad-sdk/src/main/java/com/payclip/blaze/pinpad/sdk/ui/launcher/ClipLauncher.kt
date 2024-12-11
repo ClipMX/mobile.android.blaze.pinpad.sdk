@@ -3,6 +3,8 @@ package com.payclip.blaze.pinpad.sdk.ui.launcher
 import android.annotation.SuppressLint
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
+import com.payclip.blaze.pinpad.sdk.domain.listener.login.LoginListener
+import com.payclip.blaze.pinpad.sdk.domain.listener.payment.PaymentListener
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.PaymentResult
 import com.payclip.blaze.pinpad.sdk.domain.models.login.ClipPaymentLogin
 import com.payclip.blaze.pinpad.sdk.domain.models.login.LoginResult
@@ -20,9 +22,8 @@ internal interface ClipLauncher {
      */
     fun setPaymentHandler(
         activity: ComponentActivity,
-        onSuccess: (result: PaymentResult) -> Unit,
-        onCancelled: () -> Unit,
-        onFailure: (code: String) -> Unit
+        paymentListener: PaymentListener,
+        loginListener: LoginListener?
     )
 
     /**
@@ -36,35 +37,8 @@ internal interface ClipLauncher {
     @SuppressLint("ComposableNaming")
     @Composable
     fun setPaymentHandler(
-        onSuccess: (result: PaymentResult) -> Unit,
-        onCancelled: () -> Unit,
-        onFailure: (code: String) -> Unit
-    )
-
-    /**
-     * This handler register activity contract in your Activity. It is very import to
-     * invoke this method before calling 'startPayment' only if you want to login.
-     *  @param activity component activity needed to register activity contract.
-     *  @param onSuccess listener called when login process succeed.
-     *  @param onFailure listener called when login process fail.
-     */
-    fun setLoginHandler(
-        activity: ComponentActivity,
-        onSuccess: (LoginResult) -> Unit,
-        onFailure: (LoginResult) -> Unit,
-    )
-
-    /**
-     * This handler register activity contract in your Activity. It is very import to
-     * invoke this method before calling 'startPayment' only if you want to login.
-     *  @param onSuccess listener called when login process succeed.
-     *  @param onFailure listener called when login process fail.
-     */
-    @SuppressLint("ComposableNaming")
-    @Composable
-    fun setLoginHandler(
-        onSuccess: (LoginResult) -> Unit,
-        onFailure: (LoginResult) -> Unit
+        paymentListener: PaymentListener,
+        loginListener: LoginListener?
     )
 
     /**
