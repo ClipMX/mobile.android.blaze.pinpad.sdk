@@ -14,12 +14,14 @@ class ActivityClipResultManager : ClipResultManager {
     override fun setSuccessResult(
         activity: Activity,
         reference: String,
-        amount: String
+        amount: String,
+        receiptNumber: String
     ) {
         val result = PaymentResult(
             reference = reference,
             status = PAYMENT_RESPONSE_APPROVED_STATUS,
-            amount = amount
+            amount = amount,
+            receiptNumber = receiptNumber
         )
 
         activity.setResult(
@@ -44,8 +46,6 @@ class ActivityClipResultManager : ClipResultManager {
                 putExtra(LOGIN_RESPONSE_SUCCESS_EXTRA, Gson().toJson(successResult))
             }
         )
-
-        activity.finish()
     }
 
     override fun setLoginErrorResult(activity: Activity, code: String, errorMessage: String) {
@@ -96,11 +96,8 @@ class ActivityClipResultManager : ClipResultManager {
         return result.data?.extras?.getString(LOGIN_RESPONSE_SUCCESS_EXTRA)
     }
 
-    override fun getLoginExceptionResponse(code: String, exceptionMessage: String): LoginResult {
-        return loginResultStructure(
-            code = code,
-            message = exceptionMessage
-        )
+    override fun getLoginErrorResponse(result: ActivityResult): String? {
+        return result.data?.extras?.getString(LOGIN_RESPONSE_ERROR_EXTRA)
     }
 
     override fun parseResponse(
@@ -174,6 +171,8 @@ class ActivityClipResultManager : ClipResultManager {
 
         private const val LOGIN_DEFAULT_ERROR = "LOGIN_UNKNOWN_ERROR"
         private const val LOGIN_RESPONSE_SUCCESS_CODE = "LOGIN_SUCCESS"
+        private const val LOGIN_RESPONSE_ERROR_CODE = "LOGIN_ERROR"
+
 
         private const val LOGIN_RESPONSE_SUCCESS_EXTRA = "LOGIN_SUCCESS_EXTRA"
         private const val LOGIN_RESPONSE_ERROR_EXTRA = "LOGIN_ERROR_EXTRA"
