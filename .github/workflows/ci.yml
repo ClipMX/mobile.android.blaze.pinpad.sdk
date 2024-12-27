@@ -1,0 +1,21 @@
+name: PayClip CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - '**/*.yml'
+      - '**/*.md'
+
+jobs:
+  android-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Android CI
+        uses: ClipMX/mobile.android.blaze.ci@main
+        with:
+          workspace: ${{ github.workspace }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          packages_user: ${{ secrets.PACKAGES_USERNAME }}
+          packages_token: ${{ secrets.PACKAGES_TOKEN }}
+          google_credentials_base64: ${{ secrets.GOOGLE_CREDENTIALS_BASE64 }}
