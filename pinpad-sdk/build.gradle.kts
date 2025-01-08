@@ -1,43 +1,19 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    id("maven-publish")
+    alias(clipLibs.plugins.android.library)
+    alias(libs.plugins.blaze.configuration)
     id("kotlin-parcelize")
 }
 
 @Suppress("UnstableApiUsage")
 android {
     namespace = "com.payclip.blaze.pinpad.sdk"
-    compileSdk = 34
-
-    defaultConfig {
-        minSdk = 22
-        @Suppress("DEPRECATION")
-        targetSdk = 34
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildFeatures {
-        compose = true
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
-    }
 
     kotlinOptions {
-        jvmTarget = libs.versions.jvmTarget.get()
+        jvmTarget = clipLibs.versions.jvmTarget.get()
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
-    }
-
-    sourceSets["main"].java {
-        srcDir("src/main/java")
+        kotlinCompilerExtensionVersion = clipLibs.versions.androidxComposeCompiler.get()
     }
 }
 
@@ -50,42 +26,37 @@ project.artifacts {
     archives(sourcesJar)
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("release") {
-                groupId = "com.github.ClipMX"
-                artifactId = "mobile.android.blaze.pinpad.sdk"
-                // the version is provided by the TAG name
-                version = System.getenv("GITHUB_REF_NAME") ?: "0.0.0"
-
-                afterEvaluate {
-                    from(components["release"])
-                    artifact(project.tasks.getByName("sourcesJar"))
-                }
-            }
-        }
-    }
-}
-
 dependencies {
-    implementation(libs.androidx.coreKtx)
+    implementation(clipLibs.androidx.coreKtx)
 
-    testImplementation(libs.junit4)
-    testImplementation(libs.mockito.kotlin)
-    testImplementation(libs.mockk)
-    testImplementation(libs.coroutines.test)
+    compileOnly(clipLibs.blaze.lintChecks)
 
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.runtime.livedata)
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.lifecycle.runtimeCompose)
-    implementation(libs.androidx.lifecycle.viewModelCompose)
-    implementation(libs.androidx.activity.compose)
+    // Test
+    testImplementation(clipLibs.junit4)
+    testImplementation(clipLibs.mockito.kotlin)
+    testImplementation(clipLibs.mockk)
+    testImplementation(clipLibs.coroutines.test)
+    androidTestImplementation(clipLibs.androidx.test.ext)
+    androidTestImplementation(clipLibs.androidx.test.espressoCore)
+    testImplementation(clipLibs.androidx.room.testing)
 
-    implementation(libs.retrofitCore)
-    implementation(libs.retrofit.converterGson)
-    implementation(libs.gsonCore)
-    implementation(libs.okhttpCore)
-    implementation(libs.okhttpLogging)
+    // Compose
+    implementation(platform(clipLibs.androidx.compose.bom))
+    implementation(clipLibs.androidx.compose.runtime.livedata)
+    implementation(clipLibs.androidx.compose.material3)
+    implementation(clipLibs.androidx.compose.ui)
+    implementation(clipLibs.androidx.compose.ui.graphics)
+    implementation(clipLibs.androidx.compose.ui.tooling)
+    implementation(clipLibs.androidx.compose.ui.toolingPreview)
+    implementation(clipLibs.androidx.compose.navigation)
+    implementation(clipLibs.androidx.lifecycle.runtimeCompose)
+    implementation(clipLibs.androidx.lifecycle.viewModelCompose)
+    implementation(clipLibs.androidx.activity.compose)
+
+    // Retrofit
+    implementation(clipLibs.retrofitCore)
+    implementation(clipLibs.retrofit.converterGson)
+    implementation(clipLibs.gsonCore)
+    implementation(clipLibs.okhttpCore)
+    implementation(clipLibs.okhttpLogging)
 }
