@@ -28,6 +28,7 @@ interface ClipIntentProvider {
         isAutoReturnEnabled: Boolean = false,
         isRetryEnabled: Boolean = true,
         isShareEnabled: Boolean = true,
+        isSplitPaymentEnabled: Boolean = false,
         preferences: PaymentPreferences,
         clipLoginCredentials: ClipPaymentLogin? = null
     ): Intent
@@ -76,6 +77,15 @@ interface ClipIntentProvider {
      * @return The share buttons availability state. If share availability was not settled, null is returned.
      */
     fun isShareEnabled(intent: Intent): Boolean?
+
+    /**
+     * Get split payment availability from intent extras.
+     *
+     * @param intent activity intent with extras.
+     *
+     * @return The split payment availability state. If split payment was not settled, null is returned.
+     */
+    fun isSplitPaymentEnabled(intent: Intent): Boolean?
 
     /**
      * Get payment preferences from intent extras.

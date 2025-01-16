@@ -16,6 +16,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         isAutoReturnEnabled: Boolean,
         isRetryEnabled: Boolean,
         isShareEnabled: Boolean,
+        isSplitPaymentEnabled: Boolean,
         preferences: PaymentPreferences,
         clipLoginCredentials: ClipPaymentLogin?
     ): Intent {
@@ -49,6 +50,10 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
 
     override fun isShareEnabled(intent: Intent): Boolean? {
         return intent.extras?.getBoolean(PAYMENT_SHARE_EXTRA)
+    }
+
+    override fun isSplitPaymentEnabled(intent: Intent): Boolean? {
+        return intent.extras?.getBoolean(PAYMENT_SPLIT_EXTRA)
     }
 
     @Suppress("DEPRECATION")
@@ -86,6 +91,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         private const val PAYMENT_AMOUNT_EXTRA = "PAYMENT_AMOUNT"
         private const val PAYMENT_SHARE_EXTRA = "PAYMENT_SHARE"
         private const val PAYMENT_RETRY_EXTRA = "PAYMENT_RETRY"
+        private const val PAYMENT_SPLIT_EXTRA = "PAYMENT_SPLIT_EXTRA"
         private const val PAYMENT_AUTO_RETURN_EXTRA = "PAYMENT_AUTO_RETURN"
         private const val PAYMENT_PREFERENCES_EXTRA = "PAYMENT_PREFERENCES"
         private const val CLIP_LOGIN_CREDENTIALS_EXTRA = "CLIP_LOGIN_CREDENTIALS"

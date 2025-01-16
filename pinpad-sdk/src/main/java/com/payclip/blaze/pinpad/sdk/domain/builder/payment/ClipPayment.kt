@@ -23,6 +23,7 @@ class ClipPayment internal constructor(
     private val isAutoReturnEnabled: Boolean,
     private val isRetryEnabled: Boolean,
     private val isShareEnabled: Boolean,
+    private val isSplitPaymentEnabled: Boolean,
     private val preferences: PaymentPreferences,
     private val listener: PaymentListener?,
     private val loginListener: LoginListener?,
@@ -40,6 +41,8 @@ class ClipPayment internal constructor(
         private var isRetryEnabled: Boolean = true
 
         private var isShareEnabled: Boolean = true
+
+        private var isSplitPaymentEnabled: Boolean = false
 
         private var preferences: PaymentPreferences = PaymentPreferences()
 
@@ -77,6 +80,16 @@ class ClipPayment internal constructor(
          */
         fun isShareEnabled(isEnabled: Boolean) = apply {
             this.isShareEnabled = isEnabled
+        }
+
+        /**
+         * Method to settle if split payment is possible.
+         *
+         * @param isEnabled If it is true, the terminal will show you the option to split the payment.
+         * If set to false, the terminal will not show the option to split and use a single payment.
+         */
+        fun isSplitPaymentEnabled(isEnabled: Boolean) = apply {
+            this.isSplitPaymentEnabled = isEnabled
         }
 
         /**
@@ -131,6 +144,7 @@ class ClipPayment internal constructor(
                 isAutoReturnEnabled = isAutoReturnEnabled,
                 isRetryEnabled = isRetryEnabled,
                 isShareEnabled = isShareEnabled,
+                isSplitPaymentEnabled = isSplitPaymentEnabled,
                 preferences = preferences,
                 listener = listener,
                 loginListener = clipLoginListener,
