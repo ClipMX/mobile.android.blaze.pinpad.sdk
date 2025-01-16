@@ -219,6 +219,7 @@ class ClipPaymentTest {
         isAutoReturnEnabled: Boolean = false,
         isRetryEnabled: Boolean = true,
         isShareEnabled: Boolean = true,
+        isSplitPaymentEnabled : Boolean = false,
         preferences: PaymentPreferences = getPaymentPreferences()
     ) = ClipPayment(
         useCase,
@@ -226,6 +227,7 @@ class ClipPaymentTest {
         isAutoReturnEnabled,
         isRetryEnabled,
         isShareEnabled,
+        isSplitPaymentEnabled,
         preferences,
         listener,
         loginListener
