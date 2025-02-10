@@ -11,6 +11,7 @@ data class PaymentPreferences(
     val isMCIEnabled: Boolean = true,
     val isDCCEnabled: Boolean = true,
     val isTipEnabled: Boolean = false,
+    val isSplitPaymentEnabled: Boolean = false,
     /**
      * When transaction is successful you can enable the auto print of your receipt in POS
      */

@@ -185,6 +185,24 @@ class ClipPaymentTest {
     }
 
     @Test
+    fun `create payment with success response and split payment enabled and check if the result is right`() = runTest {
+        val preferences = getPaymentPreferences(isSplitPaymentEnabled = true)
+        val payment = getPaymentInstance(preferences = preferences)
+
+        whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+
+        payment.start(REFERENCE, AMOUNT)
+
+        verify(launcher).startPayment(
+            reference = REFERENCE,
+            amount = AMOUNT,
+            isAutoReturnEnabled = false,
+            isRetryEnabled = true,
+            preferences = preferences
+        )
+    }
+
+    @Test
     fun `try to create payment with empty amount and handle thrown exception`() = runTest {
         val payment = getPaymentInstance()
 
@@ -258,12 +276,14 @@ class ClipPaymentTest {
         isMSIEnabled: Boolean = IS_MSI_ENABLED,
         isMCIEnabled: Boolean = IS_MCI_ENABLED,
         isDCCEnabled: Boolean = IS_DCC_ENABLED,
-        isTipEnabled: Boolean = IS_TIP_ENABLED
+        isTipEnabled: Boolean = IS_TIP_ENABLED,
+        isSplitPaymentEnabled: Boolean = IS_SPLIT_PAYMENT_ENABLED
     ) = PaymentPreferences(
         isMSIEnabled = isMSIEnabled,
         isMCIEnabled = isMCIEnabled,
         isDCCEnabled = isDCCEnabled,
-        isTipEnabled = isTipEnabled
+        isTipEnabled = isTipEnabled,
+        isSplitPaymentEnabled = isSplitPaymentEnabled
     )
 
     private fun getLoginCredentialsTest() = ClipPaymentLogin(
@@ -283,5 +303,6 @@ class ClipPaymentTest {
         private const val IS_MCI_ENABLED = true
         private const val IS_DCC_ENABLED = true
         private const val IS_TIP_ENABLED = false
+        private const val IS_SPLIT_PAYMENT_ENABLED = false
     }
 }
