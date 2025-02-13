@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.TIRAMISU
+import com.google.gson.Gson
 import com.payclip.blaze.pinpad.sdk.domain.models.login.ClipPaymentLogin
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
 import com.payclip.blaze.pinpad.sdk.ui.intent.ClipIntentProvider
@@ -27,6 +28,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
             putExtra(PAYMENT_RETRY_EXTRA, isRetryEnabled)
             putExtra(PAYMENT_SHARE_EXTRA, isShareEnabled)
             putExtra(PAYMENT_PREFERENCES_EXTRA, preferences)
+            putExtra(PAYMENT_PREFERENCES_JSON_EXTRA, Gson().toJson(preferences))
             putExtra(CLIP_LOGIN_CREDENTIALS_EXTRA, clipLoginCredentials)
         }
     }
@@ -68,6 +70,10 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         return preferences ?: PaymentPreferences()
     }
 
+    override fun getPaymentPreferencesJson(intent: Intent): String? {
+        return intent.extras?.getString(PAYMENT_PREFERENCES_JSON_EXTRA)
+    }
+
     override fun getPaymentLoginCredentials(intent: Intent): ClipPaymentLogin? {
         val loginCredentials: ClipPaymentLogin? = when {
             SDK_INT >= TIRAMISU -> intent.getParcelableExtra(
@@ -92,6 +98,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         private const val PAYMENT_RETRY_EXTRA = "PAYMENT_RETRY"
         private const val PAYMENT_AUTO_RETURN_EXTRA = "PAYMENT_AUTO_RETURN"
         private const val PAYMENT_PREFERENCES_EXTRA = "PAYMENT_PREFERENCES"
+        private const val PAYMENT_PREFERENCES_JSON_EXTRA = "PAYMENT_PREFERENCES_JSON"
         private const val CLIP_LOGIN_CREDENTIALS_EXTRA = "CLIP_LOGIN_CREDENTIALS"
     }
 }

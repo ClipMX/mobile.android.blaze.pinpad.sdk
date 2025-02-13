@@ -88,6 +88,16 @@ interface ClipIntentProvider {
     fun getPaymentPreferences(intent: Intent): PaymentPreferences
 
     /**
+     * Get payment preferences as a JSON string from intent extras.
+     *
+     * @param intent activity intent with extras.
+     *
+     * @return The payment preferences model as a JSON string, or null if no preferences were set in the intent.
+     * Returns null if no preferences were set.
+     */
+    fun getPaymentPreferencesJson(intent: Intent): String?
+
+    /**
      * Get login credentials from intent extras.
      *
      * @param intent activity intent with extras.
