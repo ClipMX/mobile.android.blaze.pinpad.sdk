@@ -53,13 +53,17 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
 
     @Suppress("DEPRECATION")
     override fun getPaymentPreferences(intent: Intent): PaymentPreferences {
-        val preferences = when {
-            SDK_INT >= TIRAMISU -> intent.getParcelableExtra(
-                PAYMENT_PREFERENCES_EXTRA,
-                PaymentPreferences::class.java
-            )
+        val preferences = try {
+            when {
+                SDK_INT >= TIRAMISU -> intent.getParcelableExtra(
+                    PAYMENT_PREFERENCES_EXTRA,
+                    PaymentPreferences::class.java
+                )
 
-            else -> intent.extras?.getParcelable(PAYMENT_PREFERENCES_EXTRA)
+                else -> intent.extras?.getParcelable(PAYMENT_PREFERENCES_EXTRA)
+            }
+        } catch (e: Exception) {
+            PaymentPreferences()
         }
         return preferences ?: PaymentPreferences()
     }
