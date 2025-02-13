@@ -19,10 +19,10 @@ data class PaymentPreferences(
      * When transaction is successful you can enable the auto print of your receipt in POS
      */
     val isAutoPrintReceiptEnabled: Boolean = false,
-    val isSplitPaymentEnabled: Boolean = false,
+    val isSplitPaymentEnabled: Boolean? = false,
 ) : Parcelable {
 
-    companion object : Parceler<PaymentPreferences> {
+    /*companion object : Parceler<PaymentPreferences> {
         @RequiresApi(Build.VERSION_CODES.Q)
         override fun PaymentPreferences.write(parcel: Parcel, flags: Int) {
             parcel.writeBoolean(isMSIEnabled)
@@ -43,5 +43,5 @@ data class PaymentPreferences(
                 parcel.readBoolean(),
                 false
             )
-    }
+    }*/
 }
