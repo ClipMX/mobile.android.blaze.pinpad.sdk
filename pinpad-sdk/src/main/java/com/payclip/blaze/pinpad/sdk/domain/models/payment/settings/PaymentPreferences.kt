@@ -41,7 +41,7 @@ data class PaymentPreferences(
                 parcel.readBoolean(),
                 parcel.readBoolean(),
                 parcel.readBoolean(),
-                parcel.readBoolean()
+                false
             )
     }
 }
