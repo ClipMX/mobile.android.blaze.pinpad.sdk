@@ -53,17 +53,8 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         return intent.extras?.getBoolean(PAYMENT_SHARE_EXTRA)
     }
 
-    /**
-     * Retrieves the payment preferences from the given [Intent].
-     *
-     * @param intent The [Intent] containing the payment preferences.
-     * @return The [PaymentPreferences] object, or a default instance if not found.
-     *
-     * @deprecated Use [getRequestPaymentPreferences] instead. This method will be removed in a future version.
-     * @see getRequestPaymentPreferences
-     */
     @Deprecated(
-        message = "Use getRequestPaymentPreferences instead. This method will be removed in a future version.",
+        "Use getRequestPaymentPreferences instead. This method will be removed in a future version.",
         replaceWith = ReplaceWith("getRequestPaymentPreferences(intent)"),
         level = DeprecationLevel.WARNING
     )
@@ -80,12 +71,6 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         return preferences ?: PaymentPreferences()
     }
 
-    /**
-     * Retrieves the request payment preferences from the given [Intent].
-     *
-     * @param intent The [Intent] containing the request payment preferences.
-     * @return The [RequestPaymentPreferences] represented in a JSON string, or null if not found.
-     */
     override fun getRequestPaymentPreferences(intent: Intent): String? {
         return intent.extras?.getString(REQUEST_PAYMENT_PREFERENCES_EXTRA)
     }

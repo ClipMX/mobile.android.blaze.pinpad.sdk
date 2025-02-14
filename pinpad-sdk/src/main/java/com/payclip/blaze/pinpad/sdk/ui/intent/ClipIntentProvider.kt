@@ -79,21 +79,28 @@ interface ClipIntentProvider {
     fun isShareEnabled(intent: Intent): Boolean?
 
     /**
-     * Get payment preferences from intent extras.
+     * Retrieves the payment preferences from the given [Intent].
      *
-     * @param intent activity intent with extras.
+     * @param intent The [Intent] containing the payment preferences.
+     * @return The [PaymentPreferences] object, or a default instance if not found.
      *
-     * @return The payment preferences model.
-     * If no preferences was settled, a default model is returned.
+     * @deprecated Use [getRequestPaymentPreferences] instead. This method will be removed in a future version.
+     * @see getRequestPaymentPreferences
      */
+    @Deprecated(
+        message = "Use getRequestPaymentPreferences instead. This method will be removed in a future version.",
+        replaceWith = ReplaceWith("getRequestPaymentPreferences(intent)"),
+        level = DeprecationLevel.WARNING
+    )
     fun getPaymentPreferences(intent: Intent): PaymentPreferences
 
 
     /**
-     * Get request payment preferences from intent extras.
+     * Retrieves the request payment preferences from the given [Intent].
      *
-     * @param intent activity intent with extras.
-     **/
+     * @param intent The [Intent] containing the request payment preferences.
+     * @return The [RequestPaymentPreferences] represented in a JSON string, or null if not found.
+     */
     fun getRequestPaymentPreferences(intent: Intent): String?
 
 
