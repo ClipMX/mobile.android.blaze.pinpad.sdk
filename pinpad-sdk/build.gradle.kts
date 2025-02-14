@@ -12,8 +12,6 @@ android {
 
     defaultConfig {
         minSdk = 22
-        @Suppress("DEPRECATION")
-        targetSdk = 34
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -88,5 +86,5 @@ dependencies {
     implementation(libs.gsonCore)
     implementation(libs.okhttpCore)
     implementation(libs.okhttpLogging)
-    implementation(libs.kotlin.stdlib.jdk8)
+    //implementation(libs.kotlin.stdlib.jdk8)
 }
