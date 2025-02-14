@@ -4,8 +4,12 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import kotlinx.parcelize.Parcelize
 
+/**
+ * This class is deprecated. Use [RequestPaymentPreferences] instead.
+ */
 @Keep
 @Parcelize
+@Deprecated(message = "use requestPaymentPreferences instead")
 data class PaymentPreferences(
     val isMSIEnabled: Boolean = true,
     val isMCIEnabled: Boolean = true,
