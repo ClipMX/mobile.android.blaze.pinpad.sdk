@@ -24,23 +24,38 @@ data class PaymentPreferences(
 
     companion object : Parceler<PaymentPreferences> {
 
+        private const val VERSION_1_0_9_1 = 1
+        private const val VERSION_1_0_10_X = 2
+        private const val CURRENT_VERSION = VERSION_1_0_9_1
+
         override fun PaymentPreferences.write(parcel: Parcel, flags: Int) {
+            parcel.writeInt(CURRENT_VERSION) // Write the version first
             parcel.writeInt(if (isMSIEnabled) 1 else 0)
             parcel.writeInt(if (isMCIEnabled) 1 else 0)
             parcel.writeInt(if (isDCCEnabled) 1 else 0)
             parcel.writeInt(if (isTipEnabled) 1 else 0)
             parcel.writeInt(if (isAutoPrintReceiptEnabled) 1 else 0)
-            parcel.writeInt(0)
+            if (CURRENT_VERSION >= VERSION_1_0_10_X) {
+                parcel.writeInt(if (isSplitPaymentEnabled) 1 else 0)
+            } else {
+                parcel.writeInt(0)
+            }
         }
 
-        override fun create(parcel: Parcel): PaymentPreferences =
-            PaymentPreferences(
+        override fun create(parcel: Parcel): PaymentPreferences {
+            val version = parcel.readInt() // Read the version first
+            return PaymentPreferences(
                 parcel.readInt() == 1,
                 parcel.readInt() == 1,
                 parcel.readInt() == 1,
                 parcel.readInt() == 1,
                 parcel.readInt() == 1,
-                false
+                if (version >= VERSION_1_0_10_X) {
+                    parcel.readInt() == 1
+                } else {
+                    false // Default to false for older versions
+                }
             )
+        }
     }
 }
