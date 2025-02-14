@@ -88,4 +88,5 @@ dependencies {
     implementation(libs.gsonCore)
     implementation(libs.okhttpCore)
     implementation(libs.okhttpLogging)
+    implementation(libs.kotlin.stdlib.jdk8)
 }
