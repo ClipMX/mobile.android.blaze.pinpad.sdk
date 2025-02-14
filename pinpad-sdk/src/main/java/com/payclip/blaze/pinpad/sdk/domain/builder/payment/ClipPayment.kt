@@ -10,7 +10,7 @@ import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyAmountExceptio
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyReferenceException
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.PaymentListenerInitializationException
 import com.payclip.blaze.pinpad.sdk.domain.models.login.ClipPaymentLogin
-import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
+import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.RequestPaymentPreferences
 import com.payclip.blaze.pinpad.sdk.domain.usecases.payment.CreatePaymentUseCase
 import com.payclip.blaze.pinpad.sdk.ui.launcher.ClipLauncher
 
@@ -23,7 +23,7 @@ class ClipPayment internal constructor(
     private val isAutoReturnEnabled: Boolean,
     private val isRetryEnabled: Boolean,
     private val isShareEnabled: Boolean,
-    private val preferences: PaymentPreferences,
+    private val preferences: RequestPaymentPreferences,
     private val listener: PaymentListener?,
     private val loginListener: LoginListener?,
     private val loginCredentials: ClipPaymentLogin? = null
@@ -41,7 +41,7 @@ class ClipPayment internal constructor(
 
         private var isShareEnabled: Boolean = true
 
-        private var preferences: PaymentPreferences = PaymentPreferences()
+        private var preferences: RequestPaymentPreferences = RequestPaymentPreferences()
 
         private var loginCredentials: ClipPaymentLogin? = null
 
@@ -84,7 +84,7 @@ class ClipPayment internal constructor(
          *
          * @param preferences An object loaded with all payment configuration.
          */
-        fun setPaymentPreferences(preferences: PaymentPreferences) = apply {
+        fun setPaymentPreferences(preferences: RequestPaymentPreferences) = apply {
             this.preferences = preferences
         }
 
@@ -194,7 +194,7 @@ class ClipPayment internal constructor(
                     isAutoReturnEnabled = isAutoReturnEnabled,
                     isRetryEnabled = isRetryEnabled,
                     isShareEnabled = isShareEnabled,
-                    preferences = preferences,
+                    requestPaymentPreferences = preferences,
                     clipLoginCredentials = loginCredentials
                 )
             }

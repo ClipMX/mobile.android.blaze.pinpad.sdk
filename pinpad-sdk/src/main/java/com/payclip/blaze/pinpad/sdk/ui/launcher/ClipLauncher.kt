@@ -5,10 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import com.payclip.blaze.pinpad.sdk.domain.listener.login.LoginListener
 import com.payclip.blaze.pinpad.sdk.domain.listener.payment.PaymentListener
-import com.payclip.blaze.pinpad.sdk.domain.models.payment.PaymentResult
 import com.payclip.blaze.pinpad.sdk.domain.models.login.ClipPaymentLogin
-import com.payclip.blaze.pinpad.sdk.domain.models.login.LoginResult
-import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
+import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.RequestPaymentPreferences
 
 internal interface ClipLauncher {
 
@@ -63,7 +61,7 @@ internal interface ClipLauncher {
         isAutoReturnEnabled: Boolean = false,
         isRetryEnabled: Boolean = true,
         isShareEnabled: Boolean = true,
-        preferences: PaymentPreferences,
+        requestPaymentPreferences: RequestPaymentPreferences,
         clipLoginCredentials: ClipPaymentLogin? = null
     )
 }
