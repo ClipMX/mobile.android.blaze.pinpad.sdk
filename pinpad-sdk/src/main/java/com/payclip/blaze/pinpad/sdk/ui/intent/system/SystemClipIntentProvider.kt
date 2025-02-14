@@ -4,8 +4,10 @@ import android.content.ComponentName
 import android.content.Intent
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.TIRAMISU
+import com.google.gson.Gson
 import com.payclip.blaze.pinpad.sdk.domain.models.login.ClipPaymentLogin
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
+import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.RequestPaymentPreferences
 import com.payclip.blaze.pinpad.sdk.ui.intent.ClipIntentProvider
 
 internal class SystemClipIntentProvider : ClipIntentProvider {
@@ -16,7 +18,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         isAutoReturnEnabled: Boolean,
         isRetryEnabled: Boolean,
         isShareEnabled: Boolean,
-        preferences: PaymentPreferences,
+        requestPaymentPreferences: RequestPaymentPreferences,
         clipLoginCredentials: ClipPaymentLogin?
     ): Intent {
         return Intent(Intent.ACTION_MAIN).apply {
@@ -26,7 +28,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
             putExtra(PAYMENT_AUTO_RETURN_EXTRA, isAutoReturnEnabled)
             putExtra(PAYMENT_RETRY_EXTRA, isRetryEnabled)
             putExtra(PAYMENT_SHARE_EXTRA, isShareEnabled)
-            putExtra(PAYMENT_PREFERENCES_EXTRA, preferences)
+            putExtra(REQUEST_PAYMENT_PREFERENCES_EXTRA, Gson().toJson(requestPaymentPreferences))
             putExtra(CLIP_LOGIN_CREDENTIALS_EXTRA, clipLoginCredentials)
         }
     }
@@ -51,6 +53,20 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         return intent.extras?.getBoolean(PAYMENT_SHARE_EXTRA)
     }
 
+    /**
+     * Retrieves the payment preferences from the given [Intent].
+     *
+     * @param intent The [Intent] containing the payment preferences.
+     * @return The [PaymentPreferences] object, or a default instance if not found.
+     *
+     * @deprecated Use [getRequestPaymentPreferences] instead. This method will be removed in a future version.
+     * @see getRequestPaymentPreferences
+     */
+    @Deprecated(
+        message = "Use getRequestPaymentPreferences instead. This method will be removed in a future version.",
+        replaceWith = ReplaceWith("getRequestPaymentPreferences(intent)"),
+        level = DeprecationLevel.WARNING
+    )
     @Suppress("DEPRECATION")
     override fun getPaymentPreferences(intent: Intent): PaymentPreferences {
         val preferences = when {
@@ -62,6 +78,16 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
             else -> intent.extras?.getParcelable(PAYMENT_PREFERENCES_EXTRA)
         }
         return preferences ?: PaymentPreferences()
+    }
+
+    /**
+     * Retrieves the request payment preferences from the given [Intent].
+     *
+     * @param intent The [Intent] containing the request payment preferences.
+     * @return The [RequestPaymentPreferences] represented in a JSON string, or null if not found.
+     */
+    override fun getRequestPaymentPreferences(intent: Intent): String? {
+        return intent.extras?.getString(REQUEST_PAYMENT_PREFERENCES_EXTRA)
     }
 
     override fun getPaymentLoginCredentials(intent: Intent): ClipPaymentLogin? {
@@ -88,6 +114,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         private const val PAYMENT_RETRY_EXTRA = "PAYMENT_RETRY"
         private const val PAYMENT_AUTO_RETURN_EXTRA = "PAYMENT_AUTO_RETURN"
         private const val PAYMENT_PREFERENCES_EXTRA = "PAYMENT_PREFERENCES"
+        private const val REQUEST_PAYMENT_PREFERENCES_EXTRA = "REQUEST_PAYMENT_PREFERENCES"
         private const val CLIP_LOGIN_CREDENTIALS_EXTRA = "CLIP_LOGIN_CREDENTIALS"
     }
 }

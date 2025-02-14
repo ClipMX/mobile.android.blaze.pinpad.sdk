@@ -16,7 +16,7 @@ import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.LoginListenerInitia
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.PaymentInitializationException
 import com.payclip.blaze.pinpad.sdk.domain.models.login.ClipPaymentLogin
 import com.payclip.blaze.pinpad.sdk.domain.models.login.LoginResult
-import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
+import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.RequestPaymentPreferences
 import com.payclip.blaze.pinpad.sdk.ui.activity.ClipResultManager
 import com.payclip.blaze.pinpad.sdk.ui.intent.ClipIntentProvider
 import com.payclip.blaze.pinpad.sdk.ui.launcher.ClipLauncher
@@ -115,7 +115,7 @@ internal class ActivityClipLauncher(
         isAutoReturnEnabled: Boolean,
         isRetryEnabled: Boolean,
         isShareEnabled: Boolean,
-        preferences: PaymentPreferences,
+        requestPaymentPreferences: RequestPaymentPreferences,
         clipLoginCredentials: ClipPaymentLogin?
     ) {
         val launcher = getLauncher()
@@ -125,7 +125,7 @@ internal class ActivityClipLauncher(
             isAutoReturnEnabled = isAutoReturnEnabled,
             isRetryEnabled = isRetryEnabled,
             isShareEnabled = isShareEnabled,
-            preferences = preferences,
+            requestPaymentPreferences = requestPaymentPreferences,
             clipLoginCredentials = clipLoginCredentials
         )
 
