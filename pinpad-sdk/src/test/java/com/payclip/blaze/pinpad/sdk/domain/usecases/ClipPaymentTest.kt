@@ -5,9 +5,9 @@ import com.payclip.blaze.pinpad.sdk.domain.listener.login.LoginListener
 import com.payclip.blaze.pinpad.sdk.domain.listener.payment.PaymentListener
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyAmountException
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.EmptyReferenceException
-import com.payclip.blaze.pinpad.sdk.domain.models.payment.PaymentResult
 import com.payclip.blaze.pinpad.sdk.domain.models.login.ClipPaymentLogin
-import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
+import com.payclip.blaze.pinpad.sdk.domain.models.payment.PaymentResult
+import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.RequestPaymentPreferences
 import com.payclip.blaze.pinpad.sdk.domain.usecases.payment.CreatePaymentUseCase
 import com.payclip.blaze.pinpad.sdk.ui.launcher.ClipLauncher
 import kotlinx.coroutines.test.runTest
@@ -41,7 +41,7 @@ class ClipPaymentTest {
 
     @Test
     fun `create payment with success response and check if the result is right`() = runTest {
-        val preferences = getPaymentPreferences()
+        val requestPaymentPreferences = getPaymentPreferences()
         val payment = getPaymentInstance()
 
         whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
@@ -53,154 +53,162 @@ class ClipPaymentTest {
             amount = AMOUNT,
             isAutoReturnEnabled = false,
             isRetryEnabled = true,
-            preferences = preferences
+            requestPaymentPreferences = requestPaymentPreferences
         )
     }
 
     @Test
-    fun `create payment with success response and auto return and check if the result is right`() = runTest {
-        val preferences = getPaymentPreferences()
-        val payment = getPaymentInstance(isAutoReturnEnabled = true)
+    fun `create payment with success response and auto return and check if the result is right`() =
+        runTest {
+            val requestPaymentPreferences = getPaymentPreferences()
+            val payment = getPaymentInstance(isAutoReturnEnabled = true)
 
-        whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+            whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
 
-        payment.start(REFERENCE, AMOUNT)
+            payment.start(REFERENCE, AMOUNT)
 
-        verify(launcher).startPayment(
-            reference = REFERENCE,
-            amount = AMOUNT,
-            isAutoReturnEnabled = true,
-            isRetryEnabled = true,
-            preferences = preferences
-        )
-    }
-
-    @Test
-    fun `create payment with success response and retries disabled and check if the result is right`() = runTest {
-        val preferences = getPaymentPreferences()
-        val payment = getPaymentInstance(isRetryEnabled = false)
-
-        whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
-
-        payment.start(REFERENCE, AMOUNT)
-
-        verify(launcher).startPayment(
-            reference = REFERENCE,
-            amount = AMOUNT,
-            isAutoReturnEnabled = false,
-            isRetryEnabled = false,
-            preferences = preferences
-        )
-    }
+            verify(launcher).startPayment(
+                reference = REFERENCE,
+                amount = AMOUNT,
+                isAutoReturnEnabled = true,
+                isRetryEnabled = true,
+                requestPaymentPreferences = requestPaymentPreferences
+            )
+        }
 
     @Test
-    fun `create payment with success response and share options disabled and check if the result is right`() = runTest {
-        val preferences = getPaymentPreferences()
-        val payment = getPaymentInstance(isShareEnabled = false)
+    fun `create payment with success response and retries disabled and check if the result is right`() =
+        runTest {
+            val requestPaymentPreferences = getPaymentPreferences()
+            val payment = getPaymentInstance(isRetryEnabled = false)
 
-        whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+            whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
 
-        payment.start(REFERENCE, AMOUNT)
+            payment.start(REFERENCE, AMOUNT)
 
-        verify(launcher).startPayment(
-            reference = REFERENCE,
-            amount = AMOUNT,
-            isAutoReturnEnabled = false,
-            isRetryEnabled = true,
-            isShareEnabled = false,
-            preferences = preferences
-        )
-    }
-
-    @Test
-    fun `create payment with success response and msi disabled and check if the result is right`() = runTest {
-        val preferences = getPaymentPreferences(isMSIEnabled = true)
-        val payment = getPaymentInstance(preferences = preferences)
-
-        whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
-
-        payment.start(REFERENCE, AMOUNT)
-
-        verify(launcher).startPayment(
-            reference = REFERENCE,
-            amount = AMOUNT,
-            isAutoReturnEnabled = false,
-            isRetryEnabled = true,
-            preferences = preferences
-        )
-    }
+            verify(launcher).startPayment(
+                reference = REFERENCE,
+                amount = AMOUNT,
+                isAutoReturnEnabled = false,
+                isRetryEnabled = false,
+                requestPaymentPreferences = requestPaymentPreferences
+            )
+        }
 
     @Test
-    fun `create payment with success response and mci disabled and check if the result is right`() = runTest {
-        val preferences = getPaymentPreferences(isMCIEnabled = true)
-        val payment = getPaymentInstance(preferences = preferences)
+    fun `create payment with success response and share options disabled and check if the result is right`() =
+        runTest {
+            val requestPaymentPreferences = getPaymentPreferences()
+            val payment = getPaymentInstance(isShareEnabled = false)
 
-        whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+            whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
 
-        payment.start(REFERENCE, AMOUNT)
+            payment.start(REFERENCE, AMOUNT)
 
-        verify(launcher).startPayment(
-            reference = REFERENCE,
-            amount = AMOUNT,
-            isAutoReturnEnabled = false,
-            isRetryEnabled = true,
-            preferences = preferences
-        )
-    }
-
-    @Test
-    fun `create payment with success response and dcc disabled and check if the result is right`() = runTest {
-        val preferences = getPaymentPreferences(isDCCEnabled = true)
-        val payment = getPaymentInstance(preferences = preferences)
-
-        whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
-
-        payment.start(REFERENCE, AMOUNT)
-
-        verify(launcher).startPayment(
-            reference = REFERENCE,
-            amount = AMOUNT,
-            isAutoReturnEnabled = false,
-            isRetryEnabled = true,
-            preferences = preferences
-        )
-    }
+            verify(launcher).startPayment(
+                reference = REFERENCE,
+                amount = AMOUNT,
+                isAutoReturnEnabled = false,
+                isRetryEnabled = true,
+                isShareEnabled = false,
+                requestPaymentPreferences = requestPaymentPreferences
+            )
+        }
 
     @Test
-    fun `create payment with success response and tip enabled and check if the result is right`() = runTest {
-        val preferences = getPaymentPreferences(isTipEnabled = true)
-        val payment = getPaymentInstance(preferences = preferences)
+    fun `create payment with success response and msi disabled and check if the result is right`() =
+        runTest {
+            val requestPaymentPreferences = getPaymentPreferences(isMSIEnabled = true)
+            val payment = getPaymentInstance(preferences = requestPaymentPreferences)
 
-        whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+            whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
 
-        payment.start(REFERENCE, AMOUNT)
+            payment.start(REFERENCE, AMOUNT)
 
-        verify(launcher).startPayment(
-            reference = REFERENCE,
-            amount = AMOUNT,
-            isAutoReturnEnabled = false,
-            isRetryEnabled = true,
-            preferences = preferences
-        )
-    }
+            verify(launcher).startPayment(
+                reference = REFERENCE,
+                amount = AMOUNT,
+                isAutoReturnEnabled = false,
+                isRetryEnabled = true,
+                requestPaymentPreferences = requestPaymentPreferences
+            )
+        }
 
     @Test
-    fun `create payment with success response and split payment enabled and check if the result is right`() = runTest {
-        val preferences = getPaymentPreferences(isSplitPaymentEnabled = true)
-        val payment = getPaymentInstance(preferences = preferences)
+    fun `create payment with success response and mci disabled and check if the result is right`() =
+        runTest {
+            val requestPaymentPreferences = getPaymentPreferences(isMCIEnabled = true)
+            val payment = getPaymentInstance(preferences = requestPaymentPreferences)
 
-        whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+            whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
 
-        payment.start(REFERENCE, AMOUNT)
+            payment.start(REFERENCE, AMOUNT)
 
-        verify(launcher).startPayment(
-            reference = REFERENCE,
-            amount = AMOUNT,
-            isAutoReturnEnabled = false,
-            isRetryEnabled = true,
-            preferences = preferences
-        )
-    }
+            verify(launcher).startPayment(
+                reference = REFERENCE,
+                amount = AMOUNT,
+                isAutoReturnEnabled = false,
+                isRetryEnabled = true,
+                requestPaymentPreferences = requestPaymentPreferences
+            )
+        }
+
+    @Test
+    fun `create payment with success response and dcc disabled and check if the result is right`() =
+        runTest {
+            val requestPaymentPreferences = getPaymentPreferences(isDCCEnabled = true)
+            val payment = getPaymentInstance(preferences = requestPaymentPreferences)
+
+            whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+
+            payment.start(REFERENCE, AMOUNT)
+
+            verify(launcher).startPayment(
+                reference = REFERENCE,
+                amount = AMOUNT,
+                isAutoReturnEnabled = false,
+                isRetryEnabled = true,
+                requestPaymentPreferences = requestPaymentPreferences
+            )
+        }
+
+    @Test
+    fun `create payment with success response and tip enabled and check if the result is right`() =
+        runTest {
+            val requestPaymentPreferences = getPaymentPreferences(isTipEnabled = true)
+            val payment = getPaymentInstance(preferences = requestPaymentPreferences)
+
+            whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+
+            payment.start(REFERENCE, AMOUNT)
+
+            verify(launcher).startPayment(
+                reference = REFERENCE,
+                amount = AMOUNT,
+                isAutoReturnEnabled = false,
+                isRetryEnabled = true,
+                requestPaymentPreferences = requestPaymentPreferences
+            )
+        }
+
+    @Test
+    fun `create payment with success response and split payment enabled and check if the result is right`() =
+        runTest {
+            val requestPaymentPreferences = getPaymentPreferences(isSplitPaymentEnabled = true)
+            val payment = getPaymentInstance(preferences = requestPaymentPreferences)
+
+            whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+
+            payment.start(REFERENCE, AMOUNT)
+
+            verify(launcher).startPayment(
+                reference = REFERENCE,
+                amount = AMOUNT,
+                isAutoReturnEnabled = false,
+                isRetryEnabled = true,
+                requestPaymentPreferences = requestPaymentPreferences
+            )
+        }
 
     @Test
     fun `try to create payment with empty amount and handle thrown exception`() = runTest {
@@ -237,7 +245,7 @@ class ClipPaymentTest {
         isAutoReturnEnabled: Boolean = false,
         isRetryEnabled: Boolean = true,
         isShareEnabled: Boolean = true,
-        preferences: PaymentPreferences = getPaymentPreferences()
+        preferences: RequestPaymentPreferences = getPaymentPreferences()
     ) = ClipPayment(
         useCase,
         launcher,
@@ -267,6 +275,7 @@ class ClipPaymentTest {
         override fun onLoginSuccess(result: String) {
             // no-op
         }
+
         override fun onLoginFailure(code: String, message: String?) {
             // no-op
         }
@@ -278,7 +287,7 @@ class ClipPaymentTest {
         isDCCEnabled: Boolean = IS_DCC_ENABLED,
         isTipEnabled: Boolean = IS_TIP_ENABLED,
         isSplitPaymentEnabled: Boolean = IS_SPLIT_PAYMENT_ENABLED
-    ) = PaymentPreferences(
+    ) = RequestPaymentPreferences(
         isMSIEnabled = isMSIEnabled,
         isMCIEnabled = isMCIEnabled,
         isDCCEnabled = isDCCEnabled,
