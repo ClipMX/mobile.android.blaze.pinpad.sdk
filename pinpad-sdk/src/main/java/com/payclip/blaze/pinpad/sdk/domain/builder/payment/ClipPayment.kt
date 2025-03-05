@@ -208,6 +208,43 @@ class ClipPayment internal constructor(
                 listener?.onFailure(code)
             }
     }
+    /**
+     * Call this method when you want to start Clip payment process. Be sure to call
+     * `setPaymentHandler` before, otherwise this method call will crash with no initialization
+     * exception.
+     *
+     * @param reference The id or a reference of your payment.
+     * @param amount The amount to be processed in payment process.
+     * @param tipAmount The tip amount to be processed in payment process.
+     */
+    fun start(
+        reference: String,
+        amount: Double,
+        tipAmount: Double
+    ) {
+        useCase.invoke(reference = reference, amount = amount)
+            .onSuccess {
+                launcher.startPayment(
+                    reference = reference,
+                    amount = amount,
+                    tipAmount = tipAmount,
+                    isAutoReturnEnabled = isAutoReturnEnabled,
+                    isRetryEnabled = isRetryEnabled,
+                    isShareEnabled = isShareEnabled,
+                    requestPaymentPreferences = preferences,
+                    clipLoginCredentials = loginCredentials
+                )
+            }
+            .onFailure {
+                val code = when (it) {
+                    is EmptyAmountException -> EmptyAmountException.ERROR_CODE
+                    is EmptyReferenceException -> EmptyReferenceException.ERROR_CODE
+                    else -> DEFAULT_ERROR
+                }
+
+                listener?.onFailure(code)
+            }
+    }
 
     companion object {
         internal const val DEFAULT_ERROR = "UNKNOWN_ERROR"

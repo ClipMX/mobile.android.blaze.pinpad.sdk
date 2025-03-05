@@ -136,6 +136,34 @@ internal class ActivityClipLauncher(
         }
     }
 
+    override fun startPayment(
+        reference: String,
+        amount: Double,
+        tipAmount: Double,
+        isAutoReturnEnabled: Boolean,
+        isRetryEnabled: Boolean,
+        isShareEnabled: Boolean,
+        requestPaymentPreferences: RequestPaymentPreferences,
+        clipLoginCredentials: ClipPaymentLogin?
+    ) {
+        val launcher = getLauncher()
+        val intent = intentProvider.getClipIntent(
+            reference = reference,
+            amount = amount,
+            isAutoReturnEnabled = isAutoReturnEnabled,
+            isRetryEnabled = isRetryEnabled,
+            isShareEnabled = isShareEnabled,
+            requestPaymentPreferences = requestPaymentPreferences,
+            clipLoginCredentials = clipLoginCredentials
+        )
+
+        try {
+            launcher.launch(intent)
+        } catch (e: Exception) {
+            throw ApplicationNotFoundException()
+        }
+    }
+
     private fun getLauncher(): ActivityResultLauncher<Intent> {
         if (::aLauncher.isInitialized) {
             return aLauncher
