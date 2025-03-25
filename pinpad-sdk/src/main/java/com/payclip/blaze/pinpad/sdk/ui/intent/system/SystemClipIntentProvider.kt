@@ -33,12 +33,39 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         }
     }
 
+    override fun getClipIntent(
+        reference: String,
+        amount: Double,
+        tipAmount: Double,
+        isAutoReturnEnabled: Boolean,
+        isRetryEnabled: Boolean,
+        isShareEnabled: Boolean,
+        requestPaymentPreferences: RequestPaymentPreferences,
+        clipLoginCredentials: ClipPaymentLogin?
+    ): Intent {
+        return Intent(Intent.ACTION_MAIN).apply {
+            component = ComponentName(PINPAD_PACKAGE, PINPAD_ENTRY_ACTIVITY)
+            putExtra(PAYMENT_REFERENCE_EXTRA, reference)
+            putExtra(PAYMENT_AMOUNT_EXTRA, amount.toString())
+            putExtra(PAYMENT_TIP_AMOUNT_EXTRA, tipAmount.toString())
+            putExtra(PAYMENT_AUTO_RETURN_EXTRA, isAutoReturnEnabled)
+            putExtra(PAYMENT_RETRY_EXTRA, isRetryEnabled)
+            putExtra(PAYMENT_SHARE_EXTRA, isShareEnabled)
+            putExtra(REQUEST_PAYMENT_PREFERENCES_EXTRA, Gson().toJson(requestPaymentPreferences))
+            putExtra(CLIP_LOGIN_CREDENTIALS_EXTRA, clipLoginCredentials)
+        }
+    }
+
     override fun getReference(intent: Intent): String? {
         return intent.extras?.getString(PAYMENT_REFERENCE_EXTRA)
     }
 
     override fun getAmount(intent: Intent): String? {
         return intent.extras?.getString(PAYMENT_AMOUNT_EXTRA)
+    }
+
+    override fun getTipAmount(intent: Intent): String? {
+        return intent.extras?.getString(PAYMENT_TIP_AMOUNT_EXTRA)
     }
 
     override fun isAutoReturnEnabled(intent: Intent): Boolean? {
@@ -95,6 +122,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
 
         private const val PAYMENT_REFERENCE_EXTRA = "PAYMENT_REFERENCE"
         private const val PAYMENT_AMOUNT_EXTRA = "PAYMENT_AMOUNT"
+        private const val PAYMENT_TIP_AMOUNT_EXTRA = "PAYMENT_TIP_AMOUNT"
         private const val PAYMENT_SHARE_EXTRA = "PAYMENT_SHARE"
         private const val PAYMENT_RETRY_EXTRA = "PAYMENT_RETRY"
         private const val PAYMENT_AUTO_RETURN_EXTRA = "PAYMENT_AUTO_RETURN"
