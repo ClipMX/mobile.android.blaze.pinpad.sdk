@@ -117,8 +117,9 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
     }
 
     companion object {
-        private const val PINPAD_PACKAGE = "com.payclip.blaze.pinpad"
-        private const val PINPAD_ENTRY_ACTIVITY = "$PINPAD_PACKAGE.shared.ui.MainActivity"
+        private const val BASE_PACKAGE = "com.payclip.blaze.pinpad"
+        private const val PINPAD_PACKAGE = "com.payclip.blaze.pinpad.qa"
+        private const val PINPAD_ENTRY_ACTIVITY = "$BASE_PACKAGE.shared.ui.MainActivity"
 
         private const val PAYMENT_REFERENCE_EXTRA = "PAYMENT_REFERENCE"
         private const val PAYMENT_AMOUNT_EXTRA = "PAYMENT_AMOUNT"
