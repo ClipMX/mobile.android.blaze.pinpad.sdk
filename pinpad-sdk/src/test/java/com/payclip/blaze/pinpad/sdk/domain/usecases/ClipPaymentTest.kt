@@ -214,7 +214,7 @@ class ClipPaymentTest {
     fun `try to create payment with empty amount and handle thrown exception`() = runTest {
         val payment = getPaymentInstance()
 
-        whenever(useCase.invoke(REFERENCE, 0.0)).thenReturn(Result.failure(EmptyAmountException()))
+        whenever(useCase.invoke(REFERENCE, 0.0f)).thenReturn(Result.failure(EmptyAmountException()))
         payment.start(REFERENCE, 0.0)
 
         verify(listener).onFailure(EmptyAmountException.ERROR_CODE)
@@ -301,7 +301,7 @@ class ClipPaymentTest {
     )
 
     companion object {
-        private const val AMOUNT = 10.0
+        private const val AMOUNT = 10.0f
         private const val REFERENCE = "xyz"
 
         private const val AUTO_RETURN = false
