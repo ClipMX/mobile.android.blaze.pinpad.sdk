@@ -57,7 +57,7 @@ internal interface ClipLauncher {
      */
     fun startPayment(
         reference: String,
-        amount: Double,
+        amount: Float,
         isAutoReturnEnabled: Boolean = false,
         isRetryEnabled: Boolean = true,
         isShareEnabled: Boolean = true,
@@ -84,8 +84,8 @@ internal interface ClipLauncher {
      */
     fun startPayment(
         reference: String,
-        amount: Double,
-        tipAmount: Double,
+        amount: Float,
+        tipAmount: Float,
         isAutoReturnEnabled: Boolean = false,
         isRetryEnabled: Boolean = true,
         isShareEnabled: Boolean = true,

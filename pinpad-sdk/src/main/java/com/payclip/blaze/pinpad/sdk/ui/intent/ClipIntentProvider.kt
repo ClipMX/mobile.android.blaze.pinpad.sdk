@@ -25,7 +25,7 @@ interface ClipIntentProvider {
      */
     fun getClipIntent(
         reference: String,
-        amount: Double,
+        amount: Float,
         isAutoReturnEnabled: Boolean = false,
         isRetryEnabled: Boolean = true,
         isShareEnabled: Boolean = true,
@@ -52,8 +52,8 @@ interface ClipIntentProvider {
      */
     fun getClipIntent(
         reference: String,
-        amount: Double,
-        tipAmount: Double,
+        amount: Float,
+        tipAmount: Float,
         isAutoReturnEnabled: Boolean = false,
         isRetryEnabled: Boolean = true,
         isShareEnabled: Boolean = true,

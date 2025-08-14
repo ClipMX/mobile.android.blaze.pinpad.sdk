@@ -111,7 +111,7 @@ internal class ActivityClipLauncher(
 
     override fun startPayment(
         reference: String,
-        amount: Double,
+        amount: Float,
         isAutoReturnEnabled: Boolean,
         isRetryEnabled: Boolean,
         isShareEnabled: Boolean,
@@ -138,8 +138,8 @@ internal class ActivityClipLauncher(
 
     override fun startPayment(
         reference: String,
-        amount: Double,
-        tipAmount: Double,
+        amount: Float,
+        tipAmount: Float,
         isAutoReturnEnabled: Boolean,
         isRetryEnabled: Boolean,
         isShareEnabled: Boolean,

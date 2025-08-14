@@ -14,7 +14,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
 
     override fun getClipIntent(
         reference: String,
-        amount: Double,
+        amount: Float,
         isAutoReturnEnabled: Boolean,
         isRetryEnabled: Boolean,
         isShareEnabled: Boolean,
@@ -35,8 +35,8 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
 
     override fun getClipIntent(
         reference: String,
-        amount: Double,
-        tipAmount: Double,
+        amount: Float,
+        tipAmount: Float,
         isAutoReturnEnabled: Boolean,
         isRetryEnabled: Boolean,
         isShareEnabled: Boolean,

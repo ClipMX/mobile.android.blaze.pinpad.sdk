@@ -182,9 +182,25 @@ class ClipPayment internal constructor(
      * @param reference The id or a reference of your payment.
      * @param amount The amount to be processed in payment process.
      */
+    @Deprecated("Use start(reference: String, amount: Float) instead.")
     fun start(
         reference: String,
         amount: Double
+    ) {
+        start(reference = reference, amount = amount.toFloat())
+    }
+
+    /**
+     * Call this method when you want to start Clip payment process. Be sure to call
+     * `setPaymentHandler` before, otherwise this method call will crash with no initialization
+     * exception.
+     *
+     * @param reference The id or a reference of your payment.
+     * @param amount The amount to be processed in payment process.
+     */
+    fun start(
+        reference: String,
+        amount: Float
     ) {
         useCase.invoke(reference = reference, amount = amount)
             .onSuccess {
@@ -208,6 +224,25 @@ class ClipPayment internal constructor(
                 listener?.onFailure(code)
             }
     }
+
+    /**
+     * Call this method when you want to start Clip payment process. Be sure to call
+     * `setPaymentHandler` before, otherwise this method call will crash with no initialization
+     * exception.
+     *
+     * @param reference The id or a reference of your payment.
+     * @param amount The amount to be processed in payment process.
+     * @param tipAmount The tip amount to be processed in payment process.
+     */
+    @Deprecated("Use start(reference: String, amount: Float, tipAmount: Float) instead.")
+    fun start(
+        reference: String,
+        amount: Double,
+        tipAmount: Double
+    ) {
+        start(reference = reference, amount = amount.toFloat(), tipAmount = tipAmount.toFloat())
+    }
+
     /**
      * Call this method when you want to start Clip payment process. Be sure to call
      * `setPaymentHandler` before, otherwise this method call will crash with no initialization
@@ -219,8 +254,8 @@ class ClipPayment internal constructor(
      */
     fun start(
         reference: String,
-        amount: Double,
-        tipAmount: Double
+        amount: Float,
+        tipAmount: Float
     ) {
         useCase.invoke(reference = reference, amount = amount)
             .onSuccess {

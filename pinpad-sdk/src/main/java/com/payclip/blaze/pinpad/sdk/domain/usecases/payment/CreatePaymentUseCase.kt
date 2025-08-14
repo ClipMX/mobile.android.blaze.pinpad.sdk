@@ -7,7 +7,7 @@ internal class CreatePaymentUseCase {
 
     operator fun invoke(
         reference: String,
-        amount: Double
+        amount: Float
     ): Result<Unit> {
         return try {
             if (reference.isBlank()) {
@@ -25,6 +25,6 @@ internal class CreatePaymentUseCase {
     }
 
     companion object {
-        private const val EMPTY_AMOUNT = 0.0
+        private const val EMPTY_AMOUNT = 0.0F
     }
 }
