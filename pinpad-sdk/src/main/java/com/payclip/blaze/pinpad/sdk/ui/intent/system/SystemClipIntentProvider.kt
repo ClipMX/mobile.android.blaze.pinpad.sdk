@@ -21,8 +21,12 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         requestPaymentPreferences: RequestPaymentPreferences,
         clipLoginCredentials: ClipPaymentLogin?
     ): Intent {
+        val PINPAD_ENTRY_ACTIVITY_CLASS_NAME = "com.payclip.blaze.pinpad.shared.ui.MainActivity"
+
+// El Application ID, que varía por tipo de build
+        val PINPAD_PACKAGE_QA = "com.payclip.blaze.pinpad.qa"
         return Intent(Intent.ACTION_MAIN).apply {
-            component = ComponentName(PINPAD_PACKAGE, PINPAD_ENTRY_ACTIVITY)
+            component = ComponentName(PINPAD_PACKAGE_QA, PINPAD_ENTRY_ACTIVITY_CLASS_NAME)
             putExtra(PAYMENT_REFERENCE_EXTRA, reference)
             putExtra(PAYMENT_AMOUNT_EXTRA, amount.toString())
             putExtra(PAYMENT_AUTO_RETURN_EXTRA, isAutoReturnEnabled)
@@ -43,8 +47,12 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         requestPaymentPreferences: RequestPaymentPreferences,
         clipLoginCredentials: ClipPaymentLogin?
     ): Intent {
+         val PINPAD_ENTRY_ACTIVITY_CLASS_NAME = "com.payclip.blaze.pinpad.shared.ui.MainActivity"
+
+// El Application ID, que varía por tipo de build
+         val PINPAD_PACKAGE_QA = "com.payclip.blaze.pinpad.qa"
         return Intent(Intent.ACTION_MAIN).apply {
-            component = ComponentName(PINPAD_PACKAGE, PINPAD_ENTRY_ACTIVITY)
+            component = ComponentName(PINPAD_PACKAGE_QA, PINPAD_ENTRY_ACTIVITY_CLASS_NAME)
             putExtra(PAYMENT_REFERENCE_EXTRA, reference)
             putExtra(PAYMENT_AMOUNT_EXTRA, amount.toString())
             putExtra(PAYMENT_TIP_AMOUNT_EXTRA, tipAmount.toString())
