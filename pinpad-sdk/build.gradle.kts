@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
     id("maven-publish")
     id("kotlin-parcelize")
 }
@@ -12,8 +12,6 @@ android {
 
     defaultConfig {
         minSdk = 22
-        @Suppress("DEPRECATION")
-        targetSdk = 34
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -21,6 +19,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     compileOptions {
@@ -28,22 +27,20 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    kotlinOptions {
-        jvmTarget = libs.versions.jvmTarget.get()
+    publishing {
+        singleVariant("release")
     }
+}
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
-    }
-
-    sourceSets["main"].java {
-        srcDir("src/main/java")
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
     }
 }
 
 val sourcesJar: Jar = tasks.create("sourcesJar", Jar::class.java) {
     archiveClassifier.set("sources")
-    from(android.sourceSets.getByName("main").java.srcDirs)
+    from("src/main/java")
 }
 
 project.artifacts {
