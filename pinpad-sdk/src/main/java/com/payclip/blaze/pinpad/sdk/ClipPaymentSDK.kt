@@ -29,30 +29,32 @@ object ClipPaymentSDK {
     internal val serialNumber: String by lazy { "$SERIAL_PREFIX${UUID.randomUUID()}" }
 
     /**
-     * Initialize the SDK with your merchant API credentials.
+     * Initialize the SDK with your merchant API token.
+     *
+     * The token is the authentication string generated in the Clip Developers Portal: the
+     * Base64 encoding of `apiKey:secretKey`. It can be provided with or without the `Basic `
+     * prefix, the SDK normalizes it.
      *
      * Calling this method again overrides the previous configuration, which allows credential
      * rotation at runtime.
      *
-     * @param apiKey The API key of your merchant account.
-     * @param secretKey The secret key paired with the API key.
+     * @param apiToken The API token of your merchant account (`Basic xxx` or just `xxx`).
      * @param environment The Clip backend environment to use. Defaults to [ClipEnvironment.PRODUCTION].
      *
-     * @throws IllegalArgumentException if [apiKey] or [secretKey] are blank.
+     * @throws IllegalArgumentException if [apiToken] is blank.
      */
     @JvmStatic
     @JvmOverloads
     fun initialize(
-        apiKey: String,
-        secretKey: String,
+        apiToken: String,
         environment: ClipEnvironment = ClipEnvironment.PRODUCTION
     ) {
-        require(apiKey.isNotBlank()) { "apiKey must not be blank." }
-        require(secretKey.isNotBlank()) { "secretKey must not be blank." }
+        require(apiToken.isNotBlank()) { "apiToken must not be blank." }
+
+        val normalizedToken = apiToken.trim().removePrefix(BASIC_PREFIX).trim()
 
         config = ClipSDKConfig(
-            apiKey = apiKey,
-            secretKey = secretKey,
+            authHeader = "$BASIC_PREFIX$normalizedToken",
             environment = environment
         )
     }
@@ -66,4 +68,5 @@ object ClipPaymentSDK {
     internal fun getConfigOrNull(): ClipSDKConfig? = config
 
     private const val SERIAL_PREFIX = "sdk-"
+    private const val BASIC_PREFIX = "Basic "
 }

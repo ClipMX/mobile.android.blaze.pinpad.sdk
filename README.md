@@ -274,13 +274,13 @@ In this example, there are three vital components for client configuration:
 **1. SDK Initialization and Client Creation**
 
 To begin using the Clip API in your application, initialize the SDK once (for example in your
-`Application.onCreate`) with the API credentials of your merchant account, generated from the
-Clip Developers Portal:
+`Application.onCreate`) with the API token of your merchant account, generated from the
+Clip Developers Portal (the Base64 authentication token; it can be passed with or without the
+`Basic ` prefix):
 
 ```kotlin
 ClipPaymentSDK.initialize(
-    apiKey = YOUR_API_KEY,
-    secretKey = YOUR_SECRET_KEY,
+    apiToken = YOUR_API_TOKEN,
     environment = ClipEnvironment.PRODUCTION // or ClipEnvironment.STAGE for testing
 )
 ```
