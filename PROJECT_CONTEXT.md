@@ -88,6 +88,15 @@
 
 ## 📋 Pendientes
 
+### Sesión 2026-08-05 (agenda acordada)
+
+- [ ] **Error codes hacia el integrador**: revisar/definir el catálogo completo que recibe el usuario del SDK — los de creación del request (`SDK_NOT_INITIALIZED`, `PAYMENT_REQUEST_UNAUTHORIZED`, `PAYMENT_REQUEST_INVALID`, `PAYMENT_REQUEST_SERVER_ERROR`, `PAYMENT_REQUEST_NETWORK_ERROR`), el de bloqueo (`PAYMENT_REQUEST_OWNERSHIP_REJECTED`), `APPLICATION_NOT_FOUND` (nuevo, ruta asíncrona) y los preexistentes; validar nomenclatura, semántica y documentarlos en el README.
+- [ ] **Status de la transacción**: revisar qué estados se reportan de la txn al BE y al integrador en cada camino (aprobada, declinada, cancelada, bloqueada por ownership) — hoy el bloqueo NO actualiza el status del request en BE (¿debería marcarse CANCELED/REJECTED para que no quede huérfano en PENDING/IN_PROCESS?).
+- [ ] **Eventos de analytics de errores**: auditar los eventos que se disparan en fallos (creación del request, validación de ownership, mismatch — la señal de fraude) y definir los que falten; hoy el rechazo se trackea con `terminalSideErrorEvent("PAYMENT_REQUEST_OWNERSHIP_REJECTED_<code>")`.
+- [ ] **Pruebas**: completar la matriz pendiente (subcuentas válidas, request expirado/ya usado, credenciales inválidas 401, modo avión, regresión sin request/SDK viejo, downgrade) y arrancar los tests unitarios de lo implementado.
+
+### Generales
+
 - [ ] **Pinpad (F2F-842/843/844)**: leer `PINPAD_REQUEST_ID` del intent, `GET f2f/pinpad/v1/payment?pinpadRequestId=` con credenciales de sesión, gatear el cobro (40x bloquea).
 - [ ] **Verificación manual contra stage (F2F-841)**: requiere API key/secret de prueba del portal de developers.
 - [ ] **Actualizar/crear documentación** conforme avance: este doc (avances/pruebas/decisiones), README del SDK si cambia la API pública, y docs de pinpad cuando se implemente su parte.
