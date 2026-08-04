@@ -271,23 +271,28 @@ Taking the last code example we will obtain the next step from a screen view fro
 
 In this example, there are three vital components for client configuration:
 
-**1. Client Initialization**
+**1. SDK Initialization and Client Creation**
 
-To begin using the Clip API in your application, you need to initialize the client. This involves creating an instance
-of the client with the necessary credentials. The client requires two mandatory parameters: your Clip user and the API
-key you generated earlier.
+To begin using the Clip API in your application, initialize the SDK once (for example in your
+`Application.onCreate`) with the API credentials of your merchant account, generated from the
+Clip Developers Portal:
 
-Steps to Initialize the Client:
+```kotlin
+ClipPaymentSDK.initialize(
+    apiKey = YOUR_API_KEY,
+    secretKey = YOUR_SECRET_KEY,
+    environment = ClipEnvironment.PRODUCTION // or ClipEnvironment.STAGE for testing
+)
+```
 
-1. Instantiate the Client
+With the SDK initialized, every payment started with `ClipPayment.start(...)` first creates a
+payment request in the Clip backend, authenticated as your merchant account, and attaches its
+id to the intent sent to the PinPad application. This allows the payment to be validated as
+belonging to your integration. The flow is fail-open: if the request cannot be created (no
+network, invalid credentials, SDK not initialized), the payment starts anyway without a request
+id and the failure is reported through the optional `PaymentRequestListener`.
 
-- In your application's code, create a new instance of the Clip client.
-
-2. Provide Mandatory Parameters
-
-- Ensure you pass the following parameters when instantiating the client:
-- Clip User: Your Clip user account identifier.
-- API Key: The API key you generated from the Clip Developers Portal.
+Then create the client instance:
 
 **Compose**
 
@@ -421,6 +426,18 @@ ClipPayment.Builder()
 ```kotlin
 ClipPayment.Builder()
     .addLoginListener(listener: LoginListener) 
+```    
+
+- **addPaymentRequestListener**: This OPTIONAL parameter registers a listener to receive the result of the payment
+  request created in the Clip backend before the PinPad application is launched (requires
+  `ClipPaymentSDK.initialize(...)`). `onPaymentRequestCreated(requestId)` is called on success;
+  `onPaymentRequestFailed(code)` is called with one of `SDK_NOT_INITIALIZED`, `PAYMENT_REQUEST_UNAUTHORIZED`,
+  `PAYMENT_REQUEST_INVALID`, `PAYMENT_REQUEST_SERVER_ERROR` or `PAYMENT_REQUEST_NETWORK_ERROR`. In both cases the
+  payment continues.
+
+```kotlin
+ClipPayment.Builder()
+    .addPaymentRequestListener(listener: PaymentRequestListener) 
 ```    
 
 - **setPaymentPreferences**: This parameter sets payment preferences.

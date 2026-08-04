@@ -20,6 +20,8 @@ interface ClipIntentProvider {
      * If set to false, the terminal will not show share options in success.
      * @param requestPaymentPreferences An object loaded with all payment configuration.
      * @param clipLoginCredentials An object loaded with login credentials for the terminal if is selected.
+     * @param requestId The id of the payment request previously created in the Clip backend,
+     * or null if it could not be created.
      *
      * @return [Intent] with extras pointing to PinPad application.
      */
@@ -30,7 +32,8 @@ interface ClipIntentProvider {
         isRetryEnabled: Boolean = true,
         isShareEnabled: Boolean = true,
         requestPaymentPreferences: RequestPaymentPreferences,
-        clipLoginCredentials: ClipPaymentLogin? = null
+        clipLoginCredentials: ClipPaymentLogin? = null,
+        requestId: String? = null
     ): Intent
 
     /**
@@ -47,6 +50,8 @@ interface ClipIntentProvider {
      * If set to false, the terminal will not show share options in success.
      * @param requestPaymentPreferences An object loaded with all payment configuration.
      * @param clipLoginCredentials An object loaded with login credentials for the terminal if is selected.
+     * @param requestId The id of the payment request previously created in the Clip backend,
+     * or null if it could not be created.
      *
      * @return [Intent] with extras pointing to PinPad application.
      */
@@ -58,7 +63,8 @@ interface ClipIntentProvider {
         isRetryEnabled: Boolean = true,
         isShareEnabled: Boolean = true,
         requestPaymentPreferences: RequestPaymentPreferences,
-        clipLoginCredentials: ClipPaymentLogin? = null
+        clipLoginCredentials: ClipPaymentLogin? = null,
+        requestId: String? = null
     ): Intent
 
     /**
@@ -150,4 +156,19 @@ interface ClipIntentProvider {
      * If no preferences was settled, a default model is returned and is managed from the Pinpad module.
      */
     fun getPaymentLoginCredentials(intent: Intent): ClipPaymentLogin?
+
+    /**
+     * Get the payment request id from intent extras.
+     *
+     * @param intent activity intent with extras.
+     *
+     * @return The id of the payment request created in the Clip backend before launching the
+     * PinPad application, or null if the payment was started without one.
+     */
+    fun getRequestId(intent: Intent): String? =
+        intent.extras?.getString(PINPAD_REQUEST_ID_EXTRA)
+
+    companion object {
+        const val PINPAD_REQUEST_ID_EXTRA = "PINPAD_REQUEST_ID"
+    }
 }

@@ -70,6 +70,7 @@ afterEvaluate {
 
 dependencies {
     implementation(libs.androidx.coreKtx)
+    implementation(libs.coroutines.android)
 
     testImplementation(libs.junit4)
     testImplementation(libs.mockito.kotlin)

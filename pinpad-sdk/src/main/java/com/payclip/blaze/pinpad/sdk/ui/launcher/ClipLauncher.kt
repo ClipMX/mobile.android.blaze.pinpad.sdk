@@ -54,6 +54,8 @@ internal interface ClipLauncher {
      * If set to false, the terminal will not show share options in success.
      * @param preferences An object loaded with all payment configuration.
      * @param clipLoginCredentials An object loaded with login credentials for the terminal if is selected
+     * @param requestId The id of the payment request previously created in the Clip backend,
+     * or null if it could not be created.
      */
     fun startPayment(
         reference: String,
@@ -62,7 +64,8 @@ internal interface ClipLauncher {
         isRetryEnabled: Boolean = true,
         isShareEnabled: Boolean = true,
         requestPaymentPreferences: RequestPaymentPreferences,
-        clipLoginCredentials: ClipPaymentLogin? = null
+        clipLoginCredentials: ClipPaymentLogin? = null,
+        requestId: String? = null
     )
 
     /**
@@ -81,6 +84,8 @@ internal interface ClipLauncher {
      * If set to false, the terminal will not show share options in success.
      * @param requestPaymentPreferences An object loaded with all payment configuration.
      * @param clipLoginCredentials An object loaded with login credentials for the terminal if is selected
+     * @param requestId The id of the payment request previously created in the Clip backend,
+     * or null if it could not be created.
      */
     fun startPayment(
         reference: String,
@@ -90,6 +95,7 @@ internal interface ClipLauncher {
         isRetryEnabled: Boolean = true,
         isShareEnabled: Boolean = true,
         requestPaymentPreferences: RequestPaymentPreferences,
-        clipLoginCredentials: ClipPaymentLogin? = null
+        clipLoginCredentials: ClipPaymentLogin? = null,
+        requestId: String? = null
     )
 }

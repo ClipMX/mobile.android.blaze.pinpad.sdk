@@ -19,7 +19,8 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         isRetryEnabled: Boolean,
         isShareEnabled: Boolean,
         requestPaymentPreferences: RequestPaymentPreferences,
-        clipLoginCredentials: ClipPaymentLogin?
+        clipLoginCredentials: ClipPaymentLogin?,
+        requestId: String?
     ): Intent {
         return Intent(Intent.ACTION_MAIN).apply {
             component = ComponentName(PINPAD_PACKAGE, PINPAD_ENTRY_ACTIVITY)
@@ -30,6 +31,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
             putExtra(PAYMENT_SHARE_EXTRA, isShareEnabled)
             putExtra(REQUEST_PAYMENT_PREFERENCES_EXTRA, Gson().toJson(requestPaymentPreferences))
             putExtra(CLIP_LOGIN_CREDENTIALS_EXTRA, clipLoginCredentials)
+            requestId?.let { putExtra(ClipIntentProvider.PINPAD_REQUEST_ID_EXTRA, it) }
         }
     }
 
@@ -41,7 +43,8 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         isRetryEnabled: Boolean,
         isShareEnabled: Boolean,
         requestPaymentPreferences: RequestPaymentPreferences,
-        clipLoginCredentials: ClipPaymentLogin?
+        clipLoginCredentials: ClipPaymentLogin?,
+        requestId: String?
     ): Intent {
         return Intent(Intent.ACTION_MAIN).apply {
             component = ComponentName(PINPAD_PACKAGE, PINPAD_ENTRY_ACTIVITY)
@@ -53,6 +56,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
             putExtra(PAYMENT_SHARE_EXTRA, isShareEnabled)
             putExtra(REQUEST_PAYMENT_PREFERENCES_EXTRA, Gson().toJson(requestPaymentPreferences))
             putExtra(CLIP_LOGIN_CREDENTIALS_EXTRA, clipLoginCredentials)
+            requestId?.let { putExtra(ClipIntentProvider.PINPAD_REQUEST_ID_EXTRA, it) }
         }
     }
 
