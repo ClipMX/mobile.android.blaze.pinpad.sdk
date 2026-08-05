@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.TIRAMISU
 import com.google.gson.Gson
+import com.payclip.blaze.pinpad.sdk.ClipPaymentSDK
 import com.payclip.blaze.pinpad.sdk.domain.models.login.ClipPaymentLogin
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.RequestPaymentPreferences
@@ -23,7 +24,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         requestId: String?
     ): Intent {
         return Intent(Intent.ACTION_MAIN).apply {
-            component = ComponentName(PINPAD_PACKAGE, PINPAD_ENTRY_ACTIVITY)
+            component = ComponentName(ClipPaymentSDK.getPinpadPackage(), PINPAD_ENTRY_ACTIVITY)
             putExtra(PAYMENT_REFERENCE_EXTRA, reference)
             putExtra(PAYMENT_AMOUNT_EXTRA, amount.toString())
             putExtra(PAYMENT_AUTO_RETURN_EXTRA, isAutoReturnEnabled)
@@ -47,7 +48,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         requestId: String?
     ): Intent {
         return Intent(Intent.ACTION_MAIN).apply {
-            component = ComponentName(PINPAD_PACKAGE, PINPAD_ENTRY_ACTIVITY)
+            component = ComponentName(ClipPaymentSDK.getPinpadPackage(), PINPAD_ENTRY_ACTIVITY)
             putExtra(PAYMENT_REFERENCE_EXTRA, reference)
             putExtra(PAYMENT_AMOUNT_EXTRA, amount.toString())
             putExtra(PAYMENT_TIP_AMOUNT_EXTRA, tipAmount.toString())
@@ -121,8 +122,9 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
     }
 
     companion object {
-        private const val PINPAD_PACKAGE = "com.payclip.blaze.pinpad"
-        private const val PINPAD_ENTRY_ACTIVITY = "$PINPAD_PACKAGE.shared.ui.MainActivity"
+        // The activity class name does not change across pinpad build variants: only the
+        // applicationId gets a suffix (.qa/.dev), which is resolved via ClipPaymentSDK.
+        private const val PINPAD_ENTRY_ACTIVITY = "com.payclip.blaze.pinpad.shared.ui.MainActivity"
 
         private const val PAYMENT_REFERENCE_EXTRA = "PAYMENT_REFERENCE"
         private const val PAYMENT_AMOUNT_EXTRA = "PAYMENT_AMOUNT"

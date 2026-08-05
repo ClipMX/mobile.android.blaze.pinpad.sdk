@@ -285,6 +285,12 @@ ClipPaymentSDK.initialize(
 )
 ```
 
+The environment also selects which PinPad application the payment intents open:
+`PRODUCTION` always opens the release PinPad (`com.payclip.blaze.pinpad`); `STAGE` opens the QA
+PinPad (`com.payclip.blaze.pinpad.qa`) by default, or a custom debug build via the optional
+third parameter (`debugPinpadPackage = "com.payclip.blaze.pinpad.dev"`), which is ignored in
+`PRODUCTION`.
+
 With the SDK initialized, every payment started with `ClipPayment.start(...)` first creates a
 payment request in the Clip backend, authenticated as your merchant account, and attaches its
 id to the intent sent to the PinPad application. This allows the payment to be validated as

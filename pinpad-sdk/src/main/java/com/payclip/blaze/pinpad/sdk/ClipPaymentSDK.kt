@@ -35,11 +35,17 @@ object ClipPaymentSDK {
      * Base64 encoding of `apiKey:secretKey`. It can be provided with or without the `Basic `
      * prefix, the SDK normalizes it.
      *
+     * The environment also selects which PinPad application receives the payment intents:
+     * [ClipEnvironment.PRODUCTION] always opens the release PinPad; [ClipEnvironment.STAGE]
+     * opens the QA PinPad by default, or the debug package provided in [debugPinpadPackage].
+     *
      * Calling this method again overrides the previous configuration, which allows credential
      * rotation at runtime.
      *
      * @param apiToken The API token of your merchant account (`Basic xxx` or just `xxx`).
      * @param environment The Clip backend environment to use. Defaults to [ClipEnvironment.PRODUCTION].
+     * @param debugPinpadPackage Optional PinPad debug package to open instead of the QA one
+     * (e.g. `com.payclip.blaze.pinpad.dev`). Ignored in [ClipEnvironment.PRODUCTION].
      *
      * @throws IllegalArgumentException if [apiToken] is blank.
      */
@@ -47,15 +53,22 @@ object ClipPaymentSDK {
     @JvmOverloads
     fun initialize(
         apiToken: String,
-        environment: ClipEnvironment = ClipEnvironment.PRODUCTION
+        environment: ClipEnvironment = ClipEnvironment.PRODUCTION,
+        debugPinpadPackage: String? = null
     ) {
         require(apiToken.isNotBlank()) { "apiToken must not be blank." }
 
         val normalizedToken = apiToken.trim().removePrefix(BASIC_PREFIX).trim()
+        val pinpadPackage = if (environment == ClipEnvironment.PRODUCTION) {
+            environment.defaultPinpadPackage
+        } else {
+            debugPinpadPackage?.takeIf { it.isNotBlank() } ?: environment.defaultPinpadPackage
+        }
 
         config = ClipSDKConfig(
             authHeader = "$BASIC_PREFIX$normalizedToken",
-            environment = environment
+            environment = environment,
+            pinpadPackage = pinpadPackage
         )
     }
 
@@ -66,6 +79,13 @@ object ClipPaymentSDK {
     fun isInitialized(): Boolean = config != null
 
     internal fun getConfigOrNull(): ClipSDKConfig? = config
+
+    /**
+     * Package of the PinPad application that payment intents are sent to. Falls back to the
+     * release PinPad when the SDK has not been initialized.
+     */
+    internal fun getPinpadPackage(): String =
+        config?.pinpadPackage ?: ClipEnvironment.PRODUCTION.defaultPinpadPackage
 
     private const val SERIAL_PREFIX = "sdk-"
     private const val BASIC_PREFIX = "Basic "
