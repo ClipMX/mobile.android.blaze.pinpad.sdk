@@ -606,6 +606,46 @@ clipPayment.Builder().addListener(new PaymentListener() {
 | `status`        | String | Payment status: `PENDING` , `IN_PROCESS`, `REJECTED`, `CANCELED`, `APPROVED`                                                             |
 | `amount`        | String | Amount requested to pay                                                                                                                  |
 | `receiptNumber` | String | If the transaction was successful this attribute contains the payment receipt number generated. In another case the value will be `null` |
+| `wasSessionReplaced` | Boolean | `true` when the PinPad application had an active session of a **different** account and it was replaced by the credentials provided through `setLoginCredentials` before processing the payment. `false` when there was no session, the session already belonged to the provided account, or no credentials were provided. Not available on `onCancelled()` (no result payload) |
+
+### Session handling with `setLoginCredentials`
+
+When login credentials are provided, the PinPad application resolves the session before charging:
+
+1. **No active session** → it logs in automatically with the provided credentials.
+2. **Active session of the same account** → nothing happens, the payment proceeds.
+3. **Active session of a different account** → the session is replaced by the provided
+   credentials and the payment is processed under that account. The result reports it via
+   `wasSessionReplaced = true`.
+
+If the replacement login fails (invalid credentials, no network), the payment **fails** with
+error code `SESSION_REPLACEMENT_FAILED` and the previous session is closed anyway — the payment
+is never processed under the previous account, and the device is left at the login screen.
+
+To read `wasSessionReplaced` on declined payments too, override the optional
+`onFailure(code, result)` callback:
+
+```kotlin
+.addListener(object : PaymentListener {
+    override fun onSuccess(result: PaymentResult) { /* result.wasSessionReplaced */ }
+    override fun onCancelled() { }
+    override fun onFailure(code: String) { }
+    override fun onFailure(code: String, result: PaymentResult?) {
+        // result?.wasSessionReplaced is also available on declined payments
+    }
+})
+```
+
+```java
+.addListener(new PaymentListener() {
+    @Override public void onSuccess(PaymentResult result) { /* result.getWasSessionReplaced() */ }
+    @Override public void onCancelled() { }
+    @Override public void onFailure(String code) { }
+    @Override public void onFailure(String code, PaymentResult result) {
+        // optional override: result may be null when the response could not be parsed
+    }
+})
+```
 
 ### Error Codes in Terminal SDK
 
@@ -618,6 +658,7 @@ with a description of the error:
 |-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
 | EMPTY_AMOUNT                            | Amount should not be 0.0.                                                                                                                                           | 
 | EMPTY_MESSAGE                           | Message should not be empty.                                                                                                                                        | 
+| SESSION_REPLACEMENT_FAILED              | The PinPad session belonged to a different account and the login with the credentials provided to the SDK failed. The payment was NOT processed and the device session was closed. | 
 | GENERIC_DECLINE                         | The transaction was declined for unspecified reasons.                                                                                                               | 
 | RECEIVE_DECLINE_CALL_ISSUER             | The transaction was declined. Please call the card issuer for further assistance.                                                                                   | 
 | INSUFFICIENT_FUNDS                      | Insufficient funds available for the transaction.                                                                                                                   | 
