@@ -29,8 +29,10 @@
 >
 > **Estado (2026-08-12):** implementado y commiteado en ambos repos (SDK: `1f74b21` feature +
 > `b18bcb5` WIP package `.qa` a revertir; pinpad: `ea72a6e` feature + `3e3640e` logs +
-> `e4bfca0` WIP plomería a revertir + `2320464` bitácora). **E2E en device L200 (stage): 7/8
-> casos ✅** — falta solo la regresión con SDK 1.1.0. Ramas sin pushear.
+> `e4bfca0` WIP plomería a revertir + bitácora). **E2E en device L200 (stage): matriz completa
+> 8/8 ✅**, incluida la regresión con SDK 1.1.0 (6 corridas sin crash: el contrato aditivo es
+> compatible hacia atrás; corrió con un artefacto local `1.1.0-qa-local` sin cambios en este
+> repo). Ambas ramas están pusheadas en origin; pendientes de PR.
 
 #### Problema
 
@@ -106,9 +108,8 @@
 
 ## 📋 Pendientes
 
-### Vigentes (approach 2, 2026-08-12)
+### Vigentes (approach 2, 2026-08-12 — matriz E2E completa 8/8 ✅)
 
-- [ ] Regresión demo con SDK 1.1.0 vs pinpad nuevo (único caso ⬜ de la matriz E2E).
 - [ ] Validar eventos de Segment en el debugger (`SDK Session Mismatch Detected` / `Replaced` / `Replacement Failed`).
 - [ ] PRs: revertir los commits WIP (`b18bcb5` SDK, `e4bfca0` pinpad), decidir nivel de los logs `SessionValidation`, tag `1.2.0` del SDK y bump real del catálogo en pinpad.
 - [ ] (F2F-835) Package por ambiente en el SDK (portar `7e49973` del approach 1 o equivalente) para eliminar el apuntador temporal a `.qa`.
@@ -138,7 +139,7 @@ Detalle completo en `VALIDACION_SESION_SDK.md` (repo pinpad). Las secciones sigu
 
 | Fecha | Prueba | Resultado |
 |---|---|---|
-| 2026-08-12 | **E2E approach 2 en device L200/Dspread (stage)** — pinpad QA + demo con SDK `1.2.0-local`, trazas `adb logcat -s SessionValidation PAYMENT` | ✅ **7/8 casos**: sin sesión (auto-login, flag false), misma cuenta (cero red), cuenta distinta (reemplazo, flag true, ambas direcciones), password inválido (fail-closed: sin cobro, sesión previa cerrada, `SESSION_REPLACEMENT_FAILED` a la demo), declinada `PM-CHIP-VALIDATION` con flag true vía `onFailure(code, result)` y sobreviviendo reintentos, sin credenciales (flujo legacy intacto), reset del flag por intent. ⬜ Falta regresión SDK 1.1.0. Matriz detallada en `VALIDACION_SESION_SDK.md` (repo pinpad) |
+| 2026-08-12 | **E2E approach 2 en device L200/Dspread (stage)** — pinpad QA + demo con SDK `1.2.0-local`, trazas `adb logcat -s SessionValidation PAYMENT` | ✅ **Matriz completa 8/8**: sin sesión (auto-login, flag false), misma cuenta (cero red), cuenta distinta (reemplazo, flag true, ambas direcciones), password inválido (fail-closed: sin cobro, sesión previa cerrada, `SESSION_REPLACEMENT_FAILED` a la demo), declinada `PM-CHIP-VALIDATION` con flag true vía `onFailure(code, result)` y sobreviviendo reintentos, sin credenciales (flujo legacy intacto), reset del flag por intent, y **regresión SDK 1.1.0** (6 corridas sin crash: `onSuccess` viejo parsea el JSON nuevo, `SESSION_REPLACEMENT_FAILED` llega por `onFailure(code)` de un argumento; artefacto `1.1.0-qa-local` local, cero cambios en el repo SDK). Matriz detallada en `VALIDACION_SESION_SDK.md` (repo pinpad) |
 | 2026-08-04 | Smoke test stage: `POST /f2f/pinpad/v1/mobile/payment` con `Authorization: Basic` (token del comercio), `serial_number_pos` con prefijo `sdk-`, `amount` numérico | ✅ **200** — regresó `request_id` (`pinpad-<uuid>`) y `user_id` (cuenta dueña). Contrato idéntico al implementado |
 | 2026-08-04 | Smoke test stage: `GET /f2f/pinpad/v1/payment?pinpadRequestId=` con `Pinpad-Include-Detail: false` y token del comercio | ✅ **200** — `status: IN_PROCESS`. Nota: falta validar que el BE regrese 40X cuando la sesión NO coincida con el `user_id` del request (pieza BE abierta) |
 | 2026-08-04 | **E2E completo en dispositivo (demo + pinpad QA) — matriz decisiva** | ✅ **El candado funciona de punta a punta.** (a) **Misma cuenta** (dueña del token logueada en pinpad): `GET` → **200** → cobro fluye normal. (b) **Cuenta distinta** (caso cajero tranza): `GET` → **404 `PAYMENT_NOT_FOUND`** → cobro **bloqueado**, demo recibe `PAYMENT_REQUEST_OWNERSHIP_REJECTED`. Conclusión: **el BE ya resuelve ownership hoy** vía filtro por tenant (el request solo es visible para su dueño). Un resultado intermedio que sugería "404 hasta para el dueño" fue una confusión de cuentas durante las pruebas (corregido en F2F-843). En los logs se fotografió además el mecanismo del fraude: tras la validación, pinpad crea su propia orden con `user_id` del cajero — sin el gateo, ese es el request que se cobra |
