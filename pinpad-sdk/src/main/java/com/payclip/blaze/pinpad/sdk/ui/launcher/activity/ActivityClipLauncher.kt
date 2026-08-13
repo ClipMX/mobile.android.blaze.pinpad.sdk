@@ -16,6 +16,7 @@ import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.LoginListenerInitia
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.PaymentInitializationException
 import com.payclip.blaze.pinpad.sdk.domain.models.login.ClipPaymentLogin
 import com.payclip.blaze.pinpad.sdk.domain.models.login.LoginResult
+import com.payclip.blaze.pinpad.sdk.domain.models.payment.PaymentResult
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.RequestPaymentPreferences
 import com.payclip.blaze.pinpad.sdk.ui.activity.ClipResultManager
 import com.payclip.blaze.pinpad.sdk.ui.intent.ClipIntentProvider
@@ -99,7 +100,9 @@ internal class ActivityClipLauncher(
                     result = result,
                     response = responsePayment,
                     onSuccess = paymentListener::onSuccess,
-                    onFailure = paymentListener::onFailure
+                    onFailure = { code: String, failedResult: PaymentResult? ->
+                        paymentListener.onFailure(code, failedResult)
+                    }
                 )
             } else {
                 onHandleLoginResult(result, loginListener)
@@ -150,6 +153,7 @@ internal class ActivityClipLauncher(
         val intent = intentProvider.getClipIntent(
             reference = reference,
             amount = amount,
+            tipAmount = tipAmount,
             isAutoReturnEnabled = isAutoReturnEnabled,
             isRetryEnabled = isRetryEnabled,
             isShareEnabled = isShareEnabled,
