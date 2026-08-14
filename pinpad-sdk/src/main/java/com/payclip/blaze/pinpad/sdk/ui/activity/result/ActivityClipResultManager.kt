@@ -15,13 +15,15 @@ class ActivityClipResultManager : ClipResultManager {
         activity: Activity,
         reference: String,
         amount: String,
-        receiptNumber: String
+        receiptNumber: String,
+        wasSessionReplaced: Boolean
     ) {
         val result = PaymentResult(
             reference = reference,
             status = PAYMENT_RESPONSE_APPROVED_STATUS,
             amount = amount,
-            receiptNumber = receiptNumber
+            receiptNumber = receiptNumber,
+            wasSessionReplaced = wasSessionReplaced
         )
 
         activity.setResult(
@@ -65,12 +67,14 @@ class ActivityClipResultManager : ClipResultManager {
         activity: Activity,
         reference: String,
         amount: String,
-        errorCode: String
+        errorCode: String,
+        wasSessionReplaced: Boolean
     ) {
         val result = PaymentResult(
             reference = reference,
             status = PAYMENT_RESPONSE_ERROR_STATUS,
-            amount = amount
+            amount = amount,
+            wasSessionReplaced = wasSessionReplaced
         )
 
         activity.setResult(
@@ -106,6 +110,20 @@ class ActivityClipResultManager : ClipResultManager {
         onSuccess: (result: PaymentResult) -> Unit,
         onFailure: (code: String) -> Unit
     ) {
+        parseResponse(
+            result = result,
+            response = response,
+            onSuccess = onSuccess,
+            onFailure = { code, _ -> onFailure.invoke(code) }
+        )
+    }
+
+    override fun parseResponse(
+        result: ActivityResult,
+        response: String,
+        onSuccess: (result: PaymentResult) -> Unit,
+        onFailure: (code: String, failedResult: PaymentResult?) -> Unit
+    ) {
         try {
             val model = Gson().fromJson(response, PaymentResult::class.java)
 
@@ -113,10 +131,10 @@ class ActivityClipResultManager : ClipResultManager {
                 onSuccess.invoke(model)
             } else {
                 val error = getErrorCode(result) ?: PAYMENT_DEFAULT_ERROR
-                onFailure.invoke(error)
+                onFailure.invoke(error, model)
             }
         } catch (e: JsonSyntaxException) {
-            onFailure.invoke(PAYMENT_DEFAULT_ERROR)
+            onFailure.invoke(PAYMENT_DEFAULT_ERROR, null)
         }
     }
 

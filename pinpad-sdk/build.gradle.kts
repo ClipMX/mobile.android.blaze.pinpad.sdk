@@ -36,6 +36,9 @@ android {
 kotlin {
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
+        // Emit real JVM default methods so interface defaults (e.g. PaymentListener.onFailure
+        // overload) are visible and overridable from Java integrators without recompiling.
+        freeCompilerArgs.add("-Xjvm-default=all")
     }
 }
 

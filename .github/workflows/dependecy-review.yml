@@ -4,14 +4,15 @@ on: [pull_request]
 jobs:
   dependency-review:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: 'Checkout Repository'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 'Dependency Review'
-        uses: actions/dependency-review-action@v1
+        uses: actions/dependency-review-action@v4
         # Dependency graph is currently disabled at the repo/org level, which makes this
         # action fail with "Dependency review is not supported on this repository" on every
         # PR regardless of its content. Don't let that unrelated infra gap block CI.
         # Remove this once Dependency graph is enabled under Settings > Security.
         continue-on-error: true
-
