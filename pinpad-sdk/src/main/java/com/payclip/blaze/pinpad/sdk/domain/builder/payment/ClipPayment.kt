@@ -26,7 +26,8 @@ class ClipPayment internal constructor(
     private val preferences: RequestPaymentPreferences,
     private val listener: PaymentListener?,
     private val loginListener: LoginListener?,
-    private val loginCredentials: ClipPaymentLogin? = null
+    private val loginCredentials: ClipPaymentLogin? = null,
+    private val webhookUrl: String? = null
 ) {
 
     /**
@@ -44,6 +45,8 @@ class ClipPayment internal constructor(
         private var preferences: RequestPaymentPreferences = RequestPaymentPreferences()
 
         private var loginCredentials: ClipPaymentLogin? = null
+
+        private var webhookUrl: String? = null
 
         private var listener: PaymentListener? = null
 
@@ -98,6 +101,16 @@ class ClipPayment internal constructor(
         }
 
         /**
+         * Method to settle the webhook URL.
+         *
+         * @param webhookUrl The URL to be notified with the payment result.
+         * If it is not settled, no webhook will be notified.
+         */
+        fun setWebhookUrl(webhookUrl: String?) = apply {
+            this.webhookUrl = webhookUrl
+        }
+
+        /**
          * Method to settle result listener.
          *
          * @param listener Listen the payment process results.
@@ -134,7 +147,8 @@ class ClipPayment internal constructor(
                 preferences = preferences,
                 listener = listener,
                 loginListener = clipLoginListener,
-                loginCredentials = loginCredentials
+                loginCredentials = loginCredentials,
+                webhookUrl = webhookUrl
             )
         }
     }
@@ -195,7 +209,8 @@ class ClipPayment internal constructor(
                     isRetryEnabled = isRetryEnabled,
                     isShareEnabled = isShareEnabled,
                     requestPaymentPreferences = preferences,
-                    clipLoginCredentials = loginCredentials
+                    clipLoginCredentials = loginCredentials,
+                    webhookUrl = webhookUrl
                 )
             }
             .onFailure {
@@ -232,7 +247,8 @@ class ClipPayment internal constructor(
                     isRetryEnabled = isRetryEnabled,
                     isShareEnabled = isShareEnabled,
                     requestPaymentPreferences = preferences,
-                    clipLoginCredentials = loginCredentials
+                    clipLoginCredentials = loginCredentials,
+                    webhookUrl = webhookUrl
                 )
             }
             .onFailure {
