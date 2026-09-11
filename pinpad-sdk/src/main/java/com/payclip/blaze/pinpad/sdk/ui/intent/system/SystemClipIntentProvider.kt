@@ -19,7 +19,8 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         isRetryEnabled: Boolean,
         isShareEnabled: Boolean,
         requestPaymentPreferences: RequestPaymentPreferences,
-        clipLoginCredentials: ClipPaymentLogin?
+        clipLoginCredentials: ClipPaymentLogin?,
+        webhookUrl: String?
     ): Intent {
         return Intent(Intent.ACTION_MAIN).apply {
             component = ComponentName(PINPAD_PACKAGE, PINPAD_ENTRY_ACTIVITY)
@@ -30,6 +31,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
             putExtra(PAYMENT_SHARE_EXTRA, isShareEnabled)
             putExtra(REQUEST_PAYMENT_PREFERENCES_EXTRA, Gson().toJson(requestPaymentPreferences))
             putExtra(CLIP_LOGIN_CREDENTIALS_EXTRA, clipLoginCredentials)
+            putExtra(WEBHOOK_URL_EXTRA, webhookUrl)
         }
     }
 
@@ -41,7 +43,8 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         isRetryEnabled: Boolean,
         isShareEnabled: Boolean,
         requestPaymentPreferences: RequestPaymentPreferences,
-        clipLoginCredentials: ClipPaymentLogin?
+        clipLoginCredentials: ClipPaymentLogin?,
+        webhookUrl: String?
     ): Intent {
         return Intent(Intent.ACTION_MAIN).apply {
             component = ComponentName(PINPAD_PACKAGE, PINPAD_ENTRY_ACTIVITY)
@@ -53,6 +56,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
             putExtra(PAYMENT_SHARE_EXTRA, isShareEnabled)
             putExtra(REQUEST_PAYMENT_PREFERENCES_EXTRA, Gson().toJson(requestPaymentPreferences))
             putExtra(CLIP_LOGIN_CREDENTIALS_EXTRA, clipLoginCredentials)
+            putExtra(WEBHOOK_URL_EXTRA, webhookUrl)
         }
     }
 
@@ -66,6 +70,10 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
 
     override fun getTipAmount(intent: Intent): String? {
         return intent.extras?.getString(PAYMENT_TIP_AMOUNT_EXTRA)
+    }
+
+    override fun getWebhookUrl(intent: Intent): String? {
+        return intent.extras?.getString(WEBHOOK_URL_EXTRA)
     }
 
     override fun isAutoReturnEnabled(intent: Intent): Boolean? {
@@ -129,5 +137,6 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         private const val PAYMENT_PREFERENCES_EXTRA = "PAYMENT_PREFERENCES"
         private const val REQUEST_PAYMENT_PREFERENCES_EXTRA = "REQUEST_PAYMENT_PREFERENCES"
         private const val CLIP_LOGIN_CREDENTIALS_EXTRA = "CLIP_LOGIN_CREDENTIALS"
+        private const val WEBHOOK_URL_EXTRA = "WEBHOOK_URL"
     }
 }
