@@ -415,6 +415,14 @@ ClipPayment.Builder()
     .setLoginCredentials(loginCredentials: ClipPaymentLogin) 
 ```
 
+- **setWebhookUrl**: This OPTIONAL parameter sets the URL to be notified with the payment result. If it is not settled,
+  no webhook will be notified.
+
+```kotlin
+ClipPayment.Builder()
+    .setWebhookUrl(webhookUrl: String?)
+```
+
 - **addLoginListener**: With this paramenter you can register a listener to receive information about if your
   credentials are processed successfully within your application.
 

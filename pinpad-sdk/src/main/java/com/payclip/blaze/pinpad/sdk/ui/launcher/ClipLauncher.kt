@@ -54,6 +54,7 @@ internal interface ClipLauncher {
      * If set to false, the terminal will not show share options in success.
      * @param preferences An object loaded with all payment configuration.
      * @param clipLoginCredentials An object loaded with login credentials for the terminal if is selected
+     * @param webhookUrl The URL to be notified with the payment result. If null, no webhook is settled.
      */
     fun startPayment(
         reference: String,
@@ -62,7 +63,8 @@ internal interface ClipLauncher {
         isRetryEnabled: Boolean = true,
         isShareEnabled: Boolean = true,
         requestPaymentPreferences: RequestPaymentPreferences,
-        clipLoginCredentials: ClipPaymentLogin? = null
+        clipLoginCredentials: ClipPaymentLogin? = null,
+        webhookUrl: String? = null
     )
 
     /**
@@ -81,6 +83,7 @@ internal interface ClipLauncher {
      * If set to false, the terminal will not show share options in success.
      * @param requestPaymentPreferences An object loaded with all payment configuration.
      * @param clipLoginCredentials An object loaded with login credentials for the terminal if is selected
+     * @param webhookUrl The URL to be notified with the payment result. If null, no webhook is settled.
      */
     fun startPayment(
         reference: String,
@@ -90,6 +93,7 @@ internal interface ClipLauncher {
         isRetryEnabled: Boolean = true,
         isShareEnabled: Boolean = true,
         requestPaymentPreferences: RequestPaymentPreferences,
-        clipLoginCredentials: ClipPaymentLogin? = null
+        clipLoginCredentials: ClipPaymentLogin? = null,
+        webhookUrl: String? = null
     )
 }

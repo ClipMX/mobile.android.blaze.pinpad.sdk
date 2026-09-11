@@ -211,6 +211,67 @@ class ClipPaymentTest {
         }
 
     @Test
+    fun `create payment with webhook url and check that it is forwarded to the launcher`() =
+        runTest {
+            val requestPaymentPreferences = getPaymentPreferences()
+            val payment = getPaymentInstance(webhookUrl = WEBHOOK_URL)
+
+            whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+
+            payment.start(REFERENCE, AMOUNT)
+
+            verify(launcher).startPayment(
+                reference = REFERENCE,
+                amount = AMOUNT,
+                isAutoReturnEnabled = false,
+                isRetryEnabled = true,
+                requestPaymentPreferences = requestPaymentPreferences,
+                webhookUrl = WEBHOOK_URL
+            )
+        }
+
+    @Test
+    fun `create payment without webhook url and check that null is forwarded to the launcher`() =
+        runTest {
+            val requestPaymentPreferences = getPaymentPreferences()
+            val payment = getPaymentInstance()
+
+            whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+
+            payment.start(REFERENCE, AMOUNT)
+
+            verify(launcher).startPayment(
+                reference = REFERENCE,
+                amount = AMOUNT,
+                isAutoReturnEnabled = false,
+                isRetryEnabled = true,
+                requestPaymentPreferences = requestPaymentPreferences,
+                webhookUrl = null
+            )
+        }
+
+    @Test
+    fun `create payment with tip and webhook url and check that it is forwarded to the launcher`() =
+        runTest {
+            val requestPaymentPreferences = getPaymentPreferences()
+            val payment = getPaymentInstance(webhookUrl = WEBHOOK_URL)
+
+            whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+
+            payment.start(REFERENCE, AMOUNT, TIP_AMOUNT)
+
+            verify(launcher).startPayment(
+                reference = REFERENCE,
+                amount = AMOUNT,
+                tipAmount = TIP_AMOUNT,
+                isAutoReturnEnabled = false,
+                isRetryEnabled = true,
+                requestPaymentPreferences = requestPaymentPreferences,
+                webhookUrl = WEBHOOK_URL
+            )
+        }
+
+    @Test
     fun `try to create payment with empty amount and handle thrown exception`() = runTest {
         val payment = getPaymentInstance()
 
@@ -245,7 +306,8 @@ class ClipPaymentTest {
         isAutoReturnEnabled: Boolean = false,
         isRetryEnabled: Boolean = true,
         isShareEnabled: Boolean = true,
-        preferences: RequestPaymentPreferences = getPaymentPreferences()
+        preferences: RequestPaymentPreferences = getPaymentPreferences(),
+        webhookUrl: String? = null
     ) = ClipPayment(
         useCase,
         launcher,
@@ -254,7 +316,8 @@ class ClipPaymentTest {
         isShareEnabled,
         preferences,
         listener,
-        loginListener
+        loginListener,
+        webhookUrl = webhookUrl
     )
 
     private fun getEmptyListener() = object : PaymentListener {
@@ -302,7 +365,9 @@ class ClipPaymentTest {
 
     companion object {
         private const val AMOUNT = 10.0
+        private const val TIP_AMOUNT = 2.0
         private const val REFERENCE = "xyz"
+        private const val WEBHOOK_URL = "https://merchant.example.com/clip/webhook"
 
         private const val AUTO_RETURN = false
         private const val RETRY = true
