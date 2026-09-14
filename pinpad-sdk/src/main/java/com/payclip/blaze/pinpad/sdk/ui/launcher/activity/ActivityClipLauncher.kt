@@ -119,7 +119,8 @@ internal class ActivityClipLauncher(
         isRetryEnabled: Boolean,
         isShareEnabled: Boolean,
         requestPaymentPreferences: RequestPaymentPreferences,
-        clipLoginCredentials: ClipPaymentLogin?
+        clipLoginCredentials: ClipPaymentLogin?,
+        webhookUrl: String?
     ) {
         val launcher = getLauncher()
         val intent = intentProvider.getClipIntent(
@@ -129,7 +130,8 @@ internal class ActivityClipLauncher(
             isRetryEnabled = isRetryEnabled,
             isShareEnabled = isShareEnabled,
             requestPaymentPreferences = requestPaymentPreferences,
-            clipLoginCredentials = clipLoginCredentials
+            clipLoginCredentials = clipLoginCredentials,
+            webhookUrl = webhookUrl
         )
 
         try {
@@ -147,7 +149,8 @@ internal class ActivityClipLauncher(
         isRetryEnabled: Boolean,
         isShareEnabled: Boolean,
         requestPaymentPreferences: RequestPaymentPreferences,
-        clipLoginCredentials: ClipPaymentLogin?
+        clipLoginCredentials: ClipPaymentLogin?,
+        webhookUrl: String?
     ) {
         val launcher = getLauncher()
         val intent = intentProvider.getClipIntent(
@@ -158,7 +161,8 @@ internal class ActivityClipLauncher(
             isRetryEnabled = isRetryEnabled,
             isShareEnabled = isShareEnabled,
             requestPaymentPreferences = requestPaymentPreferences,
-            clipLoginCredentials = clipLoginCredentials
+            clipLoginCredentials = clipLoginCredentials,
+            webhookUrl = webhookUrl
         )
 
         try {

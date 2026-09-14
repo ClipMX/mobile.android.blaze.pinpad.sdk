@@ -20,6 +20,7 @@ interface ClipIntentProvider {
      * If set to false, the terminal will not show share options in success.
      * @param requestPaymentPreferences An object loaded with all payment configuration.
      * @param clipLoginCredentials An object loaded with login credentials for the terminal if is selected.
+     * @param webhookUrl The URL to be notified with the payment result. If null, no webhook is settled.
      *
      * @return [Intent] with extras pointing to PinPad application.
      */
@@ -30,7 +31,8 @@ interface ClipIntentProvider {
         isRetryEnabled: Boolean = true,
         isShareEnabled: Boolean = true,
         requestPaymentPreferences: RequestPaymentPreferences,
-        clipLoginCredentials: ClipPaymentLogin? = null
+        clipLoginCredentials: ClipPaymentLogin? = null,
+        webhookUrl: String? = null
     ): Intent
 
     /**
@@ -47,6 +49,7 @@ interface ClipIntentProvider {
      * If set to false, the terminal will not show share options in success.
      * @param requestPaymentPreferences An object loaded with all payment configuration.
      * @param clipLoginCredentials An object loaded with login credentials for the terminal if is selected.
+     * @param webhookUrl The URL to be notified with the payment result. If null, no webhook is settled.
      *
      * @return [Intent] with extras pointing to PinPad application.
      */
@@ -58,7 +61,8 @@ interface ClipIntentProvider {
         isRetryEnabled: Boolean = true,
         isShareEnabled: Boolean = true,
         requestPaymentPreferences: RequestPaymentPreferences,
-        clipLoginCredentials: ClipPaymentLogin? = null
+        clipLoginCredentials: ClipPaymentLogin? = null,
+        webhookUrl: String? = null
     ): Intent
 
     /**
@@ -87,6 +91,15 @@ interface ClipIntentProvider {
      * @return The tip amount to be charged.
      */
     fun getTipAmount(intent: Intent): String?
+
+    /**
+     * Get the webhook URL to be notified with the payment result from intent extras.
+     *
+     * @param intent activity intent with extras.
+     *
+     * @return The webhook URL. If no webhook URL was settled, null is returned.
+     */
+    fun getWebhookUrl(intent: Intent): String?
 
     /**
      * Get auto return from intent extras.
