@@ -11,6 +11,7 @@ import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.RequestPaymen
 import com.payclip.blaze.pinpad.sdk.domain.usecases.payment.CreatePaymentUseCase
 import com.payclip.blaze.pinpad.sdk.ui.launcher.ClipLauncher
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertNull
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
@@ -211,6 +212,58 @@ class ClipPaymentTest {
         }
 
     @Test
+    fun `create payment with tip options and check if the result is right`() =
+        runTest {
+            val requestPaymentPreferences = getPaymentPreferences(
+                isTipEnabled = true,
+                tipOptions = TIP_OPTIONS
+            )
+            val payment = getPaymentInstance(preferences = requestPaymentPreferences)
+
+            whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+
+            payment.start(REFERENCE, AMOUNT)
+
+            verify(launcher).startPayment(
+                reference = REFERENCE,
+                amount = AMOUNT,
+                isAutoReturnEnabled = false,
+                isRetryEnabled = true,
+                requestPaymentPreferences = requestPaymentPreferences
+            )
+        }
+
+    @Test
+    fun `create payment with redirect package name and check if the result is right`() =
+        runTest {
+            val requestPaymentPreferences = getPaymentPreferences(
+                redirectPackageName = REDIRECT_PACKAGE_NAME
+            )
+            val payment = getPaymentInstance(preferences = requestPaymentPreferences)
+
+            whenever(useCase.invoke(REFERENCE, AMOUNT)).thenReturn(Result.success(Unit))
+
+            payment.start(REFERENCE, AMOUNT)
+
+            verify(launcher).startPayment(
+                reference = REFERENCE,
+                amount = AMOUNT,
+                isAutoReturnEnabled = false,
+                isRetryEnabled = true,
+                requestPaymentPreferences = requestPaymentPreferences
+            )
+        }
+
+    @Test
+    fun `create payment preferences without tip options and redirect package name, then check the default values`() =
+        runTest {
+            val requestPaymentPreferences = RequestPaymentPreferences()
+
+            assertNull(requestPaymentPreferences.tipOptions)
+            assertNull(requestPaymentPreferences.redirectPackageName)
+        }
+
+    @Test
     fun `create payment with webhook url and check that it is forwarded to the launcher`() =
         runTest {
             val requestPaymentPreferences = getPaymentPreferences()
@@ -349,13 +402,17 @@ class ClipPaymentTest {
         isMCIEnabled: Boolean = IS_MCI_ENABLED,
         isDCCEnabled: Boolean = IS_DCC_ENABLED,
         isTipEnabled: Boolean = IS_TIP_ENABLED,
-        isSplitPaymentEnabled: Boolean = IS_SPLIT_PAYMENT_ENABLED
+        isSplitPaymentEnabled: Boolean = IS_SPLIT_PAYMENT_ENABLED,
+        tipOptions: List<Int>? = null,
+        redirectPackageName: String? = null
     ) = RequestPaymentPreferences(
         isMSIEnabled = isMSIEnabled,
         isMCIEnabled = isMCIEnabled,
         isDCCEnabled = isDCCEnabled,
         isTipEnabled = isTipEnabled,
-        isSplitPaymentEnabled = isSplitPaymentEnabled
+        isSplitPaymentEnabled = isSplitPaymentEnabled,
+        tipOptions = tipOptions,
+        redirectPackageName = redirectPackageName
     )
 
     private fun getLoginCredentialsTest() = ClipPaymentLogin(
@@ -368,6 +425,8 @@ class ClipPaymentTest {
         private const val TIP_AMOUNT = 2.0
         private const val REFERENCE = "xyz"
         private const val WEBHOOK_URL = "https://merchant.example.com/clip/webhook"
+        private const val REDIRECT_PACKAGE_NAME = "com.payclip.blaze.client.app"
+        private val TIP_OPTIONS = listOf(12, 18, 23)
 
         private const val AUTO_RETURN = false
         private const val RETRY = true

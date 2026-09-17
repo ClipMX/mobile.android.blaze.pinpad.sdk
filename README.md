@@ -433,7 +433,7 @@ ClipPayment.Builder()
 
 - **setPaymentPreferences**: This parameter sets payment preferences.
     - `isMSIEnabled`: This parameter sets if the monthly interest-free installments will be enabled. By default it is
-      false, and the msi will be disabled.
+      true, and the msi will be activated.
 
     - `isMCIEnabled`: This parameter sets if the monthly installments will be enabled. By default it is true, and the
       mci will be activated.
@@ -442,11 +442,19 @@ ClipPayment.Builder()
       the dcc will be activated.
     - `isTipEnabled`: This parameter sets if the tip screen will be shown when the payment process starts or not. By
       default it is false, and the tip screen will not be shown.
+    - `isSplitPaymentEnabled`: This parameter sets if the amount will be allowed to be covered with more than one
+      charge. By default it is false, and the whole amount will be charged in a single payment.
     - `isAutoPrintReceiptEnabled`: When transaction is successful you can enable the auto print of your receipt in POS.
+    - `tipOptions`: This parameter sets the tip percentages shown in the tip screen, for example
+      `listOf(12, 18, 23)`. It only applies when `isTipEnabled` is true. By default it is null, and the tip screen will
+      show the default percentages of the pinpad app.
+    - `redirectPackageName`: This parameter sets the package name of the application to be opened when the payment
+      process finishes, for example `"com.payclip.blaze.client.app"`. By default it is null, and the pinpad app returns
+      to the application that started the payment.
 
 ```kotlin
 ClipPayment.Builder()
-    .setPaymentPreferences(preferences: PaymentPreferences) 
+    .setPaymentPreferences(preferences: RequestPaymentPreferences) 
 ```
 
 **Example Configuration**
@@ -782,7 +790,9 @@ curl --location 'https://api.payclip.io/f2f/pinpad/v1/payment' \
             "is_dcc_enabled": true,
             "is_retry_enabled": true,
             "is_share_enabled": true,
-            "is_auto_print_receipt_enabled": false
+            "is_auto_print_receipt_enabled": false,
+            "tip_options": [12, 18, 23],
+            "redirect_package_name": "com.payclip.blaze.client.app"
 	}
 }
 '  
@@ -802,6 +812,8 @@ curl --location 'https://api.payclip.io/f2f/pinpad/v1/payment' \
 | preferences.is_retry_enabled              | Param to enable to users retries their payments when these fails                    | Boolean    | --                                                               | No       | true          |
 | preferences.is_share_enabled              | Param to enable share options in the end of successful transaaction                 | Boolean    | --                                                               | No       | true          |
 | preferences.is_auto_print_receipt_enabled | When transaction is successful you can enable the auto print of your receipt in POS | Boolean    | --                                                               | No       | false         |
+| preferences.tip_options                   | Tip percentages shown in the terminal tip screen                                    | Number[]   | Only applies when `is_tip_enabled` is true                       | No       | --            |
+| preferences.redirect_package_name         | Package name of the app to be opened when the payment process finishes              | String     | The app must be installed in the terminal                        | No       | --            |
 
 <a name="post-method-syncronously"></a>
 
