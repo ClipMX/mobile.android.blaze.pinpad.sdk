@@ -1,7 +1,10 @@
 package com.payclip.blaze.pinpad.sdk.ui.launcher.activity
 
 import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -9,6 +12,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import com.payclip.blaze.pinpad.sdk.domain.listener.login.LoginListener
 import com.payclip.blaze.pinpad.sdk.domain.listener.payment.PaymentListener
 import com.payclip.blaze.pinpad.sdk.domain.models.exceptions.ApplicationNotFoundException
@@ -21,6 +25,13 @@ import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.RequestPaymen
 import com.payclip.blaze.pinpad.sdk.ui.activity.ClipResultManager
 import com.payclip.blaze.pinpad.sdk.ui.intent.ClipIntentProvider
 import com.payclip.blaze.pinpad.sdk.ui.launcher.ClipLauncher
+import com.payclip.blaze.pinpad.sdk.ui.launcher.resolver.ClipAppChoiceStore
+import com.payclip.blaze.pinpad.sdk.ui.launcher.resolver.ClipAppChooser
+import com.payclip.blaze.pinpad.sdk.ui.launcher.resolver.ClipAppQuery
+import com.payclip.blaze.pinpad.sdk.ui.launcher.resolver.ClipAppResolution
+import com.payclip.blaze.pinpad.sdk.ui.launcher.resolver.ClipAppResolver
+import com.payclip.blaze.pinpad.sdk.ui.launcher.resolver.ClipApps
+import com.payclip.blaze.pinpad.sdk.ui.launcher.resolver.ResolvedBy
 
 internal class ActivityClipLauncher(
     private val resultManager: ClipResultManager,
@@ -31,11 +42,19 @@ internal class ActivityClipLauncher(
 
     private lateinit var cLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>
 
+    private var hostContext: Context? = null
+
+    private var paymentListener: PaymentListener? = null
+
+    private val resolver = ClipAppResolver(ClipApps.ALLOWED_PACKAGES, ClipApps.PINPAD_ENTRY)
+
     override fun setPaymentHandler(
         activity: ComponentActivity,
         paymentListener: PaymentListener,
         loginListener: LoginListener?
     ) {
+        hostContext = activity
+        this.paymentListener = paymentListener
         aLauncher = activity.registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) {
@@ -51,6 +70,8 @@ internal class ActivityClipLauncher(
         paymentListener: PaymentListener,
         loginListener: LoginListener?
     ) {
+        hostContext = LocalContext.current
+        this.paymentListener = paymentListener
         cLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.StartActivityForResult()
         ) {
@@ -134,11 +155,7 @@ internal class ActivityClipLauncher(
             webhookUrl = webhookUrl
         )
 
-        try {
-            launcher.launch(intent)
-        } catch (e: Exception) {
-            throw ApplicationNotFoundException()
-        }
+        launchResolved(launcher, intent)
     }
 
     override fun startPayment(
@@ -165,11 +182,66 @@ internal class ActivityClipLauncher(
             webhookUrl = webhookUrl
         )
 
+        launchResolved(launcher, intent)
+    }
+
+    // El intent ya trae los extras; aquí solo se elige a qué app va. Siempre explícito: lleva credenciales.
+    private fun launchResolved(launcher: ActivityResultLauncher<Intent>, intent: Intent) {
+        val context = hostContext
+        if (context == null) {
+            launchSafely(launcher, intent)
+            return
+        }
+
+        val store = ClipAppChoiceStore(context)
+        val resolution = resolver.resolve(ClipAppQuery(context).findCandidates(), store.get())
+
+        when (resolution) {
+            is ClipAppResolution.Launch -> launchCandidate(launcher, intent, resolution)
+
+            is ClipAppResolution.Choose -> {
+                val activity = context.findActivity()
+                if (activity == null) {
+                    launchCandidate(launcher, intent, ClipAppResolution.Launch(resolution.candidates.first(), ResolvedBy.ACTION))
+                } else {
+                    ClipAppChooser.show(
+                        activity = activity,
+                        candidates = resolution.candidates,
+                        onChosen = { chosen, remember ->
+                            if (remember) store.save(chosen.packageName)
+                            launchCandidate(launcher, intent, ClipAppResolution.Launch(chosen, ResolvedBy.ACTION))
+                        },
+                        onCancelled = { paymentListener?.onCancelled() }
+                    )
+                }
+            }
+        }
+    }
+
+    private fun launchCandidate(
+        launcher: ActivityResultLauncher<Intent>,
+        intent: Intent,
+        resolution: ClipAppResolution.Launch
+    ) {
+        Log.i(TAG, "resolved_by=${resolution.resolvedBy.value} package=${resolution.candidate.packageName}")
+        launchSafely(launcher, intent.setComponent(resolution.candidate.component))
+    }
+
+    private fun launchSafely(launcher: ActivityResultLauncher<Intent>, intent: Intent) {
         try {
             launcher.launch(intent)
         } catch (e: Exception) {
             throw ApplicationNotFoundException()
         }
+    }
+
+    private fun Context.findActivity(): Activity? {
+        var current: Context? = this
+        while (current is ContextWrapper) {
+            if (current is Activity) return current
+            current = current.baseContext
+        }
+        return null
     }
 
     private fun getLauncher(): ActivityResultLauncher<Intent> {
@@ -184,4 +256,7 @@ internal class ActivityClipLauncher(
         throw PaymentInitializationException()
     }
 
+    private companion object {
+        const val TAG = "PinpadSdk"
+    }
 }

@@ -1,0 +1,5 @@
+<resources>
+    <string name="pinpad_sdk_app_chooser_title">Cobrar con</string>
+    <string name="pinpad_sdk_app_chooser_remember">Recordar mi elección</string>
+    <string name="pinpad_sdk_app_chooser_cancel">Cancelar</string>
+</resources>
