@@ -2,4 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Sin esto, en Android 11+ queryIntentActivities vuelve vacío y el SDK siempre cae al fallback. -->
+    <queries>
+        <intent>
+            <action android:name="com.payclip.action.CLIP_PAYMENT" />
+        </intent>
+    </queries>
 </manifest>

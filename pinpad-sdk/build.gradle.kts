@@ -5,16 +5,24 @@ plugins {
     id("kotlin-parcelize")
 }
 
+// Vacío en producción, que es lo único que JitPack publica. El SDK de QA es solo interno y se genera a mano:
+// ./gradlew :pinpad-sdk:publishToMavenLocal -PclipAppSuffix=.qa   (queda como <versión>-qa en mavenLocal)
+val clipAppSuffix: String = providers.gradleProperty("clipAppSuffix").getOrElse("")
+val qaVersionSuffix: String = clipAppSuffix.replace('.', '-')
+
 @Suppress("UnstableApiUsage")
 android {
     namespace = "com.payclip.blaze.pinpad.sdk"
     compileSdk = 34
+    resourcePrefix = "pinpad_sdk_"
 
     defaultConfig {
         minSdk = 22
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField("String", "CLIP_APP_SUFFIX", "\"$clipAppSuffix\"")
     }
 
     buildFeatures {
@@ -57,7 +65,7 @@ afterEvaluate {
                 groupId = "com.github.ClipMX"
                 artifactId = "mobile.android.blaze.pinpad.sdk"
                 // the version is provided by the TAG name
-                version = System.getenv("GITHUB_REF_NAME") ?: "0.0.0"
+                version = (System.getenv("GITHUB_REF_NAME") ?: "0.0.0") + qaVersionSuffix
 
                 afterEvaluate {
                     from(components["release"])
