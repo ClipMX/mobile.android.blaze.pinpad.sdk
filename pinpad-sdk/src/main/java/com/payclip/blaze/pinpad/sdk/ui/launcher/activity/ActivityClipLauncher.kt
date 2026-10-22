@@ -224,7 +224,9 @@ internal class ActivityClipLauncher(
         resolution: ClipAppResolution.Launch
     ) {
         Log.i(TAG, "resolved_by=${resolution.resolvedBy.value} package=${resolution.candidate.packageName}")
-        launchSafely(launcher, intent.setComponent(resolution.candidate.component))
+        intent.setComponent(resolution.candidate.component)
+        if (resolution.resolvedBy == ResolvedBy.ACTION) intent.action = ClipAppQuery.CLIP_PAYMENT_ACTION
+        launchSafely(launcher, intent)
     }
 
     private fun launchSafely(launcher: ActivityResultLauncher<Intent>, intent: Intent) {
