@@ -102,6 +102,15 @@ interface ClipIntentProvider {
     fun getWebhookUrl(intent: Intent): String?
 
     /**
+     * Get the version of the SDK that launched the payment intent.
+     *
+     * @param intent activity intent with extras.
+     *
+     * @return The SDK version. If the intent was created by an SDK without this extra, null is returned.
+     */
+    fun getSdkVersion(intent: Intent): String?
+
+    /**
      * Get auto return from intent extras.
      *
      * @param intent activity intent with extras.

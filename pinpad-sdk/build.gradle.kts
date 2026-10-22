@@ -10,6 +10,8 @@ plugins {
 val clipAppSuffix: String = providers.gradleProperty("clipAppSuffix").getOrElse("")
 val qaVersionSuffix: String = clipAppSuffix.replace('.', '-')
 
+val sdkVersion: String = System.getenv("GITHUB_REF_NAME") ?: System.getenv("VERSION") ?: "0.0.0"
+
 @Suppress("UnstableApiUsage")
 android {
     namespace = "com.payclip.blaze.pinpad.sdk"
@@ -23,6 +25,7 @@ android {
         consumerProguardFiles("consumer-rules.pro")
 
         buildConfigField("String", "CLIP_APP_SUFFIX", "\"$clipAppSuffix\"")
+        buildConfigField("String", "SDK_VERSION", "\"$sdkVersion\"")
     }
 
     buildFeatures {
@@ -65,7 +68,7 @@ afterEvaluate {
                 groupId = "com.github.ClipMX"
                 artifactId = "mobile.android.blaze.pinpad.sdk"
                 // the version is provided by the TAG name
-                version = (System.getenv("GITHUB_REF_NAME") ?: "0.0.0") + qaVersionSuffix
+                version = sdkVersion + qaVersionSuffix
 
                 afterEvaluate {
                     from(components["release"])
