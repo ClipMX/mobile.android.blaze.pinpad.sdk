@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.TIRAMISU
 import com.google.gson.Gson
+import com.payclip.blaze.pinpad.sdk.BuildConfig
 import com.payclip.blaze.pinpad.sdk.domain.models.login.ClipPaymentLogin
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.PaymentPreferences
 import com.payclip.blaze.pinpad.sdk.domain.models.payment.settings.RequestPaymentPreferences
@@ -32,6 +33,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
             putExtra(REQUEST_PAYMENT_PREFERENCES_EXTRA, Gson().toJson(requestPaymentPreferences))
             putExtra(CLIP_LOGIN_CREDENTIALS_EXTRA, clipLoginCredentials)
             putExtra(WEBHOOK_URL_EXTRA, webhookUrl)
+            putExtra(SDK_VERSION_EXTRA, BuildConfig.SDK_VERSION)
         }
     }
 
@@ -57,6 +59,7 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
             putExtra(REQUEST_PAYMENT_PREFERENCES_EXTRA, Gson().toJson(requestPaymentPreferences))
             putExtra(CLIP_LOGIN_CREDENTIALS_EXTRA, clipLoginCredentials)
             putExtra(WEBHOOK_URL_EXTRA, webhookUrl)
+            putExtra(SDK_VERSION_EXTRA, BuildConfig.SDK_VERSION)
         }
     }
 
@@ -74,6 +77,10 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
 
     override fun getWebhookUrl(intent: Intent): String? {
         return intent.extras?.getString(WEBHOOK_URL_EXTRA)
+    }
+
+    override fun getSdkVersion(intent: Intent): String? {
+        return intent.extras?.getString(SDK_VERSION_EXTRA)
     }
 
     override fun isAutoReturnEnabled(intent: Intent): Boolean? {
@@ -135,5 +142,6 @@ internal class SystemClipIntentProvider : ClipIntentProvider {
         private const val REQUEST_PAYMENT_PREFERENCES_EXTRA = "REQUEST_PAYMENT_PREFERENCES"
         private const val CLIP_LOGIN_CREDENTIALS_EXTRA = "CLIP_LOGIN_CREDENTIALS"
         private const val WEBHOOK_URL_EXTRA = "WEBHOOK_URL"
+        private const val SDK_VERSION_EXTRA = "SDK_VERSION"
     }
 }
