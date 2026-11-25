@@ -1,0 +1,43 @@
+@startuml architecture
+title mobile.android.blaze.pinpad.sdk - integracion con la app de Clip
+
+skinparam componentStyle rectangle
+skinparam defaultTextAlignment center
+skinparam shadowing false
+
+actor "Operador del comercio" as Operator
+
+rectangle "App del integrador (tercero)" as Integrator {
+  component "ClipPayment\n(Builder, setPaymentHandler, start)" as Client
+  component "PaymentListener / LoginListener" as Listeners
+}
+
+rectangle "pinpad-sdk (AAR, JitPack)" as Sdk {
+  component "ui/intent\nClipIntentProvider\nSystemClipIntentProvider" as Intent
+  component "ui/launcher\nClipAppQuery, ClipAppResolver,\nClipAppChooser, ClipAppChoiceStore" as Resolver
+  component "ui/activity\nClipResultManager\nActivityClipResultManager" as Result
+  component "domain\nPaymentResult, ClipPaymentLogin,\nPaymentPreferences" as Domain
+}
+
+rectangle "Apps de Clip (allowlist)" as Apps {
+  component "PinPad\ncom.payclip.blaze.pinpad[suffix]\nMainActivity (CLIP_PAYMENT)" as PinPad
+  component "SmartPOS\ncom.payclip.blaze.smartpos[suffix]" as SmartPos
+}
+
+cloud "api.payclip.io\nServer Side SDK\n(/f2f/pinpad/v1/payment)" as Server
+component "Backend del integrador\n(webhook, polling)" as IntegratorBackend
+
+Operator --> PinPad : cobra con tarjeta
+Client --> Intent : arma intent
+Client --> Resolver : busca app
+Resolver --> PinPad : componente elegido\n(explicito)
+Resolver --> SmartPos : componente elegido\n(explicito)
+Intent --> PinPad : extras (monto, referencia,\ncredenciales, webhook)
+PinPad --> Result : ActivityResult
+Result --> Domain : parseResponse
+Domain --> Listeners
+Listeners --> Client
+IntegratorBackend --> Server : crear cobro (Basic)
+Server --> IntegratorBackend : estado (webhook o GET)
+PinPad ..> IntegratorBackend : webhook (PINPAD_INTENT_STATUS_CHANGED)
+@enduml
