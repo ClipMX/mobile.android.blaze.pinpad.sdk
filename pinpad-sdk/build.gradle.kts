@@ -6,8 +6,11 @@ plugins {
 }
 
 // Vacío en producción, que es lo único que JitPack publica. El SDK de QA es solo interno y se genera a mano:
-// ./gradlew :pinpad-sdk:publishToMavenLocal -PclipAppSuffix=.qa   (queda como <versión>-qa en mavenLocal)
+// ./gradlew :pinpad-sdk:publishToMavenLocal -PclipAppSuffix=.qa -PblazeAppSuffix=.testing
+// (queda como <versión>-qa en mavenLocal). Blaze tiene sus propios sufijos (.testing en QA, .dev en debug),
+// por eso va aparte del de PinPad y SmartPOS.
 val clipAppSuffix: String = providers.gradleProperty("clipAppSuffix").getOrElse("")
+val blazeAppSuffix: String = providers.gradleProperty("blazeAppSuffix").getOrElse("")
 val qaVersionSuffix: String = clipAppSuffix.replace('.', '-')
 
 val sdkVersion: String = System.getenv("GITHUB_REF_NAME") ?: System.getenv("VERSION") ?: "0.0.0"
@@ -25,6 +28,7 @@ android {
         consumerProguardFiles("consumer-rules.pro")
 
         buildConfigField("String", "CLIP_APP_SUFFIX", "\"$clipAppSuffix\"")
+        buildConfigField("String", "BLAZE_APP_SUFFIX", "\"$blazeAppSuffix\"")
         buildConfigField("String", "SDK_VERSION", "\"$sdkVersion\"")
     }
 

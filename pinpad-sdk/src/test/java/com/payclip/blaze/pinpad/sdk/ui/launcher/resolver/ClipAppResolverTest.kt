@@ -9,10 +9,11 @@ import org.junit.Test
 class ClipAppResolverTest {
 
     private val fallback = mockComponent(PINPAD, "MainActivity")
-    private val resolver = ClipAppResolver(listOf(PINPAD, SMARTPOS), fallback)
+    private val resolver = ClipAppResolver(listOf(PINPAD, SMARTPOS, BLAZE), fallback)
 
     private val pinpad = candidate(PINPAD)
     private val smartpos = candidate(SMARTPOS)
+    private val blaze = candidate(BLAZE)
 
     @Test
     fun `sin candidatas, cae al lanzamiento explicito a PinPad como fallback`() {
@@ -36,6 +37,20 @@ class ClipAppResolverTest {
 
         result as ClipAppResolution.Launch
         assertEquals(ResolvedBy.FALLBACK, result.resolvedBy)
+    }
+
+    @Test
+    fun `Blaze sola se lanza directo por action`() {
+        val result = resolver.resolve(listOf(blaze), rememberedPackage = null)
+
+        assertEquals(ClipAppResolution.Launch(blaze, ResolvedBy.ACTION), result)
+    }
+
+    @Test
+    fun `Blaze y PinPad instaladas piden elegir, con PinPad primero`() {
+        val result = resolver.resolve(listOf(blaze, pinpad), rememberedPackage = null)
+
+        assertEquals(ClipAppResolution.Choose(listOf(pinpad, blaze)), result)
     }
 
     @Test
@@ -70,5 +85,6 @@ class ClipAppResolverTest {
     private companion object {
         const val PINPAD = "com.payclip.blaze.pinpad"
         const val SMARTPOS = "com.payclip.blaze.smartpos"
+        const val BLAZE = "com.payclip.clip"
     }
 }
