@@ -663,6 +663,12 @@ To read `wasSessionReplaced` on declined payments too, override the optional
 })
 ```
 
+### Clip apps that take the payment
+
+The SDK opens the Clip app installed on the device that declares the `com.payclip.action.CLIP_PAYMENT` action:
+**PinPad**, **SmartPOS** or the **Clip app** (`com.payclip.clip`). If more than one is installed, the SDK asks the
+user which one to use and can remember the choice. If none is found, it falls back to PinPad.
+
 ### Error Codes in Terminal SDK
 
 <a name="error-codes"></a>
@@ -708,6 +714,7 @@ with a description of the error:
 | NO_CONNECTION                           | No connection detected during the transaction.                                                                                                                      | 
 | CANCELLED                               | The transaction was cancelled.                                                                                                                                      | 
 | UNKNOWN_ERROR                           | An unknown error occurred.                                                                                                                                          |
+| TRANSACTION_IN_PROGRESS                 | The Clip app is already processing another payment. Retry once it finishes.                                                                                         |
 | PINPAD_TERMINAL_TIMEOUT_EXCEPTION       | Unable to connect to pinpad terminal. Please check your internet connection in desired pinpad terminal or check that you have entered the correct serial_number_pos |
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>    
